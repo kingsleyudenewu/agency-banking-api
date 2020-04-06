@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
+
 use Illuminate\Validation\Rule;
 
-class LoginRequest extends FormRequest
+class LoginRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -38,16 +36,5 @@ class LoginRequest extends FormRequest
         ];
     }
 
-
-    protected function failedValidation(Validator $validator)
-    {
-        $data = [
-            'status' => 'error',
-            'message' => _('The given data was invalid.'),
-            'errors' => $validator->errors(),
-        ];
-
-        throw new HttpResponseException(response()->json($data, 400));
-    }
 
 }

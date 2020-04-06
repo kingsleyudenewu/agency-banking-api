@@ -23,6 +23,8 @@ class Login extends TestCase
     /** @test */
     public function can_login_with_valid_credential()
     {
+        factory('App\Country')->create(['code' => 'NG']);
+
         $countryCode = 'NG';
         $id = factory('App\User')->create([
             'phone' => PhoneNumber::format('08066100671', $countryCode)
@@ -50,7 +52,8 @@ class Login extends TestCase
                 'identity' =>'',
                 'country' => 'NG',
                 'password' => 'password'
-            ])->assertSessionHasErrors('identity');
+            ])->assertStatus(400)
+            ->assertSessionHasErrors('identity');
 
     }
 
@@ -62,7 +65,9 @@ class Login extends TestCase
                 'identity' =>'2348066100671',
                 'country' => '',
                 'password' => 'password'
-            ])->assertSessionHasErrors('country');
+            ])->assertStatus(400)
+            ->assertSessionHasErrors('country');
+
 
     }
 
@@ -75,7 +80,9 @@ class Login extends TestCase
                 'identity' =>'2348066100671',
                 'country' => 'NG',
                 'password' => ''
-            ])->assertSessionHasErrors('password');
+            ])->assertStatus(400)
+            ->assertSessionHasErrors('password');
+
 
     }
 
@@ -87,7 +94,9 @@ class Login extends TestCase
                 'identity' =>'2348066100671',
                 'country' => 'NG',
                 'password' => 'password'
-            ])->assertSessionHasErrors('country');
+            ])->assertStatus(400)
+            ->assertSessionHasErrors('country');
+
 
     }
 }
