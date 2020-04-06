@@ -27,6 +27,17 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
     });
 
 
+    /**
+     * Auth endpoints
+     */
+    Route::group(['prefix' => 'agents', 'namespace' => 'Api\Agent', 'as' => 'agents.'], function () {
+
+        Route::post('/', 'CreateAgentController@store')->name('create-new');
+
+    });
+
+
+
 
 
 

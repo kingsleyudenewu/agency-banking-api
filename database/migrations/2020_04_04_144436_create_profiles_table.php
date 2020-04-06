@@ -25,6 +25,10 @@ class CreateProfilesTable extends Migration
             $table->string('next_of_kin_phone')->nullable();
             $table->enum('marital_status', ['married', 'single', 'unknown'])->default('unknown');
             $table->string('lga')->nullable();
+            $table->string('business_name')->nullable();
+            $table->string('business_address')->nullable();
+            $table->string('business_phone', 40)->nullable();
+            $table->string('bvn', 30)->nullable();
             $table->uuid('state_id')->nullable();
             $table->uuid('user_id');
             $table->primary('id');

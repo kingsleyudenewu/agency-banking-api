@@ -20,7 +20,13 @@ class User extends AuthBaseModel
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name',
+        'last_name',
+        'other_name',
+        'country_id',
+        'email',
+        'password',
+        'phone'
     ];
 
     /**
@@ -50,4 +56,5 @@ class User extends AuthBaseModel
     {
         return new UserTransformer($this);
     }
+
 }

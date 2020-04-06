@@ -117,4 +117,13 @@ class User
 
         return $this->model;
     }
+
+    public static function createWithProfile(array $data)
+    {
+        $user =  Model::create($data);
+
+        $user->profile()->create($data);
+
+        return $user;
+    }
 }
