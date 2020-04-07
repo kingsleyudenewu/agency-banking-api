@@ -58,6 +58,31 @@ class User
         return new static($model);
     }
 
+    public static function findOneByRole($role): ?self
+    {
+        if (! $model = Model::withRole($role)->first()) {
+            return null;
+        }
+
+        return new static($model);
+    }
+
+
+    public function isAdmin() :bool
+    {
+        return $this->model->hasRole(Model::ROLE_ADMIN);
+    }
+
+    public function isAgent() :bool
+    {
+        return $this->model->hasRole(Model::ROLE_AGENT);
+    }
+
+    public function isSuperAgent() :bool
+    {
+        return $this->model->hasRole(Model::ROLE_SUPER_AGENT);
+    }
+
     public function __construct(Model $model)
     {
         $this->model = $model;

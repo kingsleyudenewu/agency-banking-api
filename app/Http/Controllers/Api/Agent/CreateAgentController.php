@@ -18,6 +18,28 @@ use Illuminate\Support\Str;
 class CreateAgentController extends APIBaseController
 {
 
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+
+        $this->middleware(function ($request, $next) {
+            $user = User::find($request->user()->id);
+
+            if($user->isAdmin() || $user->isSuperAgent())
+            {
+                return $next($request);
+            }
+
+            return $this->errorResponse('Access denied');
+
+        })->only(['store']);
+
+    }
+
     public function store(CreateAgentRequest $request)
     {
 

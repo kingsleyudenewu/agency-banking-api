@@ -12,6 +12,14 @@ class User extends AuthBaseModel
 {
     use Notifiable, LaravelEntrustUserTrait;
 
+    const ROLE_AGENT = 'agent';
+    const ROLE_SUPER_AGENT = 'super-agent';
+    const ROLE_ADMIN = 'admin';
+
+    const GENDER_MALE = 'male';
+    const GENDER_FEMALE = 'female';
+    const GENDER_OTHERS = 'others';
+
 
 
     /**
