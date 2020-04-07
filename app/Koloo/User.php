@@ -83,6 +83,11 @@ class User
         return $this->model->hasRole(Model::ROLE_SUPER_AGENT);
     }
 
+    public function getParent() : ?self
+    {
+        return $this->model->parent_id ?  new static($this->model->parent) : null;
+    }
+
     public function __construct(Model $model)
     {
         $this->model = $model;

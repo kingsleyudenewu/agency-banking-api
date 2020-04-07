@@ -99,6 +99,7 @@ class AgentTest extends TestCase
 
         $this->assertNotNull($user);
         $this->assertTrue($user->isAgent(), 'Expecting user to be an agent');
+        $this->assertNotNull($user->getParent(), 'Parent not set');
 
         Event::assertDispatched(AgentAccountCreated::class, 1);
     }
