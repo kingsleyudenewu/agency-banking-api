@@ -46,7 +46,9 @@ class CreateAgentController extends APIBaseController
         $data = $request->validated();
         $data['password'] = Str::random(30);
 
-        $user =  User::createWithProfile($data);
+        $user =  User::createWithProfile($data, $request->user());
+
+        $user->setAsAgent();
 
         event(new AgentAccountCreated($user));
 

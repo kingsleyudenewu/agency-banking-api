@@ -143,8 +143,12 @@ class User
         return $this->model;
     }
 
-    public static function createWithProfile(array $data)
+    public static function createWithProfile(array $data, Model $parent  = null) : Model
     {
+
+        if($parent)
+            $data['parent_id'] = $parent->id;
+
         $user =  Model::create($data);
 
         $user->profile()->create($data);

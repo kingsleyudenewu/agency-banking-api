@@ -65,4 +65,9 @@ class User extends AuthBaseModel
         return new UserTransformer($this);
     }
 
+    public function setAsAgent()
+    {
+        $agentRole = Role::where('name', static::ROLE_AGENT)->first();
+        $this->attachRole($agentRole);
+    }
 }

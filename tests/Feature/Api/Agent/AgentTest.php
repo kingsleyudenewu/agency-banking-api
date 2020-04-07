@@ -28,6 +28,9 @@ class AgentTest extends TestCase
 
         Artisan::call('db:seed');
 
+        // We need a valid country
+        factory('App\Country')->create(['code' => 'NG']);
+
         $this->adminUser = User::findOneByRole(\App\User::ROLE_ADMIN);
         $this->superAgentUser = User::findOneByRole(\App\User::ROLE_SUPER_AGENT);
 
@@ -43,36 +46,75 @@ class AgentTest extends TestCase
     }
 
     /** @test */
+    public function can_create_agent_with_the_right_credentials_as_an_admin()
+    {
+        $this->can_create_agent_with_the_right_credentials_as($this->adminUser->getModel());
+    }
 
-    public function can_create_agent_with_the_right_credentials()
+    /** @test */
+    public function can_create_agent_with_the_right_credentials_as_as_super_agent()
+    {
+        $this->can_create_agent_with_the_right_credentials_as($this->superAgentUser->getModel());
+    }
+
+
+    /** @test */
+    public function must_not_create_agent_with_non_admin_or_super_agent_right()
+    {
+        Event::fake([AgentAccountCreated::class]);
+        $agentUser = User::findOneByRole(\App\User::ROLE_AGENT);
+        $this->assertNotNull($agentUser);
+
+        $this->signIn($agentUser->getModel());
+
+        $payload = $this->agent_create_data();
+
+        $this->postJson(route('api.agents.create-new'), $payload)
+            ->assertStatus(400)
+            ->assertJson(['status' => 'error']);
+
+        Event::assertNotDispatched(AgentAccountCreated::class);
+    }
+
+    protected function can_create_agent_with_the_right_credentials_as($user)
     {
 
-        $authUser = $this->signIn($this->adminUser->getModel());
-
-        // We need a valid country
-        factory('App\Country')->create(['code' => 'NG']);
+        $this->signIn($user);
 
         Event::fake([AgentAccountCreated::class]);
 
+        $payload = $this->agent_create_data();
+
+        $res = $this->postJson(route('api.agents.create-new'), $payload)
+            ->assertStatus(200)
+            ->assertJson([
+                "status" => "success",
+                "message" => "OK",
+                "data" => ["first_name" => $payload['first_name']]
+            ]);
+
+        $content = $res->json();
+
+        $user = User::find($content['data']['id']);
+
+        $this->assertNotNull($user);
+        $this->assertTrue($user->isAgent(), 'Expecting user to be an agent');
+
+        Event::assertDispatched(AgentAccountCreated::class, 1);
+    }
+
+    protected function agent_create_data() : array
+    {
         $userData = factory('App\User')->raw(['phone' => '08129531720']);
         $profileData = factory('App\Profile')->raw([
-                'business_phone' => '08037312520',
-                'next_of_kin_phone' => '08054473524'
+            'business_phone' => '08037312520',
+            'next_of_kin_phone' => '08054473524'
         ]);
 
         $payload = array_merge($profileData, $userData);
         $payload['country'] = 'NG';
 
-        $this->postJson(route('api.agents.create-new'), $payload)
-                ->dump()
-                ->assertStatus(200)
-                ->assertJson([
-                    "status" => "success",
-                    "message" => "OK",
-                    "data" => ["first_name" => $userData['first_name']]
-                ]);
-
-        Event::assertDispatched(AgentAccountCreated::class, 1);
+        return $payload;
     }
 
 }
