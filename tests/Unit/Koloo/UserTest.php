@@ -38,9 +38,8 @@ class UserTest extends TestCase
     /** @test */
     public function newAPIToken_should_create_new_token()
     {
-        $id = factory('App\User')->create()->id;
 
-        $user = User::find($id);
+        $user = $this->getUser();
 
         $user->newAPIToken();
 
@@ -48,6 +47,28 @@ class UserTest extends TestCase
 
         $this->assertEquals(64, strlen($user->getAPIToken()));
         $this->assertEquals(80, strlen($plain));
+
+    }
+
+    private function getUser() : User
+    {
+        $id = factory('App\User')->create()->id;
+
+        return User::find($id);
+    }
+
+    /** @test */
+    public function can_store_and_get_user_settings()
+    {
+        $user = $this->getUser();
+
+        $this->assertDatabaseMissing('settings', ['group' => $user->getId(), 'name' => 'test', 'val' => 'test']);
+
+        $user->settings()->set('test', 'test');
+
+        $this->assertEquals('test', $user->settings()->get('test'));
+
+        $this->assertDatabaseHas('settings', ['group' => $user->getId(), 'name' => 'test', 'val' => 'test']);
 
     }
 

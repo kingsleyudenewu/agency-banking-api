@@ -148,6 +148,7 @@ class User
         return $this->model;
     }
 
+
     public static function createWithProfile(array $data, Model $parent  = null) : Model
     {
 
@@ -159,5 +160,12 @@ class User
         $user->profile()->create($data);
 
         return $user;
+    }
+
+    
+    public function settings()
+    {
+        return settings()->group($this->getId());
+
     }
 }
