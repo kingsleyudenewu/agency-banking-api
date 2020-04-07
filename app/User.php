@@ -12,6 +12,14 @@ class User extends AuthBaseModel
 {
     use Notifiable, LaravelEntrustUserTrait;
 
+    const ROLE_AGENT = 'agent';
+    const ROLE_SUPER_AGENT = 'super-agent';
+    const ROLE_ADMIN = 'admin';
+
+    const GENDER_MALE = 'male';
+    const GENDER_FEMALE = 'female';
+    const GENDER_OTHERS = 'others';
+
 
 
     /**
@@ -20,7 +28,14 @@ class User extends AuthBaseModel
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name',
+        'last_name',
+        'other_name',
+        'country_id',
+        'email',
+        'password',
+        'phone',
+        'parent_id'
     ];
 
     /**
@@ -49,5 +64,21 @@ class User extends AuthBaseModel
     public function transform(): UserTransformer
     {
         return new UserTransformer($this);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(User::class, 'parent_id', 'id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(User::class, 'parent_id', 'id');
+    }
+
+    public function setAsAgent()
+    {
+        $agentRole = Role::where('name', static::ROLE_AGENT)->first();
+        $this->attachRole($agentRole);
     }
 }

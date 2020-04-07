@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Str;
 
 class BaseRequest extends FormRequest
 {
@@ -41,5 +42,10 @@ class BaseRequest extends FormRequest
         ];
 
         throw new HttpResponseException(response()->json($data, 400));
+    }
+
+    protected function cleanPhone($str) : string {
+        $phone = trim(preg_replace("/[^0-9]/", "", $str));
+        return Str::after($phone, "+");
     }
 }

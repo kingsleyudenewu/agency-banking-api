@@ -58,6 +58,36 @@ class User
         return new static($model);
     }
 
+    public static function findOneByRole($role): ?self
+    {
+        if (! $model = Model::withRole($role)->first()) {
+            return null;
+        }
+
+        return new static($model);
+    }
+
+
+    public function isAdmin() :bool
+    {
+        return $this->model->hasRole(Model::ROLE_ADMIN);
+    }
+
+    public function isAgent() :bool
+    {
+        return $this->model->hasRole(Model::ROLE_AGENT);
+    }
+
+    public function isSuperAgent() :bool
+    {
+        return $this->model->hasRole(Model::ROLE_SUPER_AGENT);
+    }
+
+    public function getParent() : ?self
+    {
+        return $this->model->parent_id ?  new static($this->model->parent) : null;
+    }
+
     public function __construct(Model $model)
     {
         $this->model = $model;
@@ -116,5 +146,18 @@ class User
         $this->plainToken = $token;
 
         return $this->model;
+    }
+
+    public static function createWithProfile(array $data, Model $parent  = null) : Model
+    {
+
+        if($parent)
+            $data['parent_id'] = $parent->id;
+
+        $user =  Model::create($data);
+
+        $user->profile()->create($data);
+
+        return $user;
     }
 }

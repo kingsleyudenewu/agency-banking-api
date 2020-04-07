@@ -5,16 +5,15 @@ return [
         'admin' => [
             'users' => 'c,r,u,d',
             'admin' => 'c,r,u,d',
-            'profile' => 'r,d'
+            'customer' => 'c,u,r,d'
         ],
-        'subadmin' => [
+        'super-agent' => [
             'users' => 'c,r,u',
-            'profile' => 'r,u'
+            'agent' => 'r,c,u',
+            'customer' => 'c,u,r'
         ],
-    ],
-    'user_roles' => [
-        'admin' => [
-            ['name' => "Admin", "email" => "admin@gmail.com", "password" => '123456'],
+        'agent' => [
+            'customer' => 'c,u,r'
         ],
     ],
     'permissions_map' => [
