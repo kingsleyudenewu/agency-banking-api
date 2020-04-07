@@ -117,4 +117,9 @@ class User
 
         return $this->model;
     }
+
+    public function settings()
+    {
+        return settings()->group($this->getId());
+    }
 }

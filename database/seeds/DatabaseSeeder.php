@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(LaravelEntrustSeeder::class);
         $this->call(CountrySeeder::class);
+        $this->call(SettingsSeeder::class);
     }
 }
