@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return \App\Koloo\PhoneNumber::format('14045782353', 'US');
+    return redirect('https://koloo.ng');
 });
