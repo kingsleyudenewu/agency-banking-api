@@ -23,6 +23,37 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function can_find_by_phone()
+    {
+        $factoryUser = factory('App\User')->create();
+
+        $user = User::findByPhone($factoryUser->phone);
+
+        $this->assertNotNull($user);
+        $this->assertInstanceOf(\App\User::class, $user->getModel());
+    }
+
+    /** @test */
+    public function find_by_phone_return_null_for_invalid_phone()
+    {
+        $user = User::findByPhone('invalid phone');
+
+        $this->assertNull($user);
+
+    }
+
+
+    /** @test */
+    public function find_should_return_null_for_invalid_id()
+    {
+
+        $user = User::find(1);
+
+        $this->assertNull($user);
+
+    }
+
+    /** @test */
     public function api_token_should_be_null_for_newly_created_user()
     {
         $id = factory('App\User')->create()->id;
