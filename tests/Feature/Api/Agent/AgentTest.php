@@ -5,8 +5,9 @@ namespace Tests\Feature\Api\Agent;
 use App\Events\AgentAccountCreated;
 use App\Koloo\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 /**
@@ -18,31 +19,16 @@ class AgentTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $adminUser;
-    protected $superAgentUser;
-    protected $agentUser;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        Artisan::call('db:seed');
-
-        // We need a valid country
-        factory('App\Country')->create(['code' => 'NG']);
-
-        $this->adminUser = User::findOneByRole(\App\User::ROLE_ADMIN);
-        $this->superAgentUser = User::findOneByRole(\App\User::ROLE_SUPER_AGENT);
-
+        $this->loadUsersWithPermission();
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        // RefreshDatabase is going to clean the data store, no need to tear down
-        $this->superAgentUser = null;
-        $this->adminUser = null;
-
     }
 
     /** @test */
@@ -120,6 +106,41 @@ class AgentTest extends TestCase
 
 
 
+    /** @test */
+    public function can_upload_valid_agent_document()
+    {
+        $this->withoutExceptionHandling();
+
+        $authUser  = $this->adminUser->getModel();
+
+        factory('App\Profile')->create(['user_id' => $this->agentUser->getID()]);
+
+        $this->withSettings()->signIn($authUser);
+
+        $path = $this->getSetting('document_storage_path');
+        $disk = $this->getSetting('document_storage_driver');
+        $maxSize = $this->getSetting('document_storage_max_size'); // default to 2mb
+
+        Storage::fake($disk);
+
+
+        $file = UploadedFile::fake()->create('document.pdf', $maxSize, 'application/pdf');
+
+        $this->json('post', route('api.agents.document.upload'),
+            [
+                'doc' => $file,
+                'id' => $this->agentUser->getId(),
+                'document_type' => 'passport_photograph'
+            ]
+        )->assertStatus(200)
+        ->assertJson(['status' => 'success']);
+
+        $fullPath  = $path  . $file->hashName();
+
+        $this->assertEquals($fullPath, $this->agentUser->getDocumentPath('passport_photograph'));
+
+        Storage::disk($disk)->assertExists($fullPath);
+    }
 
 }
 

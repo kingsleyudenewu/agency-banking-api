@@ -104,5 +104,39 @@ class UserTest extends TestCase
     }
 
 
+    /** @test */
+    public function can_check_if_an_instance_belongs_to_another_instance()
+    {
+        $user1 = User::find(factory('App\User')->create()->id);
+        $user2 = User::find(factory('App\User')->create(['parent_id' => $user1->getId()])->id);
+
+        $this->assertTrue($user2->belongsTo($user1));
+        $this->assertFalse($user1->belongsTo($user2));
+
+    }
+
+    /** @test */
+    public function can_check_if_an_instance_does_not_belongs_to_another_instance()
+    {
+        $user1 = User::find(factory('App\User')->create()->id);
+        $user2 = User::find(factory('App\User')->create()->id);
+
+        $this->assertFalse($user2->belongsTo($user1));
+        $this->assertFalse($user1->belongsTo($user2));
+
+    }
+
+
+    /** @test */
+    public function can_get_parent_id()
+    {
+        $user1 = User::find(factory('App\User')->create()->id);
+        $user2 = User::find(factory('App\User')->create(['parent_id' => $user1->getId()])->id);
+
+       $this->assertNotNull($user2->getParentID());
+       $this->assertEquals($user1->getId(), $user2->getParentID());
+
+    }
+
 
 }

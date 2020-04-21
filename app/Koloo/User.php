@@ -162,10 +162,65 @@ class User
         return $user;
     }
 
-    
     public function settings()
     {
         return settings()->group($this->getId());
 
+    }
+
+    public function canManageAgent()
+    {
+        return ($this->isSuperAgent() || $this->isAdmin()) ? true : false;
+    }
+
+    /**
+     * Check if the current instance belongs to $parent
+     *
+     * @param \App\Koloo\User $parent
+     *
+     * @return bool
+     */
+    public function belongsTo(self  $parent): bool
+    {
+        return $this->getParent() && $this->getParentID() === $parent->getId() ? true  : false;
+    }
+
+    public function getParentID(): ?string
+    {
+        return $this->getParent() ? $this->getModel()->parent_id : null;
+    }
+
+    public function getProfile()
+    {
+        return $this->getModel()->profile();
+    }
+
+    private function isValidDocumentType($documentType): bool
+    {
+        $validDocumentFields = trim(settings('valid_document_fields'));
+
+        return in_array($documentType, explode(',', $validDocumentFields));
+    }
+
+    public function updateDocument(array $data, string $documentType) : bool
+    {
+
+            return $this->isValidDocumentType($documentType) ?
+                    $this->getProfile()->update([$documentType => $data]) :
+                    false;
+
+
+    }
+
+    public function getDocumentPath($documentType):string
+    {
+        if($this->isValidDocumentType($documentType))
+        {
+            $document = json_decode($this->getModel()->profile->$documentType, false);
+
+            return $document ? str_replace('//', '/', $document->path) : '';
+        }
+
+        return '';
     }
 }

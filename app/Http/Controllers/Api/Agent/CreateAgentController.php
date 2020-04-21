@@ -29,7 +29,7 @@ class CreateAgentController extends APIBaseController
         $this->middleware(function ($request, $next) {
             $user = User::find($request->user()->id);
 
-            if($user->isAdmin() || $user->isSuperAgent())
+            if($user->canManageAgent())
             {
                 return $next($request);
             }

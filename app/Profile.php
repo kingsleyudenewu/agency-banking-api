@@ -4,6 +4,8 @@ namespace App;
 
 
 
+use App\Casts\Json;
+
 class Profile extends BaseModel
 {
     protected $fillable = [
@@ -23,6 +25,13 @@ class Profile extends BaseModel
         'business_address',
         'business_phone',
         'bvn',
+        'passport_photograph',
+        'agreement_form'
+    ];
+
+    protected $casts = [
+        'passport_photograph' => Json::class,
+        'agreement_form' => Json::class,
     ];
 
     public function user()
