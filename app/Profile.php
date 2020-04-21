@@ -29,4 +29,24 @@ class Profile extends BaseModel
     {
         return $this->belongsTo('App\User');
     }
+
+    /**
+     * By default, a profile status is setting up
+     *
+     * @return bool
+     */
+    public function isSettingUp(): bool
+    {
+        return boolval($this->setup_completed) ? false :  true;
+    }
+
+    /**
+     * Profile can be marked completed
+     */
+    public function setupCompleted()
+    {
+        $this->setup_completed = true;
+        $this->save();
+
+    }
 }

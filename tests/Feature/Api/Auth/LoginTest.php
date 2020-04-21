@@ -15,7 +15,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
  *
  * @package \Tests\Feature\Api\Auth
  */
-class Login extends TestCase
+class LoginTest extends TestCase
 {
 
     use RefreshDatabase;
@@ -47,12 +47,13 @@ class Login extends TestCase
     /** @test */
     public function identity_is_required()
     {
+
         $this->post(route('api.auth.login.post'),
             [
                 'identity' =>'',
                 'country' => 'NG',
                 'password' => 'password'
-            ])->assertStatus(400)
+            ])->assertStatus(302)
             ->assertSessionHasErrors('identity');
 
     }
@@ -65,7 +66,7 @@ class Login extends TestCase
                 'identity' =>'2348066100671',
                 'country' => '',
                 'password' => 'password'
-            ])->assertStatus(400)
+            ])->assertStatus(302)
             ->assertSessionHasErrors('country');
 
 
@@ -80,7 +81,7 @@ class Login extends TestCase
                 'identity' =>'2348066100671',
                 'country' => 'NG',
                 'password' => ''
-            ])->assertStatus(400)
+            ])->assertStatus(302)
             ->assertSessionHasErrors('password');
 
 
@@ -94,9 +95,47 @@ class Login extends TestCase
                 'identity' =>'2348066100671',
                 'country' => 'NG',
                 'password' => 'password'
-            ])->assertStatus(400)
+            ])->assertStatus(302)
             ->assertSessionHasErrors('country');
 
+
+    }
+
+    /** @test */
+    public function logged_in_user_must_not_be_allowed_to_login()
+    {
+
+        $this->signIn();
+
+        $this->post(route('api.auth.login.post'),
+            [
+                'identity' =>'2348066100671',
+                'country' => 'NG',
+                'password' => 'password'
+            ])->assertStatus(403);
+    }
+
+
+    /** @test */
+    public function login_should_fail_if_identity_is_valid_and_password_is_not()
+    {
+        factory('App\Country')->create(['code' => 'NG']);
+
+        $countryCode = 'NG';
+        $id = factory('App\User')->create([
+            'phone' => PhoneNumber::format('08066100671', $countryCode)
+        ])->id;
+
+        $user = User::find($id);
+
+        $this->postJson(route('api.auth.login.post'), [
+                'identity' => $user->getPhone(),
+                'country' => $countryCode,
+                'password' => 'invalid_password'
+            ]
+        )->assertStatus(400)
+            ->assertJson(['status' => 'error', 'message' => 'Login and/or password are incorrect.'])
+        ;
 
     }
 }
