@@ -17,5 +17,5 @@ pipelines:
             - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
             - composer install
             - ./vendor/bin/phpunit
-            - ssh koloo@134.122.106.209 -o StrictHostKeyChecking=no 'cd /var/www/koloo-v1 &&  git pull && composer install && php artisan migrate && php artisan db:seed'
+            - ssh koloo@134.122.106.209 -o StrictHostKeyChecking=no 'cd /var/www/koloo-v1 &&  git pull && composer install && php artisan migrate:refresh && php artisan db:seed'
 
