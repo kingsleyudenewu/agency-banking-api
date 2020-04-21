@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\Agent;
 
 use App\Events\AgentAccountCreated;
+use App\Events\AgentDocumentUploaded;
 use App\Koloo\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
@@ -111,6 +112,8 @@ class AgentTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Event::fake([AgentDocumentUploaded::class]);
+
         $authUser  = $this->adminUser->getModel();
 
         factory('App\Profile')->create(['user_id' => $this->agentUser->getID()]);
@@ -139,7 +142,11 @@ class AgentTest extends TestCase
 
         $this->assertEquals($fullPath, $this->agentUser->getDocumentPath('passport_photograph'));
 
+        $this->assertEquals('', $this->agentUser->getDocumentPath('invalid document'));
+
         Storage::disk($disk)->assertExists($fullPath);
+
+        Event::assertDispatched(AgentDocumentUploaded::class, 1);
     }
 
 }

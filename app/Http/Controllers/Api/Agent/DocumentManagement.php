@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Agent;
 
+use App\Events\AgentDocumentUploaded;
 use App\Http\Controllers\APIBaseController;
 use App\Http\Requests\AgentDocumentUploadRequest;
 use App\Koloo\User;
@@ -19,6 +20,7 @@ class DocumentManagement extends APIBaseController
     {
         $path = settings('document_storage_path');
         $disk = settings('document_storage_driver');
+        $docType = request('document_type');
 
         // We already check for existence via the request middle where
         $agent = User::find(request('id'));
@@ -30,7 +32,9 @@ class DocumentManagement extends APIBaseController
             'path' => $storedLocation
         ];
 
-        $agent->updateDocument($fileData, request('document_type'));
+        $agent->updateDocument($fileData, $docType);
+
+        event(new AgentDocumentUploaded($docType));
 
         return $this->successResponse('Uploaded');
     }
