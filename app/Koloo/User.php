@@ -223,4 +223,10 @@ class User
 
         return '';
     }
+
+
+    public function setNewPassword(string $password):bool
+    {
+        return $this->getModel()->updatePassword($password);
+    }
 }

@@ -6,6 +6,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 
 use App\Http\Resources\User as UserTransformer;
+use Illuminate\Support\Facades\Hash;
 use Shanmuga\LaravelEntrust\Traits\LaravelEntrustUserTrait;
 
 class User extends AuthBaseModel
@@ -86,5 +87,12 @@ class User extends AuthBaseModel
     {
         $superAgentRole = Role::where('name', static::ROLE_SUPER_AGENT)->first();
         $this->attachRole($superAgentRole);
+    }
+
+    public function updatePassword(string $password) : bool
+    {
+        $this->password = Hash::make($password);
+        $this->save();
+        return true;
     }
 }

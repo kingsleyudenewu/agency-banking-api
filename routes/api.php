@@ -30,9 +30,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
     });
 
 
-    /**
-     * Auth endpoints
-     */
+
     Route::group([
         'prefix' => 'agents',
         'namespace' => 'Api\Agent',
@@ -44,6 +42,18 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
     });
 
+
+
+    Route::group([
+        'prefix' => 'admin',
+        'namespace' => 'Api\Admin',
+        'as' => 'admin.',
+        'middleware' => ['auth:api', 'admin-check']], function () {
+
+
+        Route::post('/password', 'PasswordManagement@store')->name('set-password');
+
+    });
 
 
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
 
 class APIBaseController extends Controller
 {
@@ -30,6 +30,16 @@ class APIBaseController extends Controller
      */
     public function errorResponse(string $message = 'Error message', $errors = null, int $code = 400)
     {
+
+        if($errors instanceof MessageBag)
+        {
+            $errors = $this->extractErrorMessageFromArray($errors->getMessages());
+
+        } else if(is_array($errors))
+        {
+            $errors = $this->extractErrorMessageFromArray($errors);
+        }
+
         return response()->json([
             'status' => 'error',
             'message' => $message,
@@ -56,5 +66,16 @@ class APIBaseController extends Controller
     protected function user()
     {
         return auth()->user();
+    }
+
+    protected function extractErrorMessageFromArray($errors)
+    {
+        $err = [];
+
+        foreach ($errors as $key => $value) {
+
+            $err[]  = is_array($value) ? implode("\n", $value) : $value;
+        }
+        return implode("\n", $err);
     }
 }
