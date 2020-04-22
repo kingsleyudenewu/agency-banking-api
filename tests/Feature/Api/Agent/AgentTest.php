@@ -86,7 +86,7 @@ class AgentTest extends TestCase
 
         $this->assertNotNull($user);
         $this->assertTrue($user->isAgent(), 'Expecting user to be an agent');
-        $this->assertNotNull($user->getParent(), 'Parent not set');
+        $this->assertNotNull($user->getParentID(), 'Parent not set');
 
         Event::assertDispatched(AgentAccountCreated::class, 1);
     }
@@ -116,12 +116,60 @@ class AgentTest extends TestCase
 
         $authUser  = $this->adminUser->getModel();
 
+        $disk = $this->getSetting('document_storage_driver');
+
+        $fullPath = $this->agent_document_upload($authUser, $disk);
+
+        $this->assertEquals($fullPath, $this->agentUser->getDocumentPath('passport_photograph'));
+
+        $this->assertEquals('', $this->agentUser->getDocumentPath('invalid document'));
+
+        Storage::disk($disk)->assertExists($fullPath);
+
+        Event::assertDispatched(AgentDocumentUploaded::class, 1);
+    }
+
+
+    /** @test */
+    public function user_must_be_an_admin_or_a_super_agent_to_upload_document()
+    {
+
+        Event::fake([AgentDocumentUploaded::class]);
+
+        $authUser  = $this->agentUser->getModel();
+        $this->signIn($authUser);
+
+        $this->json('post', route('api.agents.document.upload'),
+            [
+                'doc' => '',
+                'id' => '',
+                'document_type' => ''
+            ]
+        )->assertStatus(403)
+            ->assertJson(['message' => 'This action is unauthorized.']);
+
+        Event::assertNotDispatched(AgentDocumentUploaded::class, 1);
+    }
+
+
+    /**
+     * Helper method
+     *  Setup the upload process and return full path
+     *
+     * @param $authUser
+     * @param $disk
+     *
+     * @return string
+     */
+    private function agent_document_upload($authUser, $disk)
+    {
+
+
         factory('App\Profile')->create(['user_id' => $this->agentUser->getID()]);
 
         $this->withSettings()->signIn($authUser);
 
         $path = $this->getSetting('document_storage_path');
-        $disk = $this->getSetting('document_storage_driver');
         $maxSize = $this->getSetting('document_storage_max_size'); // default to 2mb
 
         Storage::fake($disk);
@@ -136,17 +184,11 @@ class AgentTest extends TestCase
                 'document_type' => 'passport_photograph'
             ]
         )->assertStatus(200)
-        ->assertJson(['status' => 'success']);
+            ->assertJson(['status' => 'success']);
 
         $fullPath  = $path  . $file->hashName();
+        return $fullPath;
 
-        $this->assertEquals($fullPath, $this->agentUser->getDocumentPath('passport_photograph'));
-
-        $this->assertEquals('', $this->agentUser->getDocumentPath('invalid document'));
-
-        Storage::disk($disk)->assertExists($fullPath);
-
-        Event::assertDispatched(AgentDocumentUploaded::class, 1);
     }
 
 }
