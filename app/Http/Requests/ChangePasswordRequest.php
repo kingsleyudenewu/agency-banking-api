@@ -24,7 +24,8 @@ class ChangePasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'password' => 'required|min:6|strong_password'
+            'password' => 'required|min:6|strong_password',
+            'id' => 'required|uuid|exists:users,id'
         ];
     }
 }
