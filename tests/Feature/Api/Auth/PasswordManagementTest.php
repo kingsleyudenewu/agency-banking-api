@@ -45,7 +45,40 @@ class PasswordManagementTest extends TestCase
     }
 
 
+    /** @test */
+    public function password_field_must_be_validated()
+    {
+
+        $this->signIn($this->adminUser->getModel());
+
+        $user = factory('App\User')->create();
+        $oldPassword = $user->password; // Old password hash
+        $newPassword = 'passs';
+
+        $this->json('POST', route('api.admin.set-password'), ['id' => $user->id, 'password' => $newPassword])
+            ->assertStatus(422)
+            ->assertJson(['errors' => [
+                'password' => []
+            ] ]);
 
 
+        $updatedUser = User::find($user->id);
+        $this->assertEquals($oldPassword, $updatedUser->password);
+    }
+
+
+    /** @test */
+    public function ensure_only_admin_can_call_this_endpoint()
+    {
+
+        $this->signIn($this->agentUser->getModel());
+
+        $user = factory('App\User')->create();
+
+
+        $this->json('POST', route('api.admin.set-password'), ['id' => $user->id, 'password' => 'ss'])
+            ->assertStatus(401)
+            ->assertJson(['message' => 'Access denied']);
+    }
 
 }
