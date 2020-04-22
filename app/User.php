@@ -81,4 +81,10 @@ class User extends AuthBaseModel
         $agentRole = Role::where('name', static::ROLE_AGENT)->first();
         $this->attachRole($agentRole);
     }
+
+    public function setAsSuperAgent()
+    {
+        $superAgentRole = Role::where('name', static::ROLE_SUPER_AGENT)->first();
+        $this->attachRole($superAgentRole);
+    }
 }

@@ -46,9 +46,12 @@ class CreateAgentController extends APIBaseController
         $data = $request->validated();
         $data['password'] = Str::random(30);
 
+        $authUser = User::find($request->user()->id);
         $user =  User::createWithProfile($data, $request->user());
 
-        $user->setAsAgent();
+        $method = ($authUser->isAdmin() && request('type') === 'super') ? 'setAsSuperAgent' : 'setAsAgent';
+
+        $user->$method();
 
         event(new AgentAccountCreated($user));
 

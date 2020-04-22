@@ -82,11 +82,12 @@ class AgentTest extends TestCase
 
         $content = $res->json();
 
-        $user = User::find($content['data']['id']);
+        $createdUser = User::find($content['data']['id']);
 
-        $this->assertNotNull($user);
-        $this->assertTrue($user->isAgent(), 'Expecting user to be an agent');
-        $this->assertNotNull($user->getParentID(), 'Parent not set');
+        $this->assertNotNull($createdUser);
+        $this->assertTrue($createdUser->isAgent(), 'Expecting user to be an agent');
+        $this->assertNotNull($createdUser->getParentID(), 'Parent not set');
+        $this->assertTrue($createdUser->belongsTo(User::find($user->id)));
 
         Event::assertDispatched(AgentAccountCreated::class, 1);
     }
