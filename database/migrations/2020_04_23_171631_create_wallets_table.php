@@ -18,7 +18,8 @@ class CreateWalletsTable extends Migration
             $table->uuid('user_id')->index();
             $table->string('currency');
             $table->bigInteger('amount')->default(0);
-            $table->string('hash');
+            $table->string('hash')->nullable();
+            $table->dateTime('touched')->nullable();
             $table->timestamps();
         });
     }

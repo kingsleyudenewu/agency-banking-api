@@ -18,6 +18,7 @@
         "propaganistas/laravel-phone": "^4.2",
         "qcod/laravel-settings": "^1.0",
         "shanmuga/laravel-entrust": "^1.1",
+        "tormjens/eventy": "^0.5.9",
         "webpatser/laravel-uuid": "^3.0"
     },
     "require-dev": {
