@@ -62,6 +62,11 @@ class User extends AuthBaseModel
         return $this->hasOne(Profile::class);
     }
 
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
     public function transform(): UserTransformer
     {
         return new UserTransformer($this);
