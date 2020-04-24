@@ -32,7 +32,7 @@ class User extends AuthBaseModel
         'first_name',
         'last_name',
         'other_name',
-        'country_id',
+        'country_code',
         'email',
         'password',
         'phone',
@@ -57,6 +57,11 @@ class User extends AuthBaseModel
         'email_verified_at' => 'datetime',
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
     public function profile()
     {
         return $this->hasOne(Profile::class);
@@ -65,6 +70,11 @@ class User extends AuthBaseModel
     public function wallet()
     {
         return $this->hasOne(Wallet::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_code', 'code');
     }
 
     public function transform(): UserTransformer

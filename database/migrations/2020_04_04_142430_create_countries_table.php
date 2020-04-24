@@ -17,6 +17,7 @@ class CreateCountriesTable extends Migration
             $table->uuid('id');
             $table->string('name');
             $table->string('code', 4);
+            $table->string('currency', 4)->nullable();
             $table->boolean('enabled')->default(true);
             $table->primary('id');
             $table->softDeletes();

@@ -22,7 +22,7 @@ $factory->define(User::class, function (Faker $faker) {
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
         'other_name' => $faker->firstName,
-        'country_id' => factory(\App\Country::class),
+        'country_code' => factory(\App\Country::class)->create()->code,
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'phone' => $faker->phoneNumber,

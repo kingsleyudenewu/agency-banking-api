@@ -157,6 +157,8 @@ class User
 
         $user =  Model::create($data);
 
+        \App\Wallet::start($user);
+
         $user->profile()->create($data);
 
         return $user;

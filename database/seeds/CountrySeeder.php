@@ -13,6 +13,6 @@ class CountrySeeder extends Seeder
     {
         \App\Country::truncate();
 
-        \App\Country::create(['name' => 'Nigeria', 'code' => 'NG']);
+        \App\Country::create(['name' => 'Nigeria', 'code' => 'NG', 'currency' => 'NGN']);
     }
 }

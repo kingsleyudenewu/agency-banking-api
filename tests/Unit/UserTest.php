@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 
 
+use App\Country;
 use App\Profile;
 use App\Wallet;
 use Tests\TestCase;
@@ -35,6 +36,14 @@ class UserTest extends TestCase
 
         $this->assertInstanceOf(Wallet::class, $user->wallet);
 
+    }
+
+    /** @test */
+    public function should_have_a_country()
+    {
+        $user = factory('App\User')->create();
+
+        $this->assertInstanceOf(Country::class, $user->country);
     }
 
 

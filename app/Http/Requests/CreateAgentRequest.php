@@ -30,11 +30,11 @@ class CreateAgentRequest extends BaseRequest
 
         //dd();
         $validationRules =  [
-            'country' => [
+            'country_code' => [
                 'required',
                 'max:2',
                 Rule::exists('countries', 'code')
-                    ->where('code', $this->country)
+                    ->where('code', $this->country_code)
             ],
             'phone' => [
                 'required',
