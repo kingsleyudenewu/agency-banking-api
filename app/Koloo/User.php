@@ -3,7 +3,10 @@
 namespace App\Koloo;
 
 
+use App\Events\SendNewOTP;
+use App\OTP;
 use App\User as Model;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
@@ -116,6 +119,11 @@ class User
     public function getPhone() : string
     {
         return $this->model->phone;
+    }
+
+    public function isPhoneVerified(): bool
+    {
+        return !! $this->model->phone_verified;
     }
 
     public function getName(): string
@@ -231,4 +239,26 @@ class User
     {
         return $this->getModel()->updatePassword($password);
     }
+
+    public function sendOTP(string $messageType = 'sms')
+    {
+        if (! in_array($messageType, ['sms', 'email', 'both'])) {
+            $error = "Messages does not support type [$messageType].";
+            Log::info($error);
+            throw new \Exception($error);
+        }
+
+        $otp =  makeRandomInt(settings('otp_length', 4));
+
+        $otpModel = OTP::create([
+            'expire_at' => now()->addHours(24),
+            'phone' => $this->getPhone(),
+            'code' => $otp
+        ]);
+
+        event(new SendNewOTP($otpModel, $this));
+
+        return $otpModel;
+    }
+
 }

@@ -23,18 +23,12 @@ class LoginTest extends TestCase
     /** @test */
     public function can_login_with_valid_credential()
     {
-        factory('App\Country')->create(['code' => 'NG']);
 
-        $countryCode = 'NG';
-        $id = factory('App\User')->create([
-            'phone' => PhoneNumber::format('08066100671', $countryCode)
-        ])->id;
-
-        $user = User::find($id);
+        $this->loadUsersWithPermission();
 
         $this->postJson(route('api.auth.login.post'), [
-            'identity' => $user->getPhone(),
-             'country' => $countryCode,
+            'identity' => $this->adminUser->getPhone(),
+             'country' => 'NG',
              'password' => 'password'
             ]
         )->assertStatus(200)
