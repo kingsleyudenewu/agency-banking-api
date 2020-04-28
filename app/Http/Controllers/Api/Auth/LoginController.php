@@ -27,13 +27,12 @@ class LoginController extends APIBaseController
             return $this->errorResponse('Login and/or password are incorrect.');
         }
 
-        $user->newAPIToken();
+        $user->newAPIToken()
+            ->determineLoginOTP();
+
 
         auth()->setUser($user->getModel());
-
-        return $this->successResponseWithUser('OK', [
-            'access_token' => $user->getPlainToken(),
-        ]);
+        return $this->successResponseWithUser('OK', $user->getLoginResponse());
 
     }
 

@@ -26,6 +26,14 @@ class User
      */
     private $plainToken;
 
+
+    /**
+     * This is what we return when a user successfully login
+     * @var
+     */
+    private $loginResponse = [];
+
+
     /**
      * Find User by id
      *
@@ -141,7 +149,7 @@ class User
         return $this->plainToken;
     }
 
-    public function newAPIToken($len=80) : Model
+    public function newAPIToken($len=80) : self
     {
         $token = Str::random($len);
 
@@ -153,7 +161,7 @@ class User
 
         $this->plainToken = $token;
 
-        return $this->model;
+        return $this;
     }
 
 
@@ -261,4 +269,25 @@ class User
         return $otpModel;
     }
 
+    public  function getLoginResponse(): array
+    {
+        return $this->loginResponse;
+    }
+
+    public function determineLoginOTP()
+    {
+        $otpRequired = boolval(settings('enable_otp_for_login'));
+        $this->loginResponse['otp_required'] = $otpRequired;
+
+        if($otpRequired)
+        {
+            $otp = new OtpVerification($this);
+            $otp->send();
+        }
+        else
+        {
+            $this->loginResponse['access_token'] = $this->getPlainToken();
+        }
+
+    }
 }

@@ -14,5 +14,12 @@ class OtpVerificationTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** @test */
+    public function should_throw_an_exception_if_phone_is_already_verified()
+    {
+        $this->assertTrue(true);
+    }
+
+
 
 }
