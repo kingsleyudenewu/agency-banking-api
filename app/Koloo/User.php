@@ -269,24 +269,34 @@ class User
         return $otpModel;
     }
 
-    public  function getLoginResponse(): array
+    public  function getLoginResponse($otp = null)
     {
-        return $this->loginResponse;
+        return $otp ? json_decode($otp->response, true) : $this->loginResponse;
+
     }
 
     public function determineLoginOTP()
     {
+        settings()->flushCache();
+
         $otpRequired = boolval(settings('enable_otp_for_login'));
+
         $this->loginResponse['otp_required'] = $otpRequired;
+
+        $accessToken = $this->getPlainToken();
 
         if($otpRequired)
         {
             $otp = new OtpVerification($this);
             $otp->send();
+
+            // The send has to happen first else getLastOtp will be null
+            if($otp->getLastOtp())
+                $otp->getLastOtp()->update(['response' => json_encode(['access_token' => $accessToken])]);
         }
         else
         {
-            $this->loginResponse['access_token'] = $this->getPlainToken();
+            $this->loginResponse['access_token'] = $accessToken;
         }
 
     }

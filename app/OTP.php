@@ -8,5 +8,5 @@ class OTP extends Model
 {
     protected $table = 'otps';
 
-    protected $fillable = ['phone', 'expire_at', 'code'];
+    protected $fillable = ['phone', 'expire_at', 'code', 'response'];
 }

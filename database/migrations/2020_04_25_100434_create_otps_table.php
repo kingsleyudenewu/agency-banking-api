@@ -18,6 +18,7 @@ class CreateOTPSTable extends Migration
             $table->string('phone', 45);
             $table->string('code');
             $table->dateTime('expire_at');
+            $table->text('response')->nullable();
             $table->timestamps();
         });
     }

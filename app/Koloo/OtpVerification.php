@@ -42,9 +42,11 @@ class OtpVerification
 
     public function send(): self
     {
-        if ($this->user->isPhoneVerified()) {
+        /* TODO: Extract to a new method/hook
+
+         * if ($this->user->isPhoneVerified()) {
             throw new \Exception("Phone is already verified.");
-        }
+        }*/
 
         $this->loadOtpInformation();
 
@@ -85,6 +87,11 @@ class OtpVerification
         return $this->lastOtp ? $this->determineChannel($this->otpCount - 1) : null;
     }
 
+    public function getLastOtp()
+    {
+        return $this->lastOtp;
+    }
+
     public function verifyPhone(string $code = null): bool
     {
 
@@ -112,13 +119,13 @@ class OtpVerification
     {
         if (! $code) return false;
 
-        $otp = OTP::where('otp', $code)
+       $this->lastOtp = OTP::where('code', $code)
             ->where('expire_at', '>', now())
             ->where('phone', $this->user->getPhone())
             ->orderByDesc('created_at')
             ->first();
 
-        if (! $otp OR ! $code) {
+        if (! $this->lastOtp OR ! $code) {
             return false;
         }
 
@@ -179,11 +186,11 @@ class OtpVerification
         $this->otpCount = OTP::where('phone', $this->user->getPhone())->count();
     }
 
-    private function invalidateActiveOtp()
+    public function invalidateActiveOtp()
     {
         OTP::where('phone', $this->user->getPhone())
             ->where('expire_at', '>', now())
-            ->update(['expire_at' => now()->subYear()]);
+            ->update(['expire_at' => now()->subYear(), 'response' => null, 'code' => '']);
     }
 
 
