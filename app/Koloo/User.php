@@ -290,6 +290,8 @@ class User
             $otp = new OtpVerification($this);
             $otp->send();
 
+            $this->loginResponse['expires_at'] = $otp->getExpiresAt();
+
             // The send has to happen first else getLastOtp will be null
             if($otp->getLastOtp())
                 $otp->getLastOtp()->update(['response' => json_encode(['access_token' => $accessToken])]);

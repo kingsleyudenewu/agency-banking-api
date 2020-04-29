@@ -193,5 +193,10 @@ class OtpVerification
             ->update(['expire_at' => now()->subYear(), 'response' => null, 'code' => '']);
     }
 
+    public function getExpiresAt()
+    {
+        return $this->getLastOtp() ? $this->getLastOtp()->expire_at : null;
+    }
+
 
 }
