@@ -22,6 +22,7 @@ class CreateMessagesTable extends Migration
             $table->uuid('user_id');
             $table->uuid('sender');
             $table->primary('id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
