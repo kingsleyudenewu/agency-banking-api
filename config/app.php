@@ -177,6 +177,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        App\Providers\SmsServiceProvider::class,
+
     ],
 
     /*
@@ -230,6 +232,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Eventy' => TorMorten\Eventy\Facades\Events::class,
+        'SMS' => \App\Components\Sms\Facade\Sms::class,
 
     ],
 

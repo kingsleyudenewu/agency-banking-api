@@ -20,16 +20,20 @@ class SendNewOTP
 
     public $user;
 
+    public $channel;
+
     /**
      * Create a new event instance.
      *
      * @param \App\OTP        $otp
      * @param \App\Koloo\User $user
+     * @param string          $channel
      */
-    public function __construct(OTP $otp, User $user)
+    public function __construct(OTP $otp, User $user, string $channel = 'sms')
     {
         $this->otp = $otp;
         $this->user = $user;
+        $this->channel = $channel;
     }
 
     /**

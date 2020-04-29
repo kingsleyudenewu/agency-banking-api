@@ -261,10 +261,10 @@ class User
         $otpModel = OTP::create([
             'expire_at' => now()->addHours(24),
             'phone' => $this->getPhone(),
-            'code' => $otp
+            'code' => $otp,
         ]);
 
-        event(new SendNewOTP($otpModel, $this));
+        event(new SendNewOTP($otpModel, $this, $messageType));
 
         return $otpModel;
     }

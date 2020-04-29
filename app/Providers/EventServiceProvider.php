@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 use App\Events\AgentAccountCreated;
+use App\Events\SendMessage;
+use App\Events\SendNewOTP;
 use App\Listeners\HandleAgentAccountCreation;
+use App\Listeners\HandleNewOTP;
+use App\Listeners\OnSendMessage;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -23,6 +27,14 @@ class EventServiceProvider extends ServiceProvider
 
         AgentAccountCreated::class => [
             HandleAgentAccountCreation::class
+        ],
+
+        SendMessage::class => [
+            OnSendMessage::class
+        ],
+
+        SendNewOTP::class => [
+            HandleNewOTP::class
         ]
 
     ];

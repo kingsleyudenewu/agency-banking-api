@@ -13,9 +13,22 @@ trait LogTrait
 {
 
 
-    public function log(string $message, array $context = []): self
+    protected $logChannel = 'logs';
+
+
+    protected function logInfo($message, array $context = []): self
     {
-        Log::channel('koloo')->info($message, $context);
+        return $this->log('info', $message, $context);
+    }
+
+    protected function logError(string $message = '', array $context = []): self
+    {
+        return $this->log('error', $message, $context);
+    }
+
+    protected function log(string $type, string $message, array $context = []): self
+    {
+        Log::channel($this->logChannel)->{$type}($message, $context);
 
         return $this;
     }
