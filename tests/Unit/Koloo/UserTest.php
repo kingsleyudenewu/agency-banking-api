@@ -139,4 +139,35 @@ class UserTest extends TestCase
     }
 
 
+    /** @test */
+    public function can_generate_a_unique_account_number()
+    {
+        $user = User::find(factory('App\User')->create()->id);
+
+        $this->assertNull($user->getAccountNumber());
+
+
+        $user->setAccountNumber();
+
+        $this->assertNotNull($user->getAccountNumber());
+
+    }
+
+    /** @test */
+    public function make_sure_account_number_is_unique_at_all_times()
+    {
+        $user = User::find(factory('App\User')->create()->id);
+        $user2 = User::find(factory('App\User')->create()->id);
+
+        $this->assertNull($user->getAccountNumber());
+
+
+        $user->setAccountNumber();
+        $user2->setAccountNumber();
+
+        $this->assertNotNull($user->getAccountNumber());
+
+    }
+
+
 }

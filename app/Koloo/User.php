@@ -119,6 +119,11 @@ class User
         return $this->model->id;
     }
 
+    public function getAccountNumber(): ?string
+    {
+        return $this->model->account_number;
+    }
+
     public function getEmail(): string
     {
         return $this->model->email;
@@ -299,6 +304,23 @@ class User
         else
         {
             $this->loginResponse['access_token'] = $accessToken;
+        }
+
+    }
+
+    public function setAccountNumber()
+    {
+        $accountNumber =  makeRandomInt(settings('account_number_length', 10));
+
+        try {
+
+            $this->model->update(['account_number' => $accountNumber]);
+
+            return $accountNumber;
+        }
+        catch (\Exception $e)
+        {
+            $this->setAccountNumber();
         }
 
     }
