@@ -123,4 +123,20 @@ class WalletTest extends TestCase
     }
 
 
+    /** @test */
+    public function do_not_start_morethan_two_wallets_for_the_user()
+    {
+        $user = factory('App\User')->create();
+
+        $this->assertEquals(0, $user->wallets()->count());
+
+        \App\Wallet::start($user);
+        $this->assertEquals(2, $user->wallets()->count());
+
+        \App\Wallet::start($user);
+        $this->assertEquals(2, $user->wallets()->count());
+
+    }
+
+
 }
