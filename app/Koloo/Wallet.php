@@ -75,6 +75,7 @@ class Wallet
         } catch (\Exception $e)
         {
             $this->logError($e->getMessage());
+            DB::rollBack();
         }
 
         return $this->getAmount();
@@ -91,11 +92,24 @@ class Wallet
     public function debit(int $amount): int
     {
 
-        $this->model->amount -= $amount;
-        $this->model->touched = now();
-        $this->model->save();
+        $this->logInfo('debiting wallet with ' .  $amount);
 
-        $this->updateHash();
+        try {
+            DB::beginTransaction();
+
+            $this->model->amount -= $amount;
+            $this->model->touched = now();
+            $this->model->save();
+
+            $this->updateHash();
+
+            DB::commit();
+            $this->logInfo('done debiting  wallet with ' .  $amount);
+        } catch (\Exception $e)
+        {
+            $this->logError($e->getMessage());
+            DB::rollBack();
+        }
 
         return $this->getAmount();
     }
