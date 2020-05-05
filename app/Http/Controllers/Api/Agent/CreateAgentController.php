@@ -7,6 +7,7 @@ use App\Http\Controllers\APIBaseController;
 use App\Http\Requests\CreateAgentRequest;
 use App\Koloo\User;
 use App\Http\Resources\User as UserTransformer;
+use App\Traits\LogTrait;
 use Illuminate\Support\Str;
 
 
@@ -18,6 +19,8 @@ use Illuminate\Support\Str;
 class CreateAgentController extends APIBaseController
 {
 
+    use LogTrait;
+
     /**
      * Instantiate a new controller instance.
      *
@@ -25,6 +28,7 @@ class CreateAgentController extends APIBaseController
      */
     public function __construct()
     {
+         $this->logChannel = 'CreateAgent';
 
         $this->middleware(function ($request, $next) {
             $user = User::find($request->user()->id);
@@ -42,6 +46,7 @@ class CreateAgentController extends APIBaseController
 
     public function store(CreateAgentRequest $request)
     {
+        $this->logInfo('Creating account ..');
 
         $data = $request->validated();
         $data['password'] = Str::random(30);
@@ -59,6 +64,9 @@ class CreateAgentController extends APIBaseController
         $user->$method();
 
         event(new AgentAccountCreated($user));
+
+
+        $this->logInfo('Done creating account ..');
 
         return $this->successResponse('OK', new UserTransformer($user));
 

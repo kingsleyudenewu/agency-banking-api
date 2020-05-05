@@ -6,7 +6,7 @@ namespace Tests\Unit;
 
 use App\Country;
 use App\Profile;
-use App\Wallet;
+use Illuminate\Database\Eloquent\Collection;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -28,13 +28,13 @@ class UserTest extends TestCase
 
 
     /** @test */
-    public function has_one_wallet()
+    public function has_many_wallet()
     {
         $user = factory('App\User')->create();
 
         factory('App\Wallet')->create(['user_id' => $user->id]);
 
-        $this->assertInstanceOf(Wallet::class, $user->wallet);
+        $this->assertInstanceOf(Collection::class, $user->wallets);
 
     }
 

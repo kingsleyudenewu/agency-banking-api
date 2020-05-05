@@ -185,7 +185,8 @@ class User
            $data['account_number'] = Model::makeAccountNumber();
            $user =  Model::create($data);
 
-           \App\Wallet::start($user);
+           $wallet = \App\Wallet::start($user);
+           if(!$wallet) throw new \Exception('Unable to start wallet');
 
            $user->profile()->create($data);
 

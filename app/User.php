@@ -68,9 +68,9 @@ class User extends AuthBaseModel
         return $this->hasOne(Profile::class);
     }
 
-    public function wallet()
+    public function wallets()
     {
-        return $this->hasOne(Wallet::class);
+        return $this->hasMany(Wallet::class);
     }
 
     public function country()
@@ -121,5 +121,10 @@ class User extends AuthBaseModel
     {
         return makeRandomInt(settings('account_number_length', 10));
 
+    }
+
+    public function hasWallet($type): bool
+    {
+        return $this->wallets()->where('type', $type)->exists();
     }
 }

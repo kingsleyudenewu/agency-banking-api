@@ -20,6 +20,7 @@ class CreateWalletsTable extends Migration
             $table->bigInteger('amount')->default(0);
             $table->string('hash')->nullable();
             $table->dateTime('touched')->nullable();
+            $table->enum('type', ['wallet', 'commission'])->default('wallet');
             $table->timestamps();
         });
     }
