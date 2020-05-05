@@ -49,6 +49,11 @@ class CreateAgentController extends APIBaseController
         $authUser = User::find($request->user()->id);
         $user =  User::createWithProfile($data, $request->user());
 
+        if(!$user)
+        {
+            return $this->errorResponse('Unable to create account. Try again.');
+        }
+
         $method = ($authUser->isAdmin() && request('type') === 'super') ? 'setAsSuperAgent' : 'setAsAgent';
 
         $user->$method();

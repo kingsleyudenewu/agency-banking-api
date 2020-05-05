@@ -2,7 +2,9 @@
 
 namespace App\Koloo;
 
+use App\Traits\LogTrait;
 use App\Wallet as Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -12,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
  */
 class Wallet
 {
+    use LogTrait;
 
     const AMOUNT_HASH_TEMPLATE = '%s--%d-%s-%s';
 
@@ -23,6 +26,7 @@ class Wallet
     public function __construct(Model $model)
     {
         $this->model = $model;
+        $this->logChannel = 'KOLOO_WALLET';
     }
 
     public function getModel(): Model
@@ -54,11 +58,24 @@ class Wallet
      */
     public function credit(int $amount): int
     {
-        $this->model->amount += $amount;
-        $this->model->touched = now();
-        $this->model->save();
+        $this->logInfo('Crediting wallet with ' .  $amount);
 
-        $this->updateHash();
+        try {
+            DB::beginTransaction();
+
+            $this->model->amount += $amount;
+            $this->model->touched = now();
+            $this->model->save();
+            $this->updateHash();
+
+            DB::commit();
+
+            $this->logInfo('Done wallet with ' .  $amount);
+
+        } catch (\Exception $e)
+        {
+            $this->logError($e->getMessage());
+        }
 
         return $this->getAmount();
 

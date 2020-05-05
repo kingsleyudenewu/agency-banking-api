@@ -5,7 +5,9 @@ namespace App\Koloo;
 
 use App\Events\SendNewOTP;
 use App\OTP;
+use App\Traits\LogTrait;
 use App\User as Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -16,6 +18,7 @@ use Illuminate\Support\Str;
  */
 class User
 {
+    use LogTrait;
     /**
      * User
      */
@@ -102,6 +105,7 @@ class User
     public function __construct(Model $model)
     {
         $this->model = $model;
+        $this->logChannel  = 'KOLOO_USER';
     }
 
     public function getModel(): Model
@@ -170,19 +174,30 @@ class User
     }
 
 
-    public static function createWithProfile(array $data, Model $parent  = null) : Model
+    public static function createWithProfile(array $data, Model $parent  = null) : ?Model
     {
+       try {
+           DB::beginTransaction();
 
-        if($parent)
-            $data['parent_id'] = $parent->id;
+           if($parent)
+               $data['parent_id'] = $parent->id;
 
-        $user =  Model::create($data);
+           $data['account_number'] = Model::makeAccountNumber();
+           $user =  Model::create($data);
 
-        \App\Wallet::start($user);
+           \App\Wallet::start($user);
 
-        $user->profile()->create($data);
+           $user->profile()->create($data);
 
-        return $user;
+           DB::commit();
+
+           return $user;
+       } catch (\Exception $e) {
+           Log::channel('KOLOO_USER')->error($e->getMessage());
+           DB::rollBack();
+       }
+
+       return null;
     }
 
     public function settings()
@@ -304,23 +319,6 @@ class User
         else
         {
             $this->loginResponse['access_token'] = $accessToken;
-        }
-
-    }
-
-    public function setAccountNumber()
-    {
-        $accountNumber =  makeRandomInt(settings('account_number_length', 10));
-
-        try {
-
-            $this->model->update(['account_number' => $accountNumber]);
-
-            return $accountNumber;
-        }
-        catch (\Exception $e)
-        {
-            $this->setAccountNumber();
         }
 
     }

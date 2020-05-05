@@ -111,4 +111,15 @@ class User extends AuthBaseModel
         $this->save();
         return true;
     }
+
+
+    /**
+     * TODO: Work on the account number to be unique
+     * @return string
+     */
+    public static function makeAccountNumber() : string
+    {
+        return makeRandomInt(settings('account_number_length', 10));
+
+    }
 }
