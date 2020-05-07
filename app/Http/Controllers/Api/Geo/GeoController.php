@@ -7,6 +7,7 @@ use App\Http\Controllers\APIBaseController;
 use App\Http\Requests\CountryCreateRequest;
 use  App\Http\Resources\State;
 use  App\Http\Resources\Country as CountryTransformer;
+use Illuminate\Http\Request;
 
 
 /**
@@ -36,5 +37,16 @@ class GeoController extends APIBaseController
 
          return $this->successResponse('OK', Country::create($data));
 
+    }
+
+
+    public function createState(Request $request, $countryId)
+    {
+        $data = $request->validate(['name' => 'required:max:255']);
+
+        $country = Country::findOrFail($countryId);
+
+
+        return $this->successResponse('OK', new State( $country->states()->create($data)));
     }
 }
