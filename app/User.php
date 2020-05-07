@@ -127,4 +127,11 @@ class User extends AuthBaseModel
     {
         return $this->wallets()->where('type', $type)->exists();
     }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles()->get()->first();
+
+        return $roles ? $roles->pluck('name')->toArray() : [];
+    }
 }

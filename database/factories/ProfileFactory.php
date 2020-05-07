@@ -23,5 +23,7 @@ $factory->define(Profile::class, function (Faker $faker) {
         'business_address' => $faker->address,
         'business_phone' => $faker->phoneNumber,
         'bvn' => $faker->numberBetween(1000000000),
+        'emergency_name' => '',
+        'emergency_phone' => '',
     ];
 });

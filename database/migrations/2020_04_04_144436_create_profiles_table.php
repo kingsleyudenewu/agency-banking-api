@@ -33,6 +33,8 @@ class CreateProfilesTable extends Migration
             $table->string('passport_photograph')->nullable();
             $table->string('agreement_form')->nullable();
             $table->boolean('setup_completed')->default(false);
+            $table->string('emergency_name')->nullable();
+            $table->string('emergency_phone')->nullable();
             $table->uuid('user_id');
             $table->primary('id');
             $table->timestamps();

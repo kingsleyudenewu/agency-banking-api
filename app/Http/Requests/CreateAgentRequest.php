@@ -68,6 +68,8 @@ class CreateAgentRequest extends BaseRequest
             'business_phone' => 'nullable|max:255',
             'business_email'    => 'nullable|email',
             'bvn'   => 'required|numeric',
+            'emergency_phone' => 'nullable|max:255',
+            'emergency_name' => 'nullable|max:255'
 
         ];
 

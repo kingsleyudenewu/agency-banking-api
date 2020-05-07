@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +26,15 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
         Route::post('/login', 'LoginController@postLogin')->name('login.post');
         Route::post('/login/otp', 'LoginOTPController@process')->name('login.post.top');
+
+    });
+
+    /**
+     * Profile endpoint
+     */
+    Route::group(['prefix' => 'profile', 'namespace' => 'Api\Account', 'as' => 'profile.'], function () {
+
+        Route::get('/', 'ProfileController@index')->name('get');
 
     });
 

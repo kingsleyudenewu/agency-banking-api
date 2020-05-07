@@ -35,7 +35,7 @@ class HandleNewOTP
             'message_type' => $event->channel,
             'user_id' => $user->getId(),
             'sender' => $user->getId(),
-            'subject' => 'ACTION REQUIRED: NodCredit OTP'
+            'subject' => 'ACTION REQUIRED: Koloo OTP'
         ]);
 
 
