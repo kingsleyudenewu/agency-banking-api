@@ -32,7 +32,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
     /**
      * Profile endpoint
      */
-    Route::group(['prefix' => 'profile', 'namespace' => 'Api\Account', 'as' => 'profile.'], function () {
+    Route::group(['prefix' => 'profile', 'namespace' => 'Api\Account', 'as' => 'profile.', 'middleware' => ['auth:api']], function () {
 
         Route::get('/', 'ProfileController@index')->name('get');
 

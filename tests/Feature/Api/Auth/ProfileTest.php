@@ -23,7 +23,6 @@ class ProfileTest extends TestCase
     /** @test */
     public function can_fetch_profile_data_for_authenticated_user()
     {
-        $this->withoutExceptionHandling();
 
         $user =   $this->agentUser;
         $this->signIn($user->getModel());
@@ -32,6 +31,16 @@ class ProfileTest extends TestCase
             ->assertStatus(200)
             ->assertJson(['status' => 'success', 'data' => ['name' => $user->getName()]]);
     }
+
+
+    /** @test */
+    public function must_not_be_able_to_fetch_profile_for_none_authenticated_user()
+    {
+
+        $this->json('GET', route('api.profile.get'))
+            ->assertStatus(401) ;
+    }
+
 
 
 }
