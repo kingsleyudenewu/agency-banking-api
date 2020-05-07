@@ -5,7 +5,7 @@ namespace App;
 
 class State extends BaseModel
 {
-    protected $fillable = ['name', 'country_id'];
+    protected $fillable = ['name', 'country_id', 'enabled'];
 
     public function scopeEnabled($query)
     {
