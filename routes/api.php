@@ -40,6 +40,14 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
         Route::get('/countries', 'GeoController@countries')->name('countries');
         Route::get('/countries/{id}/states', 'GeoController@states')->name('states');
 
+        Route::post('/countries', 'GeoController@createCountry')
+            ->middleware(['auth:api', 'admin-check'])
+            ->name('countries.store');
+
+        Route::post('/countries/{id}/states', 'GeoController@createState')
+            ->middleware(['auth:api', 'admin-check'])
+            ->name('countries.state.store');
+
     });
 
 
