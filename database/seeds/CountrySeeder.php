@@ -13,6 +13,13 @@ class CountrySeeder extends Seeder
     {
         \App\Country::truncate();
 
-        \App\Country::create(['name' => 'Nigeria', 'code' => 'NG', 'currency' => 'NGN']);
+        $c = \App\Country::create(['name' => 'Nigeria', 'code' => 'NG', 'currency' => 'NGN']);
+
+        $states = ['Lagos', 'Edo', 'Enugu', 'Benue', 'Ogun'];
+
+        foreach($states as $state)
+        {
+            $c->states()->create(['name' => $state]);
+        }
     }
 }

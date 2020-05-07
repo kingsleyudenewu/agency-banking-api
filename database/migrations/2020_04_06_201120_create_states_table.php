@@ -16,6 +16,7 @@ class CreateStatesTable extends Migration
         Schema::create('states', function (Blueprint $table) {
             $table->uuid('id');
             $table->uuid('country_id');
+            $table->boolean('enabled')->default(true);
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();

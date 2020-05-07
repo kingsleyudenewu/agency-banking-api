@@ -35,6 +35,13 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
     });
 
+    Route::group(['prefix' => 'geo', 'namespace' => 'Api\Geo', 'as' => 'countries.'], function () {
+
+        Route::get('/countries', 'GeoController@countries')->name('countries');
+        Route::get('/countries/{id}/states', 'GeoController@states')->name('states');
+
+    });
+
 
     /**
      * Profile endpoint
