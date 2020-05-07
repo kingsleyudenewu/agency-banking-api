@@ -19,7 +19,7 @@ class GeoController extends APIBaseController
 
     public function countries()
     {
-        return $this->successResponse('countries', CountryTransformer::collection(Country::enabled()->get()));
+        return $this->successResponse('countries', CountryTransformer::collection( Country::enabled()->get()));
     }
 
 
@@ -35,8 +35,6 @@ class GeoController extends APIBaseController
          $data['currency'] = strtoupper($data['currency']);
 
          return $this->successResponse('OK', Country::create($data));
-
-
 
     }
 }
