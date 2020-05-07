@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Api\Customer;
 
-use App\Events\AgentAccountCreated;
 use App\Http\Controllers\APIBaseController;
 use App\Http\Requests\CreateAgentRequest;
 use App\Http\Resources\User as UserTransformer;
 use App\Koloo\User;
 use App\Traits\LogTrait;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+
 
 /**
  * Class CustomerController
@@ -27,6 +25,7 @@ class CustomerController extends APIBaseController
 
     public function store(CreateAgentRequest $request)
     {
+
         $this->logInfo('Creating customer account ..');
 
         $data = $request->validated();

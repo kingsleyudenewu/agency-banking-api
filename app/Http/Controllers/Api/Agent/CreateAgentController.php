@@ -8,7 +8,6 @@ use App\Http\Requests\CreateAgentRequest;
 use App\Koloo\User;
 use App\Http\Resources\User as UserTransformer;
 use App\Traits\LogTrait;
-use Illuminate\Support\Str;
 
 
 /**
@@ -49,7 +48,6 @@ class CreateAgentController extends APIBaseController
         $this->logInfo('Creating account ..');
 
         $data = $request->validated();
-        $data['password'] = Str::random(30);
 
         $authUser = User::find($request->user()->id);
         $user =  User::createWithProfile($data, $request->user());

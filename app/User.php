@@ -135,10 +135,8 @@ class User extends AuthBaseModel
         return $this->wallets()->where('type', $type)->exists();
     }
 
-    public function getRoles(): array
+    public function getRoles()
     {
-        $roles = $this->roles()->get()->first();
-
-        return $roles ? $roles->pluck('name')->toArray() : [];
+       return $this->roles->pluck('name');
     }
 }
