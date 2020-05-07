@@ -174,7 +174,7 @@ class User
     }
 
 
-    public static function createWithProfile(array $data, Model $parent  = null) : ?Model
+    public static function createWithProfile(array $data, Model $parent  = null) : ?self
     {
        try {
            DB::beginTransaction();
@@ -192,7 +192,7 @@ class User
 
            DB::commit();
 
-           return $user;
+           return static::find($user->id);
        } catch (\Exception $e) {
            Log::channel('KOLOO_USER')->error($e->getMessage());
            DB::rollBack();

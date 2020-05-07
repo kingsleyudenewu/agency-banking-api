@@ -2,12 +2,9 @@
 
 namespace App\Events;
 
-use App\User;
-use Illuminate\Broadcasting\Channel;
+
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -20,9 +17,9 @@ class AgentAccountCreated
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param \App\Koloo\User $agent
      */
-    public function __construct(User $agent)
+    public function __construct(\App\Koloo\User $agent)
     {
         $this->agent = $agent;
     }

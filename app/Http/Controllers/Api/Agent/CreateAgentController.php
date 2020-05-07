@@ -61,14 +61,14 @@ class CreateAgentController extends APIBaseController
 
         $method = ($authUser->isAdmin() && request('type') === 'super') ? 'setAsSuperAgent' : 'setAsAgent';
 
-        $user->$method();
+        $user->getModel()->$method();
 
         event(new AgentAccountCreated($user));
 
 
         $this->logInfo('Done creating account ..');
 
-        return $this->successResponse('OK', new UserTransformer($user));
+        return $this->successResponse('OK', new UserTransformer($user->getModel()));
 
     }
 
