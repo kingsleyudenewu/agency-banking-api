@@ -8,6 +8,7 @@ use App\OTP;
 use App\Traits\LogTrait;
 use App\User as Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -182,6 +183,7 @@ class User
            if($parent)
                $data['parent_id'] = $parent->id;
 
+           $data['password'] = Hash::make($data['password']);
            $data['account_number'] = Model::makeAccountNumber();
            $user =  Model::create($data);
 

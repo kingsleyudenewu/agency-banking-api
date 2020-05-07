@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 
 use App\Koloo\PhoneNumber;
 use App\Koloo\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Rules\BannedName;
 
@@ -73,8 +74,10 @@ class CreateAgentRequest extends BaseRequest
 
         ];
 
-        if($this->path() === "/api/v1/customers" && $this->isMethod("post"))
+
+        if($this->path() === "api/v1/customers" && $this->isMethod("post"))
         {
+
             $validationRules['lga'] = 'required|max:255';
             $validationRules['next_of_kin_phone'] = 'required|max:150';
             $validationRules['marital_status'] = ['required', Rule::in('married','single','unknown')];
@@ -82,6 +85,8 @@ class CreateAgentRequest extends BaseRequest
 
         }
 
+        if(request('password'))
+            $validationRules['password'] = 'required|min:6|strong_password';
 
         return $validationRules;
     }
@@ -107,6 +112,9 @@ class CreateAgentRequest extends BaseRequest
                $data['secondary_phone'] = PhoneNumber::format($this->cleanPhone($this->secondary_phone), $this->country);
 
        }
+
+        if(!request('password'))
+            $data['password'] = 'S.$a' . str_random(60);
 
         return $this->merge($data);
     }

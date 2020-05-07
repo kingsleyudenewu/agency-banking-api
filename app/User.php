@@ -16,6 +16,7 @@ class User extends AuthBaseModel
     const ROLE_AGENT = 'agent';
     const ROLE_SUPER_AGENT = 'super-agent';
     const ROLE_ADMIN = 'admin';
+    const ROLE_CUSTOMER = 'customer';
 
     const GENDER_MALE = 'male';
     const GENDER_FEMALE = 'female';
@@ -103,6 +104,12 @@ class User extends AuthBaseModel
     {
         $superAgentRole = Role::where('name', static::ROLE_SUPER_AGENT)->first();
         $this->attachRole($superAgentRole);
+    }
+
+    public function setAsCustomer()
+    {
+        $customer = Role::where('name', static::ROLE_CUSTOMER)->first();
+        $this->attachRole($customer);
     }
 
     public function updatePassword(string $password) : bool

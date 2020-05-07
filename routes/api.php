@@ -29,6 +29,13 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
     });
 
+    Route::group(['prefix' => 'customers', 'namespace' => 'Api\Customer', 'as' => 'customers.'], function () {
+
+        Route::post('/', 'CustomerController@store')->name('new');
+
+    });
+
+
     /**
      * Profile endpoint
      */

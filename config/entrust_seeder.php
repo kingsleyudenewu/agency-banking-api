@@ -15,6 +15,8 @@ return [
         'agent' => [
             'customer' => 'c,u,r'
         ],
+
+        'customer' => []
     ],
     'permissions_map' => [
         'c' => 'create',
