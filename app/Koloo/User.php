@@ -190,7 +190,8 @@ class User
            $wallet = \App\Wallet::start($user);
            if(!$wallet) throw new \Exception('Unable to start wallet');
 
-           $user->profile()->create($data);
+
+           $profile = $user->profile()->create($data);
 
            DB::commit();
 
@@ -324,5 +325,18 @@ class User
             $this->loginResponse['access_token'] = $accessToken;
         }
 
+    }
+
+    public function getPassportPath(): ?string
+    {
+        $passport = $this->getModel()->profile ? $this->getModel()->profile->passport_photo : '';
+        if(isJson($passport))
+        {
+
+            $passport = json_decode($passport, false, JSON_UNESCAPED_SLASHES);
+            return str_replace("//", "/", $passport->path);
+        }
+
+        return null;
     }
 }

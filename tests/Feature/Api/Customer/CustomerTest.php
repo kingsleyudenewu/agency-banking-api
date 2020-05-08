@@ -4,6 +4,8 @@ namespace Tests\Feature\Api\Customer;
 
 use App\Koloo\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 /**
@@ -28,11 +30,21 @@ class CustomerTest extends TestCase
     public function can_create_a_customer_account_with_the_right_data()
     {
 
-        $this->withoutExceptionHandling();
 
         $payload = $this->profile_creation_data();
 
+        $disk = $this->getSetting('document_storage_driver');
+        $path = $this->getSetting('document_storage_path');
+        $maxSize = $this->getSetting('document_storage_max_size'); // default to 2mb
+
+        Storage::fake($disk);
+
+
+        $file = UploadedFile::fake()->create('passport.png', $maxSize, 'image/png');
+        $payload['passport_photo'] = $file;
+
         $res = $this->postJson(route('api.customers.new'), $payload)
+            ->dump()
             ->assertStatus(200)
             ->assertJson(['status' => 'success']);
 
@@ -45,6 +57,12 @@ class CustomerTest extends TestCase
         $this->assertFalse($user->getModel()->hasRole('super-agent'));
         $this->assertFalse($user->getModel()->hasRole('agent'));
         $this->assertNull($user->getParentID());
+
+        $fullPath  = $path  . $file->hashName();
+
+        $this->assertEquals($fullPath, $user->getPassportPath());
+
+        Storage::disk($disk)->assertExists($fullPath);
 
     }
 

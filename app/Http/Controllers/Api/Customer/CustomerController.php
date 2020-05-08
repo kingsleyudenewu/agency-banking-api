@@ -28,7 +28,16 @@ class CustomerController extends APIBaseController
 
         $this->logInfo('Creating customer account ..');
 
+        $path = settings('document_storage_path');
+        $disk = settings('document_storage_driver');
+
         $data = $request->validated();
+
+        $storedLocation = $request->file('passport_photo')->store($path, $disk);
+        $data['passport_photo'] = [
+            'disk' => $disk,
+            'path' => $storedLocation
+        ];
 
         $user =  User::createWithProfile($data, $request->user());
 

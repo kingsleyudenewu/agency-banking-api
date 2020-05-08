@@ -38,7 +38,7 @@ class User extends AuthBaseModel
         'password',
         'phone',
         'parent_id',
-        'account_number'
+        'account_number',
     ];
 
     /**

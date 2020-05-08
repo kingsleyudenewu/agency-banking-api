@@ -77,6 +77,7 @@ class CreateAgentRequest extends BaseRequest
             $validationRules['marital_status'] = ['required', Rule::in('married','single','unknown')];
             $validationRules['state_id']  = 'required|uuid';
             $validationRules['secondary_phone'] = 'nullable';
+            $validationRules['passport_photo'] = 'required|image|max:10240'; // 10mb largest
 
         }  elseif ($this->path() === 'api/v1/agents' && $this->isMethod("post"))
         {

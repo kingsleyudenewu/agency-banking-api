@@ -25,14 +25,14 @@ class Profile extends BaseModel
         'business_address',
         'business_phone',
         'bvn',
-        'passport_photograph',
+        'passport_photo',
         'agreement_form',
         'emergency_phone',
         'emergency_name'
     ];
 
     protected $casts = [
-        'passport_photograph' => Json::class,
+        'passport_photo' => Json::class,
         'agreement_form' => Json::class,
     ];
 
