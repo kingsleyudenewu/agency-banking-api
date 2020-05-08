@@ -26,6 +26,8 @@ class CustomerTest extends TestCase
         $this->loadUsersWithPermission();
     }
 
+
+
     /** @test */
     public function can_create_a_customer_account_with_the_right_data()
     {
@@ -44,7 +46,6 @@ class CustomerTest extends TestCase
         $payload['passport_photo'] = $file;
 
         $res = $this->postJson(route('api.customers.new'), $payload)
-            ->dump()
             ->assertStatus(200)
             ->assertJson(['status' => 'success']);
 
@@ -67,13 +68,12 @@ class CustomerTest extends TestCase
     }
 
 
-    /** @test */
-    public function authenticated_user_can_create_a_customer_account_with_the_right_data()
+
+    /*public function authenticated_user_can_create_a_customer_account_with_the_right_data()
     {
 
         $auhUser = $this->signIn($this->agentUser->getModel());
 
-        $this->withoutExceptionHandling();
 
         $payload = $this->profile_creation_data();
 
@@ -91,7 +91,7 @@ class CustomerTest extends TestCase
         $this->assertFalse($user->getModel()->hasRole('agent'));
         $this->assertEquals($auhUser->id, $user->getParentID());
 
-    }
+    }*/
 
 
     private function profile_creation_data()

@@ -121,7 +121,7 @@ class AgentTest extends TestCase
 
         $fullPath = $this->agent_document_upload($authUser, $disk);
 
-        $this->assertEquals($fullPath, $this->agentUser->getDocumentPath('passport_photograph'));
+        $this->assertEquals($fullPath, $this->agentUser->getDocumentPath('passport_photo'));
 
         $this->assertEquals('', $this->agentUser->getDocumentPath('invalid document'));
 
@@ -182,7 +182,7 @@ class AgentTest extends TestCase
             [
                 'doc' => $file,
                 'id' => $this->agentUser->getId(),
-                'document_type' => 'passport_photograph'
+                'document_type' => 'passport_photo'
             ]
         )->assertStatus(200)
             ->assertJson(['status' => 'success']);
