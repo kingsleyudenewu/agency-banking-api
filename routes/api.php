@@ -60,6 +60,16 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
     });
 
+    // savings outside of admin
+    Route::group([
+        'prefix' => 'savings',
+        'namespace' => 'Api\Savings',
+        'as' => 'agents.',
+        'middleware' => ['auth:api']], function () {
+
+        Route::get('/cycles', 'SavingCyclesController@index')->name('savings.cycles');
+
+    });
 
 
     Route::group([
@@ -83,6 +93,13 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
 
         Route::post('/password', 'PasswordManagement@store')->name('set-password');
+
+        Route::group(['prefix' => 'savings', 'as' => 'savings.'], function(){
+
+            Route::get('/cycle', 'SavingCycleManagement@index')->name('cycle.get');
+            Route::post('/cycle', 'SavingCycleManagement@store')->name('cycle.create');
+            Route::patch('/cycle', 'SavingCycleManagement@update')->name('cycle.update');
+        });
 
     });
 
