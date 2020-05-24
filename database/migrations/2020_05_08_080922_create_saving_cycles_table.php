@@ -21,6 +21,7 @@ class CreateSavingCyclesTable extends Migration
             $table->string('description')->nullable();
             $table->string('rule')->default('DefaultLoanRule');
             $table->unsignedInteger('min_saving_frequent');
+            $table->unsignedBigInteger('min_saving_amount')->comment('min amount to save daily');
             $table->enum('charge_type', ['flat', 'percent'])->default('flat');
             $table->integer('percentage_to_charge')->nullable();
             $table->softDeletes();

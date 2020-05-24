@@ -106,6 +106,21 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
 
 
+    Route::group([
+        'prefix' => 'savings',
+        'namespace' => 'Api\Savings',
+        'as' => 'savings.',
+        'middleware' => ['auth:api']], function () {
+
+
+        Route::post('/', 'SavingsController@store')->name('new');
+
+
+
+    });
+
+
+
 
 
 

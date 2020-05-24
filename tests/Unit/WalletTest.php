@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\User;
-use Cknow\Money\Money;
 use \Tests\TestCase;
 use App\Wallet;
 use Illuminate\Foundation\Testing\RefreshDatabase;

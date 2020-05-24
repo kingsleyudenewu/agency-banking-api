@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\SavingCycle;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,5 +18,14 @@ class SavingCycleTest extends TestCase
 
         $this->assertNotNull($cycle);
         $this->assertInstanceOf(SavingCycle::class, $cycle);
+    }
+
+    /** @test */
+    public function can_have_many_savings()
+    {
+        $cycle = factory('App\SavingCycle')->create();
+
+
+        $this->assertInstanceOf(Collection::class, $cycle->savings);
     }
 }

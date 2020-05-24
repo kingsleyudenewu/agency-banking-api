@@ -48,7 +48,8 @@ class Wallet extends Model
                 static::create([
                     'user_id' => $user->id,
                     'currency' => $user->country->currency,
-                    'type' => static::WALLET_TYPE_MAIN
+                    'type' => static::WALLET_TYPE_MAIN,
+                    'hash' => null
                 ]);
             }
 
@@ -57,7 +58,8 @@ class Wallet extends Model
                 static::create([
                     'user_id' => $user->id,
                     'currency' => $user->country->currency,
-                    'type' => static::WALLET_TYPE_COMMISSION
+                    'type' => static::WALLET_TYPE_COMMISSION,
+                    'hash' => null
                 ]);
             }
 

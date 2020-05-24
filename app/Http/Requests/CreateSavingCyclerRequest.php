@@ -29,7 +29,8 @@ class CreateSavingCyclerRequest extends FormRequest
             'title' => 'required|max:255|unique:saving_cycles,title',
             'description' => 'nullable|max:255',
             'duration' => 'required|numeric|min:1',
-            'min_saving_frequent' => 'nullable|min:0|max:100',
+            'min_saving_frequent' => 'required|min:0|max:100',
+            'min_saving_amount' => 'required|numeric|min:0',
             'charge_type' => [
                 'required',
                 Rule::in(['flat', 'percent']),

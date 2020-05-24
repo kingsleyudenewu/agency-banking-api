@@ -139,4 +139,25 @@ class User extends AuthBaseModel
     {
        return $this->roles->pluck('name');
     }
+
+    /**
+     * The savings this person has made - like saving money
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function savings()
+    {
+        return $this->hasMany(Saving::class, 'owner_id');
+    }
+
+    /**
+     * The saving this agent has created
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function savingsCreated()
+    {
+        return $this->hasMany(Saving::class, 'creator_id');
+    }
+
 }

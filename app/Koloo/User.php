@@ -3,8 +3,15 @@
 namespace App\Koloo;
 
 
+use App\Events\PreWalletBilled;
 use App\Events\SendNewOTP;
+use App\Events\WalletBilled;
+use App\Koloo\Exceptions\BilingException;
+use App\Koloo\Exceptions\NoWalletException;
+use App\Koloo\Exceptions\UserNotFoundException;
 use App\OTP;
+use App\Saving;
+use App\SavingCycle;
 use App\Traits\LogTrait;
 use App\User as Model;
 use Illuminate\Support\Facades\DB;
@@ -54,6 +61,14 @@ class User
         return new static($model);
     }
 
+    public static function findByInstance(?Model $user): ?self
+    {
+        if(!$user) return null;
+        return static::find($user->id);
+    }
+
+
+
     public static function findByPhone(string $phone = null): ?self
     {
         if (! $model = Model::where('phone', $phone)->first()) {
@@ -80,6 +95,11 @@ class User
         }
 
         return new static($model);
+    }
+
+    public static function checkExistence(?User $user)
+    {
+       if(!$user) throw new UserNotFoundException('User not found.');
     }
 
 
@@ -190,8 +210,7 @@ class User
            $wallet = \App\Wallet::start($user);
            if(!$wallet) throw new \Exception('Unable to start wallet');
 
-
-           $profile = $user->profile()->create($data);
+           $user->profile()->create($data);
 
            DB::commit();
 
@@ -338,5 +357,120 @@ class User
         }
 
         return null;
+    }
+
+    public function wallets()
+    {
+        return $this->model->wallets;
+    }
+
+    public function mainWallet()
+    {
+        $wallet = $this->model->wallets()->where('type', \App\Wallet::WALLET_TYPE_MAIN)->first();
+
+        return new Wallet($wallet);
+    }
+
+
+    private function checkWalletIsValid() : self
+    {
+        $wallet = $this->mainWallet();
+
+        if(!$wallet || !$wallet->isValid()) throw new BilingException('Wallet is not in a valid state');
+
+        return $this;
+    }
+
+    private function canChargeWallet(int $amount)
+    {
+
+        $this->checkWalletIsValid();
+
+        $wallet = $this->mainWallet();
+        if($wallet->getAmount() < $amount) throw new BilingException('Insufficient funds');
+
+        return $this;
+    }
+
+    /**
+     * Start a new savings for this user instance
+     * if $user is set, this method will try to debit the user the
+     * same amount the customer want to save
+     *
+     *
+     * @param $data array of data to use for the savings
+     * @param $user - the account performing the operation
+     */
+    public function newSaving(array $data , ?Model $user)
+    {
+        try {
+            DB::beginTransaction();
+
+            $authUser = static::findByInstance($user);
+
+            // If we have the user, try to debit the user
+            if($authUser)
+            {
+                $authUser->chargeWallet($data['amount']);
+            }
+
+            // Open the user savings
+            $user = static::find($data['owner_id']);
+            $saving = $user->validateForTransaction($data)
+                    ->makeNewSaving($data);
+
+            DB::commit();
+
+            return $saving;
+        } catch (\Exception $e) {
+            Log::channel('KOLOO_USER')->error($e->getMessage());
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+
+    private function chargeWallet($amount, $reason='Charged')
+    {
+
+        $this->canChargeWallet($amount);
+
+        $wallet = $this->mainWallet();
+
+        event(new PreWalletBilled($wallet));
+
+        $wallet->debit($amount);
+
+        event(new WalletBilled($wallet, $reason));
+
+    }
+
+    /**
+     * TODO: Add some fraud check here
+     * @return $this
+     */
+    public function validateForTransaction(array $data)
+    {
+        $savingCycle = SavingCycle::find($data['saving_cycle_id']);
+        if($data['amount'] < $savingCycle->minSavingAmount())
+        {
+            throw new BilingException('Amount too small for this package.');
+        }
+
+
+        return $this;
+    }
+
+    private function makeNewSaving(array $data)
+    {
+        $old = $this->getModel()
+            ->savings()
+            ->where('owner_id', $this->getId())
+            ->where('saving_cycle_id', $data['saving_cycle_id'])
+            ->whereNull('completed')->first();
+
+        if($old) return $old;
+
+        return $this->getModel()->savings()->create($data);
     }
 }

@@ -47,4 +47,22 @@ class UserTest extends TestCase
     }
 
 
+    /** @test */
+    public function a_user_can_have_many_savings()
+    {
+        $user = factory('App\User')->create();
+
+        $this->assertInstanceOf(Collection::class, $user->savings);
+    }
+
+
+    /** @test */
+    public function a_user_can_have_many_savings_created_by_them()
+    {
+        $user = factory('App\User')->create();
+
+        $this->assertInstanceOf(Collection::class, $user->savingsCreated);
+    }
+
+
 }
