@@ -47,4 +47,10 @@ class Saving extends BaseModel
         return Money::$currency($this->amount);
     }
 
+
+    public function contributions()
+    {
+        return $this->hasMany(Contribution::class, 'saving_id');
+    }
+
 }

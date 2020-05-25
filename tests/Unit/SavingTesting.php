@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Saving;
@@ -50,6 +51,16 @@ class SavingTesting extends TestCase
 
         $this->assertNotNull($saving);
         $this->assertInstanceOf(User::class, $saving->owner);
+
+    }
+
+    /** @test */
+    public function can_have_many_contributions()
+    {
+        $saving = factory('App\Saving')->create();
+
+        $this->assertNotNull($saving);
+        $this->assertInstanceOf(Collection::class, $saving->contributions);
 
     }
 

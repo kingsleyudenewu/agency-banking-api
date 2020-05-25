@@ -412,15 +412,19 @@ class User
             $user = static::find($data['owner_id']);
 
             $authUser = static::findByInstance($authUser);
+            $contribData = ['amount' => $data['amount']];
 
             // If we have the user, try to debit the user
             if($authUser)
             {
                 $authUser->chargeWallet($data['amount'], 'New saving created for ' . e($user->getName()));
+                $contribData['created_by'] = $authUser->getId();
             }
 
             $saving = $user->validateForTransaction($data)
                     ->makeNewSaving($data);
+
+            $saving->contributions()->create($contribData);
 
             $user->writeCreditTransaction($data['amount'], 'New savings created by ' . e($authUser->getName()));
             DB::commit();
@@ -472,7 +476,9 @@ class User
             ->where('saving_cycle_id', $data['saving_cycle_id'])
             ->whereNull('completed')->first();
 
-        if($old) return $old;
+        if($old) {
+            throw new \Exception('You have an active saving plan.');
+        }
 
         return $this->getModel()->savings()->create($data);
     }
