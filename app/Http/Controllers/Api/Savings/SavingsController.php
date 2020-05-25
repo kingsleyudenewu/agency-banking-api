@@ -7,6 +7,7 @@ use App\Http\Controllers\APIBaseController;
 use App\Http\Requests\CreateSavingsRequest;
 use App\Http\Resources\Saving;
 use App\Koloo\User;
+use App\Http\Resources\User as UserTransformer;
 
 /**
  * Class SavingsController
@@ -36,5 +37,27 @@ class SavingsController extends APIBaseController
             return $this->errorResponse($e->getMessage());
         }
 
+    }
+
+    public function show()
+    {
+
+        try {
+            $customer = User::search(request('q'));
+            User::checkExistence($customer);
+
+            $res = [
+                'customer' => new UserTransformer($customer->getModel()),
+                'savings' => Saving::collection($customer->getSavings())
+            ];
+
+
+
+
+             return $this->successResponse('Savings', $res);
+        }catch (\Exception $e)
+        {
+            return $this->errorResponse($e->getMessage());
+        }
     }
 }

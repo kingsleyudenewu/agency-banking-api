@@ -16,6 +16,7 @@ class Wallet extends JsonResource
     {
         return [
             'balance' => $this->amount,
+            'balance_format' => number_format($this->amount, 2),
             'currency' => $this->currency,
             'type' => $this->type
         ];

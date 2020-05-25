@@ -63,6 +63,19 @@ class User
         return new static($model);
     }
 
+    public static function search(string $query): ?self
+    {
+        $model = Model::where('email', $query)
+                    ->orWhere('phone', $query)
+                    ->orWhere('account_number', $query)
+                    ->orWhere('id', $query)->first();
+        if (! $model) {
+            return null;
+        }
+
+        return new static($model);
+    }
+
     public static function findByInstance(?Model $user): ?self
     {
         if(!$user) return null;
@@ -547,5 +560,12 @@ class User
         event(new BalanceUpdated($amount, $method, $customer, $authUser));
 
         return $customer;
+    }
+
+    public function getSavings()
+    {
+        $savings = $this->getModel()->savings();
+
+        return $savings ? $savings->with('cycle:id,title,description')->get() : [];
     }
 }

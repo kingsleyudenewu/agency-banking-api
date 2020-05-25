@@ -120,6 +120,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
         'middleware' => ['auth:api']], function () {
 
 
+        Route::get('/', 'SavingsController@show')->name('show');
         Route::post('/', 'SavingsController@store')->name('new');
 
     });

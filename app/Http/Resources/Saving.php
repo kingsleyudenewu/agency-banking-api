@@ -14,6 +14,16 @@ class Saving extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'amount' => $this->amount,
+            'owner_id' => $this->owner_id,
+            'completed' => $this->completed,
+            'created_at' => $this->created_at,
+            'target' => $this->target,
+            'target_formatted' => number_format($this->target, 2),
+            'cycle' => $this->cycle,
+            'currency' => $this->owner->country->currency
+        ];
     }
 }
