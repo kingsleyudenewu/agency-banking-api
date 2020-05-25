@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\AgentAccountCreated;
+use App\Events\BalanceUpdated;
 use App\Events\SendMessage;
 use App\Events\SendNewOTP;
 use App\Events\WalletBilled;
@@ -10,6 +11,7 @@ use App\Listeners\HandleAgentAccountCreation;
 use App\Listeners\HandleNewOTP;
 use App\Listeners\HandleWalletBilled;
 use App\Listeners\OnSendMessage;
+use App\Listeners\WriteUpdateUpdatedTransaction;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -41,6 +43,10 @@ class EventServiceProvider extends ServiceProvider
 
         WalletBilled::class => [
             HandleWalletBilled::class
+        ],
+
+        BalanceUpdated::class => [
+            WriteUpdateUpdatedTransaction::class
         ]
 
     ];

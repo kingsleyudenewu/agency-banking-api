@@ -3,6 +3,8 @@
 namespace App\Koloo;
 
 
+use App\Events\BalanceUpdated;
+use App\Events\NewSavingCreated;
 use App\Events\PreWalletBilled;
 use App\Events\SendNewOTP;
 use App\Events\WalletBilled;
@@ -368,11 +370,12 @@ class User
     {
         $wallet = $this->model->wallets()->where('type', \App\Wallet::WALLET_TYPE_MAIN)->first();
 
+        if(!$wallet) return null;
         return new Wallet($wallet);
     }
 
 
-    private function checkWalletIsValid() : self
+    public function checkWalletIsValid() : self
     {
         $wallet = $this->mainWallet();
 
@@ -421,12 +424,16 @@ class User
                 $contribData['created_by'] = $authUser->getId();
             }
 
-            $saving = $user->validateForTransaction($data)
-                    ->makeNewSaving($data);
+            $data = $user->validateForTransaction($data);
+
+            $saving = $user->makeNewSaving($data);
 
             $saving->contributions()->create($contribData);
 
             $user->writeCreditTransaction($data['amount'], 'New savings created by ' . e($authUser->getName()));
+
+            event(new NewSavingCreated($saving));
+
             DB::commit();
 
             return $saving;
@@ -455,9 +462,13 @@ class User
 
     /**
      * TODO: Add some fraud check here
-     * @return $this
+     *
+     * @param array $data
+     *
+     * @return array
+     * @throws \App\Koloo\Exceptions\BilingException
      */
-    public function validateForTransaction(array $data)
+    public function validateForTransaction(array $data) : array
     {
         $savingCycle = SavingCycle::find($data['saving_cycle_id']);
         if($data['amount'] < $savingCycle->minSavingAmount())
@@ -465,7 +476,9 @@ class User
             throw new BilingException('Amount too small for this package.');
         }
 
-        return $this;
+        $data['target'] = $savingCycle->duration * $data['amount'];
+
+        return $data;
     }
 
     private function makeNewSaving(array $data)
@@ -513,5 +526,26 @@ class User
     private function makeTransactionRef()
     {
         return Uuid::generate()->string;
+    }
+
+    public static function creditOrDebit($data, $performedBy) : self
+    {
+        $authUser = static::findByInstance($performedBy);
+        static::checkExistence($authUser);
+
+        $amount = $data['amount'];
+
+        $customer = User::find($data['user_id']);
+        static::checkExistence($customer);
+
+        $method = $data['action'];
+
+        $customer->checkWalletIsValid()
+            ->mainWallet()
+            ->$method($amount);
+
+        event(new BalanceUpdated($amount, $method, $customer, $authUser));
+
+        return $customer;
     }
 }

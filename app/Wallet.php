@@ -25,6 +25,16 @@ class Wallet extends Model
     }
 
 
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = $value * 100;
+    }
+
+    public function getAmountAttribute($value)
+    {
+        return $value / 100;
+    }
+
     /**
      * Every user starts with two wallets
      *

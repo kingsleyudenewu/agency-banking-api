@@ -101,6 +101,13 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
             Route::patch('/cycle', 'SavingCycleManagement@update')->name('cycle.update');
         });
 
+
+        Route::group(['prefix' => 'account', 'as' => 'balance.'], function(){
+
+            Route::post('/balance', 'BalanceController@store')->name('store');
+        });
+
+
     });
 
 

@@ -17,6 +17,7 @@ class CreateSavingsTable extends Migration
             $table->uuid('id');
             $table->primary('id');
             $table->bigInteger('amount')->default(0);
+            $table->bigInteger('target')->default(0);
             $table->uuid('saving_cycle_id')->index();
             $table->uuid('owner_id')->index();
             $table->uuid('creator_id')->index();

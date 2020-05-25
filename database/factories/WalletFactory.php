@@ -11,5 +11,6 @@ $factory->define(Wallet::class, function (Faker $faker) {
         'currency' => 'NGN',
         'hash' => $faker->randomNumber(),
         'amount' => 0,
+        'type' => 'wallet'
     ];
 });

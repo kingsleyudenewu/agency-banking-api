@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Savings;
 use App\Events\PreSavingCreated;
 use App\Http\Controllers\APIBaseController;
 use App\Http\Requests\CreateSavingsRequest;
+use App\Http\Resources\Saving;
 use App\Koloo\User;
 
 /**
@@ -29,7 +30,7 @@ class SavingsController extends APIBaseController
 
             $saving = $customer->newSaving($data,  request()->user());
 
-            return $this->successResponse('Success', $saving->money());
+            return $this->successResponse('Success', new Saving($saving));
         } catch (\Exception $e)
         {
             return $this->errorResponse($e->getMessage());

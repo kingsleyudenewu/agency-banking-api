@@ -11,7 +11,8 @@ class Saving extends BaseModel
         'completed',
         'owner_id',
         'creator_id',
-        'meta'
+        'meta',
+        'target'
     ];
 
     public function cycle()
@@ -39,14 +40,10 @@ class Saving extends BaseModel
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function money()
+    public function getAmountAttribute($value)
     {
-        $currency = strtoupper($this->owner->country->currency);
-
-        if(!$currency) $currency = 'NGN';
-        return Money::$currency($this->amount);
+        return $value / 100;
     }
-
 
     public function contributions()
     {
