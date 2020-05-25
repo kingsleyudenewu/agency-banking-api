@@ -39,7 +39,7 @@ class SavingsTest extends TestCase
     }
 
     private function walletWithFund(Wallet $wallet, int $amount) {
-        $wallet->credit($amount*100);
+        $wallet->credit($amount);
         return $wallet;
     }
 
@@ -55,7 +55,7 @@ class SavingsTest extends TestCase
 
         $wallet = $this->walletWithFund($user->mainWallet(), $amountToCredit);
 
-        $this->assertEquals($amountToCredit*100, $wallet->getAmount());
+        $this->assertEquals($amountToCredit, $wallet->getAmount());
 
         $customer = $this->userWithWallet();
         $this->assertNotNull($customer);
@@ -72,7 +72,7 @@ class SavingsTest extends TestCase
         $this->postJson(route('api.savings.new'), $data)
                 ->assertJson([
                     'status' => 'success',
-                    'data' => ['amount' => 1500 * 100]
+                    'data' => ['amount' => 1500]
                 ]);
 
     }
@@ -87,7 +87,7 @@ class SavingsTest extends TestCase
 
         $wallet = $this->walletWithFund($user->mainWallet(), $amountToCredit);
 
-        $this->assertEquals($amountToCredit*100, $wallet->getAmount());
+        $this->assertEquals($amountToCredit, $wallet->getAmount());
 
         $customer = $this->userWithWallet();
         $this->assertNotNull($customer);

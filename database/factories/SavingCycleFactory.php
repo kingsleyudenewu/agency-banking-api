@@ -12,6 +12,6 @@ $factory->define(SavingCycle::class, function (Faker $faker) {
         'description' => $faker->text,
         'min_saving_frequent' => 60,
         'charge_type' => 'flat',
-        'min_saving_amount' => 1000 * 100
+        'min_saving_amount' => 1000
     ];
 });

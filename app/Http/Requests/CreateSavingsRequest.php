@@ -38,13 +38,4 @@ class CreateSavingsRequest extends FormRequest
             ]
         ];
     }
-
-    public function validationData()
-    {
-
-        $this->merge(['amount' => intval($this->amount) * 100]);
-
-        return parent::validationData();
-
-    }
 }
