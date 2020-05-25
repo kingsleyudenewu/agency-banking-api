@@ -115,12 +115,21 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
         Route::post('/', 'SavingsController@store')->name('new');
 
-
-
     });
 
 
 
+    Route::group([
+        'prefix' => 'transactions',
+        'namespace' => 'Api\Customer',
+        'as' => 'transactions.',
+        'middleware' => ['auth:api']], function () {
+
+
+        Route::get('/', 'TransactionController@index')->name('list');
+
+
+    });
 
 
 

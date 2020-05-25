@@ -7,17 +7,17 @@ use App\Events\PreWalletBilled;
 use App\Events\SendNewOTP;
 use App\Events\WalletBilled;
 use App\Koloo\Exceptions\BilingException;
-use App\Koloo\Exceptions\NoWalletException;
 use App\Koloo\Exceptions\UserNotFoundException;
 use App\OTP;
-use App\Saving;
 use App\SavingCycle;
 use App\Traits\LogTrait;
+use App\Transaction;
 use App\User as Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Webpatser\Uuid\Uuid;
 
 /**
  * Class User
@@ -398,27 +398,31 @@ class User
      * same amount the customer want to save
      *
      *
-     * @param $data array of data to use for the savings
-     * @param $user - the account performing the operation
+     * @param $data     array of data to use for the savings
+     * @param $authUser - the account performing the operation
+     *
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\HasMany|object|null
      */
-    public function newSaving(array $data , ?Model $user)
+    public function newSaving(array $data , ?Model $authUser)
     {
         try {
             DB::beginTransaction();
 
-            $authUser = static::findByInstance($user);
+            // Open the user savings
+            $user = static::find($data['owner_id']);
+
+            $authUser = static::findByInstance($authUser);
 
             // If we have the user, try to debit the user
             if($authUser)
             {
-                $authUser->chargeWallet($data['amount']);
+                $authUser->chargeWallet($data['amount'], 'New saving created for ' . e($user->getName()));
             }
 
-            // Open the user savings
-            $user = static::find($data['owner_id']);
             $saving = $user->validateForTransaction($data)
                     ->makeNewSaving($data);
 
+            $user->writeCreditTransaction($data['amount'], 'New savings created by ' . e($authUser->getName()));
             DB::commit();
 
             return $saving;
@@ -441,7 +445,7 @@ class User
 
         $wallet->debit($amount);
 
-        event(new WalletBilled($wallet, $reason));
+        event(new WalletBilled($wallet, $amount, $reason));
 
     }
 
@@ -457,7 +461,6 @@ class User
             throw new BilingException('Amount too small for this package.');
         }
 
-
         return $this;
     }
 
@@ -472,5 +475,37 @@ class User
         if($old) return $old;
 
         return $this->getModel()->savings()->create($data);
+    }
+
+    public function transactions()
+    {
+        return $this->model->transactions;
+    }
+
+    public function writeTransaction(int $amount, string $type, string $remark = '')
+    {
+        return $this->model->transactions()
+                ->create([
+                    'type' => $type,
+                    'amount' => $amount,
+                    'trans_ref' => $this->makeTransactionRef(),
+                    'remark' => $remark
+                ]);
+
+    }
+
+    public function writeCreditTransaction(int $amount, string $remark = '')
+    {
+        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_CREDIT, $remark);
+    }
+
+    public function writeDebitTransaction(int $amount, string $remark = '')
+    {
+        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_DEBIT, $remark);
+    }
+
+    private function makeTransactionRef()
+    {
+        return Uuid::generate()->string;
     }
 }

@@ -160,4 +160,9 @@ class User extends AuthBaseModel
         return $this->hasMany(Saving::class, 'creator_id');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
 }

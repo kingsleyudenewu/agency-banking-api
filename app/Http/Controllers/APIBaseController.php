@@ -78,4 +78,13 @@ class APIBaseController extends Controller
         }
         return implode("\n", $err);
     }
+
+    protected function perginationPerPage(): int
+    {
+        $perPage = request('per_page') ?: 100;
+
+        if($perPage > 100) $perPage = 100;
+
+        return $perPage;
+    }
 }

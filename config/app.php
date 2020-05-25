@@ -234,6 +234,8 @@ return [
         'Eventy' => TorMorten\Eventy\Facades\Events::class,
         'SMS' => \App\Components\Sms\Facade\Sms::class,
 
+        'EloquentBuilder' => Fouladgar\EloquentBuilder\Facade::class,
+
     ],
 
 ];

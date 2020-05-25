@@ -19,16 +19,20 @@ class WalletBilled
 
     public $reason;
 
+    public $amount;
+
     /**
      * Create a new event instance.
      *
      * @param \App\Koloo\Wallet $wallet
+     * @param int               $amount
      * @param string            $reason
      */
-    public function __construct(Wallet $wallet, string $reason)
+    public function __construct(Wallet $wallet, int $amount, string $reason)
     {
         $this->wallet = $wallet;
         $this->reason = $reason;
+        $this->amount = $amount;
     }
 
     /**

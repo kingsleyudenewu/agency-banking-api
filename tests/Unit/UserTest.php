@@ -65,4 +65,13 @@ class UserTest extends TestCase
     }
 
 
+    /** @test */
+    public function a_user_can_have_many_transactions()
+    {
+        $user = factory('App\User')->create();
+
+        $this->assertInstanceOf(Collection::class, $user->transactions);
+    }
+
+
 }

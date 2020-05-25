@@ -5,13 +5,15 @@ namespace App\Providers;
 use App\Events\AgentAccountCreated;
 use App\Events\SendMessage;
 use App\Events\SendNewOTP;
+use App\Events\WalletBilled;
 use App\Listeners\HandleAgentAccountCreation;
 use App\Listeners\HandleNewOTP;
+use App\Listeners\HandleWalletBilled;
 use App\Listeners\OnSendMessage;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
+
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -35,6 +37,10 @@ class EventServiceProvider extends ServiceProvider
 
         SendNewOTP::class => [
             HandleNewOTP::class
+        ],
+
+        WalletBilled::class => [
+            HandleWalletBilled::class
         ]
 
     ];
