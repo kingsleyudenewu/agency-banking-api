@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\MessageBag;
 
 class APIBaseController extends Controller
@@ -86,5 +88,23 @@ class APIBaseController extends Controller
         if($perPage > 100) $perPage = 100;
 
         return $perPage;
+    }
+
+    protected function getPagingData(LengthAwarePaginator $paginator, callable $collection = null )
+    {
+
+        return [
+            'data' => $collection ?  $collection($paginator->items()) : $paginator->items(),
+            'current_page' => $paginator->currentPage(),
+            'first_page_url' => $paginator->url(1),
+            'from' => $paginator->firstItem(),
+            'last_page' => $paginator->lastPage(),
+            'last_page_url' => $paginator->url($paginator->lastPage()),
+            'next_page_url' => $paginator->nextPageUrl(),
+            'per_page' => $paginator->perPage(),
+            'prev_page_url' => $paginator->previousPageUrl(),
+            'to' => $paginator->lastItem(),
+            'total' => $paginator->total(),
+        ];
     }
 }

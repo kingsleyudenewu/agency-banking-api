@@ -36,6 +36,8 @@ class Profile extends BaseModel
         'agreement_form' => Json::class,
     ];
 
+    protected $hidden  = [];
+
     public function user()
     {
         return $this->belongsTo('App\User');

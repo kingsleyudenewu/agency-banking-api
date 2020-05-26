@@ -60,6 +60,14 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
     });
 
+    Route::group(['prefix' => 'accounts', 'namespace' => 'Api\Account', 'as' => 'accounts.', 'middleware' => ['auth:api']], function () {
+
+        Route::get('/', 'AccountsController@index')->name('get');
+
+    });
+
+
+
     // savings outside of admin
     Route::group([
         'prefix' => 'savings',
@@ -142,3 +150,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
 
 });
+
+/**
+ *  08066100333
+ *  239aHD#DL1230
+ */
