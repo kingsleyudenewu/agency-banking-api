@@ -43,15 +43,13 @@ class SavingsController extends APIBaseController
     {
 
         try {
-            $customer = User::search(request('q'));
+            $customer = User::search(request('q'), request('country_code'));
             User::checkExistence($customer);
 
             $res = [
                 'customer' => new UserTransformer($customer->getModel()),
                 'savings' => Saving::collection($customer->getSavings())
             ];
-
-
 
 
              return $this->successResponse('Savings', $res);

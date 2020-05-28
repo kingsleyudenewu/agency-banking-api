@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 
 use App\Koloo\PhoneNumber;
 use App\Koloo\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Rules\BannedName;
 

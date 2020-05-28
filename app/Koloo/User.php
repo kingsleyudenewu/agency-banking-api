@@ -63,8 +63,21 @@ class User
         return new static($model);
     }
 
-    public static function search(string $query): ?self
+    public static function search(string $query, $countryCode=''): ?self
     {
+        if($countryCode)
+        {
+            $phone = PhoneNumber::format($query, $countryCode);
+            if($phone)
+            {
+                $model = Model::where('phone', $phone)->first();
+                if(!$model) return null;
+
+                return new static($model);
+            }
+
+        }
+
         $model = Model::where('email', $query)
                     ->orWhere('phone', $query)
                     ->orWhere('account_number', $query)
