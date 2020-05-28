@@ -61,29 +61,28 @@ class CreateAgentRequest extends BaseRequest
                 'required',
                 Rule::in(['female', 'male'])
             ],
-            'bank_account_number' => 'required|numeric',
-            'bank_name' => 'required',
-
-
+            'bank_account_number' => 'nullable|numeric',
+            'bank_name' => 'nullable',
 
         ];
 
 
         if($this->path() === "api/v1/customers" && $this->isMethod("post"))
-        {
+         {
 
-            $validationRules['lga'] = 'required|max:255';
+            $validationRules['lga'] = 'nullable|max:255';
             $validationRules['next_of_kin_phone'] = 'required|max:150';
-            $validationRules['marital_status'] = ['required', Rule::in('married','single','unknown')];
-            $validationRules['state_id']  = 'required|uuid';
+            $validationRules['next_of_kin_name'] = 'required|max:255';
+            $validationRules['marital_status'] = ['nullable', Rule::in('married','single','unknown')];
+            $validationRules['state_id']  = 'nullable|uuid';
             $validationRules['secondary_phone'] = 'nullable';
-            $validationRules['passport_photo'] = 'required|image|max:10240'; // 10mb largest
+            $validationRules['passport_photo'] = 'nullable|image|max:10240'; // 10mb largest
 
         }  elseif ($this->path() === 'api/v1/agents' && $this->isMethod("post"))
         {
 
-            $validationRules['business_name']  = 'required|max:255';
-            $validationRules['business_address']  = 'required|max:255';
+            $validationRules['business_name']  = 'nullable|max:255';
+            $validationRules['business_address']  = 'nullable|max:255';
             $validationRules['business_phone'] = 'nullable|max:255';
             $validationRules['business_email']   = 'nullable|email';
             $validationRules['bvn']   = 'required|numeric';
@@ -91,8 +90,8 @@ class CreateAgentRequest extends BaseRequest
             $validationRules['emergency_name'] = 'nullable|max:255';
         }
 
-        if(request('password'))
-            $validationRules['password'] = 'required|min:6|strong_password';
+
+       $validationRules['password'] = 'required|min:6|strong_password';
 
         return $validationRules;
     }
@@ -122,6 +121,10 @@ class CreateAgentRequest extends BaseRequest
         if(!request('password'))
             $data['password'] = 'S.$a' . str_random(60);
 
+        if($this->path() === "api/v1/customers" && !request('email'))
+        {
+            $data['email'] = str_random(32).$this->phone.'@email-place.koloo.ng';
+        }
         return $this->merge($data);
     }
 }

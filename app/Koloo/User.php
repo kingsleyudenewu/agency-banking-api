@@ -231,6 +231,7 @@ class User
 
            return static::find($user->id);
        } catch (\Exception $e) {
+           throw $e;
            Log::channel('KOLOO_USER')->error($e->getMessage());
            DB::rollBack();
        }

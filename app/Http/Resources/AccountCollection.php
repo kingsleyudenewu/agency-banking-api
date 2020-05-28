@@ -37,6 +37,7 @@ class AccountCollection extends JsonResource
             'agreement_form_url' => '',
             'emergency_name' => $this->emergency_name,
             'emergency_phone' => $this->emergency_phone,
+            'next_of_kin_name' => $this->next_of_kin_name,
             'created_at' => $this->created_at,
             'account_number' => $this->user->account_number,
             'country' => $this->user->country,

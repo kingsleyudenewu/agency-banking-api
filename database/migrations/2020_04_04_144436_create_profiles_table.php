@@ -23,7 +23,8 @@ class CreateProfilesTable extends Migration
             $table->string('bank_name')->nullable();
             $table->string('secondary_phone')->nullable();
             $table->string('next_of_kin_phone')->nullable();
-            $table->enum('marital_status', ['married', 'single', 'unknown'])->default('unknown');
+            $table->string('next_of_kin_name')->nullable();
+            $table->enum('marital_status', ['married', 'single', 'unknown'])->nullable();
             $table->string('lga')->nullable();
             $table->string('business_name')->nullable();
             $table->string('business_address')->nullable();

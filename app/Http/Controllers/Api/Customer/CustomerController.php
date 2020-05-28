@@ -33,11 +33,16 @@ class CustomerController extends APIBaseController
 
         $data = $request->validated();
 
-        $storedLocation = $request->file('passport_photo')->store($path, $disk);
-        $data['passport_photo'] = [
-            'disk' => $disk,
-            'path' => $storedLocation
-        ];
+
+        if($request->hasFile('passport_photo'))
+        {
+            $storedLocation = $request->file('passport_photo')->store($path, $disk);
+            $data['passport_photo'] = [
+                'disk' => $disk,
+                'path' => $storedLocation
+            ];
+
+        }
 
         $user =  User::createWithProfile($data, $request->user());
 

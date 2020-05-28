@@ -18,6 +18,7 @@ class Profile extends BaseModel
         'bank_name',
         'secondary_phone',
         'next_of_kin_phone',
+        'next_of_kin_name',
         'marital_status',
         'lga',
         'state_id',
