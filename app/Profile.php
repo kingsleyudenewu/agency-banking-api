@@ -29,7 +29,8 @@ class Profile extends BaseModel
         'passport_photo',
         'agreement_form',
         'emergency_phone',
-        'emergency_name'
+        'emergency_name',
+        'commission'
     ];
 
     protected $casts = [

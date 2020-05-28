@@ -36,6 +36,7 @@ class CreateProfilesTable extends Migration
             $table->boolean('setup_completed')->default(false);
             $table->string('emergency_name')->nullable();
             $table->string('emergency_phone')->nullable();
+            $table->integer('commission')->default(0);
             $table->uuid('user_id');
             $table->primary('id');
             $table->timestamps();

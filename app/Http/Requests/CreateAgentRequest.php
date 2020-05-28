@@ -87,6 +87,22 @@ class CreateAgentRequest extends BaseRequest
             $validationRules['bvn']   = 'required|numeric';
             $validationRules['emergency_phone'] = 'nullable|max:255';
             $validationRules['emergency_name'] = 'nullable|max:255';
+
+            $validationRules['commission'] = [
+                'required',
+                'numeric',
+                'min:'. intval(settings('min_commission')),
+                function($attribute, $value, $fail) {
+
+                    $maxCommission = auth()->user()->hasRole(\App\User::ROLE_ADMIN) ?
+                        settings('max_commission') : intval(auth()->user()->profile->commission);
+
+                    if($value > $maxCommission) {
+                        $fail('You can not set commission greater than ' . $maxCommission / 100);
+                    }
+
+                }
+            ];
         }
 
 
@@ -120,10 +136,16 @@ class CreateAgentRequest extends BaseRequest
         if(!request('password'))
             $data['password'] = 'S.$a' . str_random(60);
 
-        if($this->path() === "api/v1/customers" && !request('email'))
+        if(!request('email'))
         {
             $data['email'] = str_random(32).$this->phone.'@email-place.koloo.ng';
         }
+
+        if ($this->path() === 'api/v1/agents' && $this->isMethod("post"))
+        {
+            $data['commission'] = intval(number_format($this->commission, '2') * 100);
+        }
+
         return $this->merge($data);
     }
 }

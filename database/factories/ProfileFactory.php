@@ -16,6 +16,7 @@ $factory->define(Profile::class, function (Faker $faker) {
         'bank_name' => $faker->randomElement(['GTBank', 'Access Bank', 'UBA', 'Fidelity', 'FCM']),
         'secondary_phone' => $faker->phoneNumber,
         'next_of_kin_phone' => $faker->phoneNumber,
+        'next_of_kin_name' => 'Doe',
         'marital_status' => $faker->randomElement(['married','single','unknown']),
         'lga' => 'lag',
         'state_id' => factory(\App\State::class),
@@ -25,5 +26,6 @@ $factory->define(Profile::class, function (Faker $faker) {
         'bvn' => $faker->numberBetween(1000000000),
         'emergency_name' => '',
         'emergency_phone' => '',
+        'commission' => 150
     ];
 });

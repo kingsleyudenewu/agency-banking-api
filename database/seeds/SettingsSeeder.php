@@ -14,6 +14,7 @@ class SettingsSeeder extends Seeder
         $this->clearSettings();
 
         settings()->set('max_commission', 250); // Amount is in cent/kobo
+        settings()->set('min_commission', 100);
         settings()->set('currency_precision', 2);
         settings()->set('otp_length', 4);
         settings()->set('enable_otp_for_login', false);
