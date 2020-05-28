@@ -70,6 +70,7 @@ class LaravelEntrustSeeder extends Seeder
         DB::table('permission_role')->truncate();
         DB::table('role_user')->truncate();
         DB::table('users')->truncate();
+        DB::table('profiles')->truncate();
 
         \App\Role::truncate();
         \App\Permission::truncate();
