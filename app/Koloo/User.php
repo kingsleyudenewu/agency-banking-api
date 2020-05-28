@@ -504,6 +504,7 @@ class User
         }
 
         $data['target'] = $savingCycle->duration * $data['amount'];
+        $data['maturity'] = now()->addDays($savingCycle->duration);
 
         return $data;
     }

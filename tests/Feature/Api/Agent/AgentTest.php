@@ -102,6 +102,7 @@ class AgentTest extends TestCase
 
         $payload = array_merge($profileData, $userData);
         $payload['country_code'] = 'NG';
+        $payload['commission'] = 1.5;
 
         return $payload;
     }

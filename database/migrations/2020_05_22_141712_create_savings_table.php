@@ -23,6 +23,7 @@ class CreateSavingsTable extends Migration
             $table->uuid('creator_id')->index();
             $table->dateTime('completed')->nullable();
             $table->text('meta')->nullable();
+            $table->date('maturity');
             $table->timestamps();
             $table->softDeletes();
         });

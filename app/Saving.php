@@ -12,7 +12,8 @@ class Saving extends BaseModel
         'owner_id',
         'creator_id',
         'meta',
-        'target'
+        'target',
+        'maturity'
     ];
 
     public function cycle()

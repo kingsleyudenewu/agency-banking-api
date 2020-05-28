@@ -28,6 +28,10 @@ abstract class TestCase extends BaseTestCase
         $this->adminUser = User::findOneByRole(\App\User::ROLE_ADMIN);
         $this->superAgentUser = User::findOneByRole(\App\User::ROLE_SUPER_AGENT);
         $this->agentUser = User::findOneByRole(\App\User::ROLE_AGENT);
+
+        factory('App\Profile')->create(['user_id' => $this->adminUser->getId()]);
+        factory('App\Profile')->create(['user_id' => $this->superAgentUser->getId()]);
+        factory('App\Profile')->create(['user_id' => $this->agentUser->getId()]);
     }
 
 

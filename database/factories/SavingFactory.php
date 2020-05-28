@@ -10,6 +10,7 @@ $factory->define(Saving::class, function (Faker $faker) {
         'amount' => 100,
         'saving_cycle_id' => factory('App\SavingCycle')->create(),
         'owner_id' => factory('App\User')->create(),
-        'creator_id' => factory('App\User')->create()
+        'creator_id' => factory('App\User')->create(),
+        'maturity' => now()
     ];
 });

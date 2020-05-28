@@ -26,6 +26,6 @@ $factory->define(Profile::class, function (Faker $faker) {
         'bvn' => $faker->numberBetween(1000000000),
         'emergency_name' => '',
         'emergency_phone' => '',
-        'commission' => 150
+        'commission' => 250
     ];
 });
