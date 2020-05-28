@@ -45,6 +45,7 @@ class CustomerTest extends TestCase
         $file = UploadedFile::fake()->create('passport.png', $maxSize, 'image/png');
         $payload['passport_photo'] = $file;
 
+
         $res = $this->postJson(route('api.customers.new'), $payload)
             ->assertStatus(200)
             ->assertJson(['status' => 'success']);
@@ -100,6 +101,7 @@ class CustomerTest extends TestCase
         $profileData = factory('App\Profile')->raw([
             'phone' => '08037312520',
             'next_of_kin_phone' => '08054473524',
+            'next_of_kin_name' => 'Doe',
             'secondary_phone' => '08054473523'
         ]);
 
