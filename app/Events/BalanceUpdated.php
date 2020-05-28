@@ -23,6 +23,8 @@ class BalanceUpdated
 
     public $performedBy;
 
+    public $remark;
+
 
     /**
      * Create a new event instance.
@@ -31,13 +33,15 @@ class BalanceUpdated
      * @param string          $type
      * @param \App\Koloo\User $toAccount
      * @param \App\Koloo\User $performedBy
+     * @param string          $remark
      */
-    public function __construct(int $amount, string $type, User $toAccount, User $performedBy)
+    public function __construct(int $amount, string $type, User $toAccount, User $performedBy, $remark='')
     {
         $this->amount = $amount;
         $this->transType = $type;
         $this->toAccount = $toAccount;
         $this->performedBy = $performedBy;
+        $this->remark = $remark;
     }
 
     /**

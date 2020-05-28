@@ -27,7 +27,8 @@ class BalanceCreditAndDebitRequest extends FormRequest
         return [
             'amount' => 'required|numeric',
             'action' => 'required|in:credit,debit',
-            'user_id' => 'required|uuid|exists:users,id'
+            'user_id' => 'required|uuid|exists:users,id',
+            'remark' => 'required|max:233'
         ];
     }
 }

@@ -567,12 +567,13 @@ class User
         static::checkExistence($customer);
 
         $method = $data['action'];
+        $remark = isset($data['remark']) ? $data['remark'] : '';
 
         $customer->checkWalletIsValid()
             ->mainWallet()
             ->$method($amount);
 
-        event(new BalanceUpdated($amount, $method, $customer, $authUser));
+        event(new BalanceUpdated($amount, $method, $customer, $authUser, $remark));
 
         return $customer;
     }

@@ -29,11 +29,13 @@ class WriteUpdateUpdatedTransaction
         $amount = $event->amount;
         $authUser = $event->performedBy;
         $customer  = $event->toAccount;
+        $remark = $event->remark;
 
         $transactionName = 'write' . ucfirst($method).'Transaction';
-        $customer->$transactionName($amount, 'Account credited. #' . e($authUser->getName() . '. New balance is ' . number_format($customer->mainWallet()->getAmount(), 2)));
+        $customer->$transactionName($amount,  $remark);
 
         $msg = $method == 'credit' ? 'You sent '  : 'You debited ';
-        $authUser->writeDebitTransaction($amount, $msg .  number_format($amount,2) . ' #' . e($customer->getName()));
+        $authUserMethod =  $method == 'credit' ? 'writeDebitTransaction' : 'writeCreditTransaction';
+        $authUser->$authUserMethod($amount, $msg .  $remark . '# ' . number_format($amount,2) . ' #' . e($customer->getName()));
     }
 }

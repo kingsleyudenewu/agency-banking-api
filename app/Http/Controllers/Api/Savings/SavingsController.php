@@ -58,4 +58,9 @@ class SavingsController extends APIBaseController
             return $this->errorResponse($e->getMessage());
         }
     }
+
+    public function contribute()
+    {
+
+    }
 }
