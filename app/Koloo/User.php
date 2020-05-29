@@ -244,6 +244,8 @@ class User
 
            DB::commit();
 
+
+
            return static::find($user->id);
        } catch (\Exception $e) {
            throw $e;
@@ -614,5 +616,11 @@ class User
             DB::rollBack();
             throw $e;
         }
+    }
+
+
+    public function setProvidusBankDetail(string $accountNumber, string $accountRef)
+    {
+        return $this->getModel()->update(['providus_account_number' => $accountNumber, 'providus_account_ref' => $accountRef]);
     }
 }

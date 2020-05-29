@@ -42,7 +42,8 @@ class AccountCollection extends JsonResource
             'account_number' => $this->user->account_number,
             'country' => $this->user->country,
             'roles' => $this->user->roles,
-            'commission' => $this->commission / 100
+            'commission' => $this->commission / 100,
+            'providus_account_number' => $this->user->providus_account_number
         ];
     }
 }

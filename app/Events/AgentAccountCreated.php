@@ -8,6 +8,13 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * This event is fired for non-agent users as well.
+ *
+ * Class AgentAccountCreated
+ *
+ * @package App\Events
+ */
 class AgentAccountCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;

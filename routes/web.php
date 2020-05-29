@@ -17,8 +17,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('https://koloo.ng');
 });
-
-
-Route::get('/otps', function(){
-    return  \App\OTP::select('id','code', 'expire_at', 'phone')->get();
-});

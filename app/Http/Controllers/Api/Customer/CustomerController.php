@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Customer;
 
+use App\Events\AgentAccountCreated;
 use App\Http\Controllers\APIBaseController;
 use App\Http\Requests\CreateAgentRequest;
 use App\Http\Resources\User as UserTransformer;
@@ -52,6 +53,8 @@ class CustomerController extends APIBaseController
         }
 
         $user->getModel()->setAsCustomer();
+
+        event(new AgentAccountCreated($user));
 
         $this->logInfo('Done customer creating account ..');
 

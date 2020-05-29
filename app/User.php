@@ -39,6 +39,8 @@ class User extends AuthBaseModel
         'phone',
         'parent_id',
         'account_number',
+        'providus_account_number',
+        'providus_account_ref'
     ];
 
     /**

@@ -30,4 +30,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'monnify' => [
+        'contract' => env('MONNIFY_CONTRACT'),
+        'api_key' => env('MONNIFY_API_KEY'),
+        'secret_key' => env('MONNIFY_SECRET_KEY'),
+        'base_uri' => env('MONNIFY_BASE_URI'),
+    ],
+
 ];
