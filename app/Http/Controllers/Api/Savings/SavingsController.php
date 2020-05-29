@@ -9,6 +9,7 @@ use App\Http\Requests\CreateSavingsRequest;
 use App\Http\Resources\Saving;
 use App\Koloo\User;
 use App\Http\Resources\User as UserTransformer;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class SavingsController
@@ -86,7 +87,7 @@ class SavingsController extends APIBaseController
 
         }catch (\Exception $e)
         {
-            throw $e;
+            Log::error('FAILED_REQUEST: '  .  $e->getMessage() . ' File:  ' . $e->getFile()  . ' on line ' . $e->getLine());
             return $this->errorResponse($e->getMessage());
         }
     }
