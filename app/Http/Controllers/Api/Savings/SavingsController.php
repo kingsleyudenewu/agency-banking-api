@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Savings;
 
 use App\Events\PreSavingCreated;
 use App\Http\Controllers\APIBaseController;
+use App\Http\Requests\ContributeRequest;
 use App\Http\Requests\CreateSavingsRequest;
 use App\Http\Resources\Saving;
 use App\Koloo\User;
@@ -28,6 +29,8 @@ class SavingsController extends APIBaseController
 
             $customer = User::find($data['owner_id']);
             User::checkExistence($customer);
+
+            $data['amount'] = intval($data['amount']) * 100;
 
             $saving = $customer->newSaving($data,  request()->user());
 
@@ -59,8 +62,29 @@ class SavingsController extends APIBaseController
         }
     }
 
-    public function contribute()
+    public function contribute(ContributeRequest $request, $id)
     {
+        try {
+            $saving = \App\Saving::find($id);
 
+            if(!$saving->maturity || $saving->maturity->isPast())
+            {
+                throw new \Exception('Saving closed for new contribution');
+            }
+
+
+            $authUser = User::findByInstance(auth()->user());
+            User::checkExistence($authUser);
+
+            $amount =  intval(request('amount')) * 100;
+
+            $res = $authUser->contributeToSaving($saving, $amount);
+
+            return $this->successResponse('Savings', ['contribution' => $res, 'savingStat' => $res->savingPlan->stats()]);
+
+        }catch (\Exception $e)
+        {
+            return $this->errorResponse($e->getMessage());
+        }
     }
 }

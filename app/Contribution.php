@@ -14,4 +14,14 @@ class Contribution extends BaseModel
         return $this->belongsTo(Saving::class, 'saving_id');
     }
 
+    public function getAmountAttribute($value)
+    {
+        return $value / 100;
+    }
+
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = $value * 100;
+    }
+
 }

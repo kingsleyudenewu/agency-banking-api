@@ -4,6 +4,7 @@ namespace App\Koloo;
 
 
 use App\Events\BalanceUpdated;
+use App\Events\NewContributionCreated;
 use App\Events\NewSavingCreated;
 use App\Events\PreWalletBilled;
 use App\Events\SendNewOTP;
@@ -11,6 +12,7 @@ use App\Events\WalletBilled;
 use App\Koloo\Exceptions\BilingException;
 use App\Koloo\Exceptions\UserNotFoundException;
 use App\OTP;
+use App\Saving;
 use App\SavingCycle;
 use App\Traits\LogTrait;
 use App\Transaction;
@@ -453,11 +455,10 @@ class User
 
             $data = $user->validateForTransaction($data);
 
+            $data['amount'] = $data['amount'] / 100;
             $saving = $user->makeNewSaving($data);
 
             $saving->contributions()->create($contribData);
-
-            $user->writeCreditTransaction($data['amount'], 'New savings created by ' . e($authUser->getName()));
 
             event(new NewSavingCreated($saving));
 
@@ -521,6 +522,7 @@ class User
             throw new \Exception('You have an active saving plan.');
         }
 
+
         return $this->getModel()->savings()->create($data);
     }
 
@@ -583,5 +585,34 @@ class User
         $savings = $this->getModel()->savings();
 
         return $savings ? $savings->with('cycle:id,title,description')->get() : [];
+    }
+
+    public function contributeToSaving(Saving $saving, $amount)
+    {
+        try {
+            DB::beginTransaction();
+
+             $saving->canAcceptNewContribution();
+
+             $customer = User::findByInstance($saving->owner);
+             User::checkExistence($customer);
+
+            $this->chargeWallet($amount, 'New contribution for ' . e($customer->getName()));
+
+            $contribData = ['amount' => $amount / 100, 'created_by' => $this->getId()];
+
+            $contribution = $saving->contributions()->create($contribData);
+
+            event(new NewContributionCreated($contribution));
+
+            DB::commit();
+
+            return $contribution;
+
+        } catch (\Exception $e) {
+            Log::channel('KOLOO_USER')->error($e->getMessage());
+            DB::rollBack();
+            throw $e;
+        }
     }
 }

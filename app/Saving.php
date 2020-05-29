@@ -16,6 +16,8 @@ class Saving extends BaseModel
         'maturity'
     ];
 
+    protected $dates = ['created_at', 'maturity', 'updated_at'];
+
     public function cycle()
     {
         return $this->belongsTo(SavingCycle::class, 'saving_cycle_id');
@@ -54,6 +56,22 @@ class Saving extends BaseModel
     public function contributions()
     {
         return $this->hasMany(Contribution::class, 'saving_id');
+    }
+
+    public function canAcceptNewContribution()
+    {
+        if(!$this->maturity || $this->maturity->isPast())
+        {
+            throw new \Exception('Saving closed for new contribution');
+        }
+    }
+
+    public function stats() : array
+    {
+        return [
+            'amountSaved' => $this->contributions()->sum('amount') / 100,
+            'totalSavings' => $this->contributions()->count(),
+        ];
     }
 
 }
