@@ -40,5 +40,13 @@ class HandleAgentAccountCreation implements ShouldQueue
             Log::error('HandleAgentAccountCreation::monnifyApi ::' . $e->getMessage());
         }
 
+        try {
+            $user->sendWelcomeSMS();
+
+        } catch (\Exception $e)
+        {
+            Log::error('HandleAgentAccountCreation::sendWelcomeSMS ::' . $e->getMessage());
+        }
+
     }
 }

@@ -7,6 +7,7 @@ use App\Events\BalanceUpdated;
 use App\Events\NewContributionCreated;
 use App\Events\NewSavingCreated;
 use App\Events\PreWalletBilled;
+use App\Events\SendMessage;
 use App\Events\SendNewOTP;
 use App\Events\WalletBilled;
 use App\Koloo\Exceptions\BilingException;
@@ -136,6 +137,11 @@ class User
     public function isAdmin() :bool
     {
         return $this->model->hasRole(Model::ROLE_ADMIN);
+    }
+
+    public function isCustomer() :bool
+    {
+        return $this->model->hasRole(Model::ROLE_CUSTOMER);
     }
 
     public function isAgent() :bool
@@ -622,5 +628,31 @@ class User
     public function setProvidusBankDetail(string $accountNumber, string $accountRef)
     {
         return $this->getModel()->update(['providus_account_number' => $accountNumber, 'providus_account_ref' => $accountRef]);
+    }
+
+    public function sendWelcomeSMS()
+    {
+        $message = '';
+        $channel = 'sms';
+        if($this->isCustomer())
+        {
+            $message  = sprintf(config('koloo.customer_welcome_sms'), $this->getAccountNumber());
+        } else if($this->isSuperAgent() || $this->isAgent())
+        {
+            $message  = sprintf(config('koloo.agent_welcome_sms'), $this->getModel()->providus_account_number);
+        }
+
+        if($message)
+        {
+            $data = [
+                'message' => $message,
+                'message_type' => $channel,
+                'user_id' => $this->getId(),
+                'sender' => $this->getId(),
+                'subject' => ''
+            ];
+            event(new SendMessage(\App\Message::create($data), $channel));
+        }
+
     }
 }

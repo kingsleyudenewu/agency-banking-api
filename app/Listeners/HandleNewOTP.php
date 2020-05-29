@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\SendMessage;
 use App\Message;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class HandleNewOTP
 {
@@ -31,7 +29,7 @@ class HandleNewOTP
         $user = $event->user;
 
         $message = Message::create([
-            'message' => 'Your Koloo OTP is: ' . $otp->code . '. Your OTP is secret and must NOT be shared with anyone else.',
+            'message' => sprintf(config('koloo.otp_message'), $otp->code),
             'message_type' => $event->channel,
             'user_id' => $user->getId(),
             'sender' => $user->getId(),
