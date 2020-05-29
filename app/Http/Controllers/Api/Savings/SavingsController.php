@@ -67,6 +67,8 @@ class SavingsController extends APIBaseController
         try {
             $saving = \App\Saving::find($id);
 
+            if(!$saving) throw new \Exception('Saving not found');
+
             if(!$saving->maturity || $saving->maturity->isPast())
             {
                 throw new \Exception('Saving closed for new contribution');
