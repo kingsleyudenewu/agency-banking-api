@@ -415,11 +415,11 @@ class User
 
     private function canChargeWallet(int $amount)
     {
-
         $this->checkWalletIsValid();
 
         $wallet = $this->mainWallet();
-        if($wallet->getAmount() < $amount) throw new BilingException('Insufficient funds');
+
+        if($wallet->getAmount() * 100 < $amount) throw new BilingException('Insufficient funds');
 
         return $this;
     }

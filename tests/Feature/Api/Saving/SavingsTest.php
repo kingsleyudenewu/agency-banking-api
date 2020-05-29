@@ -63,6 +63,8 @@ class SavingsTest extends TestCase
 
         $customer = $this->getCustomerWithFund(50000);
 
+
+
         $data = [
             'saving_cycle_id' => factory('App\SavingCycle')->create()->id,
             'amount' => 1500,
