@@ -131,6 +131,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
         Route::get('/', 'SavingsController@show')->name('show');
         Route::post('/', 'SavingsController@store')->name('new');
         Route::post('/{id}/contribute', 'SavingsController@contribute')->name('contribute');
+        Route::get('/{id}/contribute', 'SavingsController@getContributions')->name('get.contributions');
 
 
 

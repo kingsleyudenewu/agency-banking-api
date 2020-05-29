@@ -91,4 +91,20 @@ class SavingsController extends APIBaseController
             return $this->errorResponse($e->getMessage());
         }
     }
+
+    public function getContributions($id)
+    {
+        try {
+            $saving = \App\Saving::find($id);
+
+            if(!$saving) throw new \Exception('Saving not found');
+
+            return $this->successResponse('contributions', $saving->contributions);
+
+        }catch (\Exception $e)
+        {
+            Log::error('FAILED_REQUEST: '  .  $e->getMessage() . ' File:  ' . $e->getFile()  . ' on line ' . $e->getLine());
+            return $this->errorResponse($e->getMessage());
+        }
+    }
 }
