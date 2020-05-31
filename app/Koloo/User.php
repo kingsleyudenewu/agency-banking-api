@@ -98,7 +98,7 @@ class User
             return null;
         }
 
-        return $model;
+        return new static($model);
     }
 
     public static function findByInstance(?Model $user): ?self
