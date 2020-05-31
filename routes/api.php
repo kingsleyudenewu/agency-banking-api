@@ -153,7 +153,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
         'namespace' => 'Api\Service',
         'as' => 'services.',
         'middleware' => []], function () {
-        Route::get('/monnify/check', 'MonnifyController@check')->name('monnify.check');
+        Route::post('/monnify/check', 'MonnifyController@check')->name('monnify.check');
     });
 
 
