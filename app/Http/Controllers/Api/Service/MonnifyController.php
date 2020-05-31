@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\Service;
 
+use App\Events\SendMessage;
 use App\Http\Controllers\APIBaseController;
 use App\Koloo\User;
+use App\Message;
 use App\ProvidusTransaction;
 use App\Services\Monnify\Api;
 use Illuminate\Http\Request;
@@ -21,6 +23,7 @@ class MonnifyController extends APIBaseController
     public function check(Request $request, Api $monnifyApi)
     {
         $logger = Log::channel('monnify-account-topup');
+
 
         $logger->info('Monnify webhook. Verifying a hash.', $request->all());
 
@@ -44,7 +47,7 @@ class MonnifyController extends APIBaseController
 
             $payment = $monnifyApi->getSuccessfulTransaction($request->get('transactionReference'));
 
-            if (! $user = User::findByProvidusReference($request->get('accountReference'))) {
+            if (! $user = User::findByProvidusReference($request->get('product')['reference'])) {
                 $logger->error('Monnify webhook. User account reference is not found. ', $request->all());
                 return $this->errorResponse('User not found.', null, 400);
             }
@@ -54,7 +57,18 @@ class MonnifyController extends APIBaseController
 
             ProvidusTransaction::create(['ref' => $payment->transactionReference, 'payload' => json_encode($payment), 'completed' => now()]);
 
+            $amountInfo = sprintf(' %s %s', $payment->currency, number_format($payment->payableAmount, 2)) . ' via Providus bank';
 
+            $message = Message::create([
+                'message' => sprintf(config('koloo.account_funded_message'), $amountInfo),
+                'message_type' => 'sms',
+                'user_id' => $user->getId(),
+                'sender' => $user->getId(),
+                'subject' => ''
+            ]);
+
+
+            event(new SendMessage($message, 'sms'));
 
         } catch(\Exception $exception) {
             $logger->error($exception->getMessage());
