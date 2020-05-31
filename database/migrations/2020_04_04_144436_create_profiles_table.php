@@ -30,13 +30,13 @@ class CreateProfilesTable extends Migration
             $table->string('business_address')->nullable();
             $table->string('business_phone', 40)->nullable();
             $table->string('bvn', 30)->nullable();
-            $table->uuid('state_id')->nullable();
             $table->string('passport_photo')->nullable();
             $table->string('agreement_form')->nullable();
             $table->boolean('setup_completed')->default(false);
             $table->string('emergency_name')->nullable();
             $table->string('emergency_phone')->nullable();
             $table->integer('commission')->default(0);
+            $table->boolean('has_bank_account')->default(false);
             $table->uuid('user_id');
             $table->primary('id');
             $table->timestamps();

@@ -144,18 +144,18 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
         'namespace' => 'Api\Customer',
         'as' => 'transactions.',
         'middleware' => ['auth:api']], function () {
-
-
         Route::get('/', 'TransactionController@index')->name('list');
+    });
 
 
+    Route::group([
+        'prefix' => 'services',
+        'namespace' => 'Api\Service',
+        'as' => 'services.',
+        'middleware' => []], function () {
+        Route::get('/monnify/check', 'MonnifyController@check')->name('monnify.check');
     });
 
 
 
 });
-
-/**
- *  08066100333
- *  239aHD#DL1230
- */

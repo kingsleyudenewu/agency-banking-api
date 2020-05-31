@@ -19,9 +19,7 @@ use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
-        'other_name' => $faker->firstName,
+        'name' => $faker->name,
         'country_code' => factory(\App\Country::class)->create()->code,
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),

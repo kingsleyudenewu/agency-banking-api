@@ -15,6 +15,7 @@ class Api
 
     const ENDPOINT_RESERVE_ACCOUNT_NUMBER = 'bank-transfer/reserved-accounts';
     const ENDPOINT_LOGIN = 'auth/login';
+    const ENDPOINT_CHECK_TRANSACTION_STATUS = 'transactions/%s';
 
     /** @var string */
     private $logChannel = 'monnify-requests';
@@ -174,6 +175,30 @@ class Api
            $this->logError("[MonnifyApi::reserveAccountNumber] Exception message: {$exception->getMessage()}", ['exception' => $exception]);
            throw $exception;
        }
+    }
+
+    public function getSuccessfulTransaction(string $paymentReference)
+    {
+        $options = [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->getAccessToken()
+            ]
+        ];
+
+        try {
+            $body  = $this->get(sprintf(static::ENDPOINT_CHECK_TRANSACTION_STATUS, $paymentReference), $options);
+
+            if($body->requestSuccessful && $body->responseCode === "0") {
+                return $body->responseBody;
+            };
+
+            throw new \Exception('Transaction Status Check Failed.' . $body->responseMessage);
+
+        } catch (\Exception $exception)
+        {
+            $this->logError("[MonnifyApi::checkTransactionStatus] Exception message: {$exception->getMessage()}", ['exception' => $exception]);
+            throw $exception;
+        }
     }
 
     private function logInfo($message, array $context = []): self

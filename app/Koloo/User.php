@@ -92,6 +92,15 @@ class User
         return new static($model);
     }
 
+    public static function findByProvidusReference(string $reference): ?self
+    {
+        if (! $model = Model::where('providus_account_ref', $reference)->first()) {
+            return null;
+        }
+
+        return $model;
+    }
+
     public static function findByInstance(?Model $user): ?self
     {
         if(!$user) return null;
@@ -202,7 +211,7 @@ class User
 
     public function getName(): string
     {
-        return $this->model->first_name . ' ' . $this->model->last_name;
+        return $this->model->name;
     }
 
     public function getAPIToken(): ?string
@@ -328,6 +337,11 @@ class User
     public function setNewPassword(string $password):bool
     {
         return $this->getModel()->updatePassword($password);
+    }
+
+    public function verified(): bool
+    {
+        return boolval($this->model->verified_at);
     }
 
     public function sendOTP(string $messageType = 'sms')

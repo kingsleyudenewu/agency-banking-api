@@ -77,7 +77,7 @@ class AgentTest extends TestCase
             ->assertJson([
                 "status" => "success",
                 "message" => "OK",
-                "data" => ["first_name" => $payload['first_name']]
+                "data" => ["name" => $payload['name']]
             ]);
 
         $content = $res->json();

@@ -53,6 +53,16 @@ class Saving extends BaseModel
         $this->attributes['amount'] = $value * 100;
     }
 
+    public function getTargetAttribute($value)
+    {
+        return $value / 100;
+    }
+
+    public function setTargetAttribute($value)
+    {
+        $this->attributes['target'] = $value * 100;
+    }
+
     public function contributions()
     {
         return $this->hasMany(Contribution::class, 'saving_id');

@@ -16,7 +16,7 @@ class Profile extends JsonResource
     {
         return  [
             'id' => $this->id,
-            'name' => $this->first_name . ' ' . $this->last_name,
+            'name' => $this->name,
             'account_number' => $this->account_number,
             'role' => $this->getRoles(),
             'wallets' => Wallet::collection($this->wallets)

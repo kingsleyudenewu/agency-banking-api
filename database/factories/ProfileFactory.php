@@ -19,7 +19,6 @@ $factory->define(Profile::class, function (Faker $faker) {
         'next_of_kin_name' => 'Doe',
         'marital_status' => $faker->randomElement(['married','single','unknown']),
         'lga' => 'lag',
-        'state_id' => factory(\App\State::class),
         'business_name' => $faker->company,
         'business_address' => $faker->address,
         'business_phone' => $faker->phoneNumber,

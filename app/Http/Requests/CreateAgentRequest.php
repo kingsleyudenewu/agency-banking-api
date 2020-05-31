@@ -28,7 +28,6 @@ class CreateAgentRequest extends BaseRequest
     public function rules()
     {
 
-        //dd();
         $validationRules =  [
             'country_code' => [
                 'required',
@@ -45,9 +44,7 @@ class CreateAgentRequest extends BaseRequest
                     }
                 }
             ],
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'other_name' => 'nullable|max:255',
+            'name' => 'required|max:255',
             'email'     => [
                 'required',
                 'email',
@@ -72,21 +69,11 @@ class CreateAgentRequest extends BaseRequest
             $validationRules['lga'] = 'nullable|max:255';
             $validationRules['next_of_kin_phone'] = 'required|max:150';
             $validationRules['next_of_kin_name'] = 'required|max:255';
-            $validationRules['marital_status'] = ['nullable', Rule::in('married','single','unknown')];
-            $validationRules['state_id']  = 'nullable|uuid';
-            $validationRules['secondary_phone'] = 'nullable';
             $validationRules['passport_photo'] = 'nullable|image|max:10240'; // 10mb largest
+            $validationRules['has_bank_account'] = 'boolean';
 
         }  elseif ($this->path() === 'api/v1/agents' && $this->isMethod("post"))
         {
-
-            $validationRules['business_name']  = 'nullable|max:255';
-            $validationRules['business_address']  = 'nullable|max:255';
-            $validationRules['business_phone'] = 'nullable|max:255';
-            $validationRules['business_email']   = 'nullable|email';
-            $validationRules['bvn']   = 'required|numeric';
-            $validationRules['emergency_phone'] = 'nullable|max:255';
-            $validationRules['emergency_name'] = 'nullable|max:255';
 
             $validationRules['commission'] = [
                 'required',
@@ -121,20 +108,10 @@ class CreateAgentRequest extends BaseRequest
        {
            if($this->phone)
                $data['phone'] = PhoneNumber::format($this->cleanPhone($this->phone), $this->country_code);
-
-           if($this->business_phone)
-               $data['business_phone'] =  PhoneNumber::format($this->cleanPhone($this->business_phone), $this->country_code);
-
-           if($this->next_of_kin_phone)
-               $data['next_of_kin_phone'] = PhoneNumber::format($this->cleanPhone($this->next_of_kin_phone), $this->country_code);
-
-           if($this->secondary_phone)
-               $data['secondary_phone'] = PhoneNumber::format($this->cleanPhone($this->secondary_phone), $this->country_code);
-
        }
 
-        if(!request('password'))
-            $data['password'] = 'S.$a' . str_random(60);
+
+       $data['password'] = 'S.$a' . str_random(60);
 
         if(!request('email'))
         {
