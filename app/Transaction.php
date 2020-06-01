@@ -32,4 +32,9 @@ class Transaction extends Model
     {
         return $value / 100;
     }
+
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = $value * 100;
+    }
 }

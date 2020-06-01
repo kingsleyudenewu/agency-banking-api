@@ -43,6 +43,8 @@ class MonnifyController extends APIBaseController
             return $this->errorResponse($exception->getMessage());
         }
 
+        $amountToCredit = 0;
+
         try {
 
             $payment = $monnifyApi->getSuccessfulTransaction($request->get('transactionReference'));
@@ -52,12 +54,15 @@ class MonnifyController extends APIBaseController
                 return $this->errorResponse('User not found.', null, 400);
             }
 
-            $user->mainWallet()->credit($payment->payableAmount * 100);
-            $user->writeCreditTransaction($payment->payableAmount, sprintf('%s%s was deposited into your account via providus bank tranfer', $payment->currency, number_format($payment->payableAmount, 2)));
+
+            $amountToCredit = $payment->payableAmount;
+            $user->mainWallet()->credit($amountToCredit);
+
+            $user->writeCreditTransaction($amountToCredit, sprintf('%s%s was deposited into your account via providus bank tranfer', $payment->currencyCode, number_format($payment->payableAmount, 2)));
 
             ProvidusTransaction::create(['ref' => $payment->transactionReference, 'payload' => json_encode($payment), 'completed' => now()]);
 
-            $amountInfo = sprintf(' %s %s', $payment->currency, number_format($payment->payableAmount, 2)) . ' via Providus bank';
+            $amountInfo = sprintf(' %s %s', $payment->currencyCode, number_format($payment->payableAmount, 2)) . ' via Providus bank';
 
             $message = Message::create([
                 'message' => sprintf(config('koloo.account_funded_message'), $amountInfo),
@@ -70,13 +75,19 @@ class MonnifyController extends APIBaseController
 
             event(new SendMessage($message, 'sms'));
 
+            return $this->successResponse('Funded.');
+
         } catch(\Exception $exception) {
-            $logger->error($exception->getMessage());
+
+            $user->mainWallet()->debit($amountToCredit);
+            $user->writeCreditTransaction($amountToCredit, 'Revered due to error: ' . $exception->getMessage());
+
+            $logger->error($exception->getMessage() . ' File ' . $exception->getFile() . ' on line ' . $exception->getLine() . ' Code ' . $exception->getCode());
             $logger->error($request->all());
             return $this->errorResponse($exception->getMessage());
         }
 
-        return $this->errorResponse('Error');
+
 
     }
 
