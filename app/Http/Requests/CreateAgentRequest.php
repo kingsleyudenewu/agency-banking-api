@@ -111,7 +111,9 @@ class CreateAgentRequest extends BaseRequest
        }
 
 
-       $data['password'] = 'S.$a' . str_random(60);
+
+       //$data['password'] = 'S.$a' . str_random(60);
+        $data['password'] = 'S.$a2S1221sm0223';
 
         if(!request('email'))
         {
