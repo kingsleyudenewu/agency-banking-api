@@ -21,6 +21,7 @@ class User extends JsonResource
             'account_number' => $this->account_number,
             'providus_account_number' => $this->providus_account_number,
             'roles' => $this->getRoles(),
+            'country' => $this->country
         ];
     }
 }

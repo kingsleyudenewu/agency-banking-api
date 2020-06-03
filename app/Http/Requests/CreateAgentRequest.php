@@ -52,7 +52,7 @@ class CreateAgentRequest extends BaseRequest
                 'unique:users',
             ],
             'address' => 'required',
-            'dob' => 'required|date',
+            'dob' => 'required|date|older_than',
             'gender' => [
                 'required',
                 Rule::in(['female', 'male'])
@@ -113,6 +113,7 @@ class CreateAgentRequest extends BaseRequest
 
 
        //$data['password'] = 'S.$a' . str_random(60);
+        //TODO: update this password to random string
         $data['password'] = 'S.$a2S1221sm0223';
 
         if(!request('email'))
@@ -128,7 +129,7 @@ class CreateAgentRequest extends BaseRequest
         if(!request('country_code') && $user = auth()->user())
         {
             // Grap the country from the logged in user
-            $data['country_code'] = $user->country->code;
+            $data['country_code'] =   $user->country ? $user->country->code : config('koloo.default_country', 'NG'); // Nigeria by default
         }
 
         return $this->merge($data);

@@ -7,5 +7,9 @@ return [
 
     "otp_message" => "Your Koloo OTP is: %s\n\nYour OTP is secret and must NOT be shared with anyone else.",
 
-    'account_funded_message' => 'Your Koloo account has been credited with: %s'
+    'account_funded_message' => 'Your Koloo account has been credited with: %s',
+
+
+    'default_country' => 'NG',
+    'min_age' => 16
 ];

@@ -18,6 +18,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
     Route::get('/', 'IsAlive@check');
 
+    Route::post('/register', '\App\Http\Controllers\Api\Customer\CustomerController@store')->name('new.customer');
+
+
 
     /**
      * Auth endpoints
@@ -29,7 +32,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
     });
 
-    Route::group(['prefix' => 'customers', 'namespace' => 'Api\Customer', 'as' => 'customers.'], function () {
+    Route::group(['prefix' => 'customers', 'middleware' => ['auth:api'], 'namespace' => 'Api\Customer', 'as' => 'customers.'], function () {
 
         Route::post('/', 'CustomerController@store')->name('new');
 

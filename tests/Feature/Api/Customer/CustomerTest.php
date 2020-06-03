@@ -29,9 +29,10 @@ class CustomerTest extends TestCase
 
 
     /** @test */
-    public function can_create_a_customer_account_with_the_right_data()
+    public function logged_in_can_create_a_new_customer()
     {
-
+        $authUser = $this->agentUser;
+        $this->signIn($authUser->getModel());
 
         $payload = $this->profile_creation_data();
 
@@ -58,7 +59,7 @@ class CustomerTest extends TestCase
         $this->assertFalse($user->getModel()->hasRole('admin'));
         $this->assertFalse($user->getModel()->hasRole('super-agent'));
         $this->assertFalse($user->getModel()->hasRole('agent'));
-        $this->assertNull($user->getParentID());
+        $this->assertEquals($authUser->getId(), $user->getParentID());
 
         $fullPath  = $path  . $file->hashName();
 
