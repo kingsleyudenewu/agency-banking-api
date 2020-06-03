@@ -65,6 +65,7 @@ class AgentTest extends TestCase
 
     protected function can_create_agent_with_the_right_credentials_as($user)
     {
+        $this->withoutExceptionHandling();
 
         $this->signIn($user);
 
