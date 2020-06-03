@@ -27,7 +27,7 @@ abstract class OwnerFilterBase extends  Filter
     protected function query(Builder $builder, $value, $field): Builder {
 
         return $builder->whereHas('owner', function (Builder $query) use ($value, $field){
-            $query->where($field, $value);
+            $query->where($field, 'LIKE', '%' . $value . '%');
         });
     }
 

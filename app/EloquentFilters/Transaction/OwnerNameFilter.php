@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
  *
  * @package \App\EloquentFilters\Transaction
  */
-class OwnerFirstNameFilter extends OwnerFilterBase
+class OwnerNameFilter extends OwnerFilterBase
 {
 
     /**
@@ -21,7 +21,7 @@ class OwnerFirstNameFilter extends OwnerFilterBase
      */
     public function apply(Builder $builder, $value): Builder
     {
-        return $this->query($builder, $value, 'first_name');
+        return $this->query($builder, $value, 'name');
     }
 
 
