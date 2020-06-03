@@ -125,6 +125,12 @@ class CreateAgentRequest extends BaseRequest
             $data['commission'] = intval(number_format($this->commission, '2') * 100);
         }
 
+        if(!request('country_code') && $user = auth()->user())
+        {
+            // Grap the country from the logged in user
+            $data['country_code'] = $user->country->code;
+        }
+
         return $this->merge($data);
     }
 }
