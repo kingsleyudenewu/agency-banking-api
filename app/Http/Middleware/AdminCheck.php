@@ -20,9 +20,8 @@ class AdminCheck
 
         if(!$authUser) return response(['message' => 'Unauthenticated'], 401);
 
-        $user = User::find($authUser->id);
 
-        if(!$user->isAdmin()) return response(['message' => 'Access denied'], 401);
+        if(!$authUser->hasRole(\App\User::ROLE_ADMIN)) return response(['message' => 'Access denied'], 401);
 
 
         return $next($request);
