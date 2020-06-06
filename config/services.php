@@ -37,4 +37,9 @@ return [
         'base_uri' => env('MONNIFY_BASE_URI'),
     ],
 
+    'infobip' => [
+        'api_key' => env('INFOBIP_API_KEY'),
+        'base_uri' => env('INFOBIP_BASE_URL'),
+    ],
+
 ];
