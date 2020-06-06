@@ -31,8 +31,6 @@ class SavingsController extends APIBaseController
             $customer = User::find($data['owner_id']);
             User::checkExistence($customer);
 
-            $data['amount'] = intval($data['amount']) * 100;
-
             $saving = $customer->newSaving($data,  request()->user());
 
             return $this->successResponse('Success', new Saving($saving));
