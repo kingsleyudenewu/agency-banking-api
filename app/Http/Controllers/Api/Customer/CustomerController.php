@@ -34,11 +34,12 @@ class CustomerController extends APIBaseController
 
         $data = $request->validated();
 
+        $idKey = 'means_of_identification';
 
-        if($request->hasFile('passport_photo'))
+        if($request->hasFile($idKey))
         {
-            $storedLocation = $request->file('passport_photo')->store($path, $disk);
-            $data['passport_photo'] = [
+            $storedLocation = $request->file($idKey)->store($path, $disk);
+            $data[$idKey] = [
                 'disk' => $disk,
                 'path' => $storedLocation
             ];

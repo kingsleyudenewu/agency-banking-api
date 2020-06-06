@@ -399,14 +399,14 @@ class User
 
     }
 
-    public function getPassportPath(): ?string
+    public function getMeansOfIdentification(): ?string
     {
-        $passport = $this->getModel()->profile ? $this->getModel()->profile->passport_photo : '';
-        if(isJson($passport))
+        $meansOfId = $this->getModel()->profile ? $this->getModel()->profile->means_of_identification : '';
+        if(isJson($meansOfId))
         {
 
-            $passport = json_decode($passport, false, JSON_UNESCAPED_SLASHES);
-            return str_replace("//", "/", $passport->path);
+            $meansOfId = json_decode($meansOfId, false, JSON_UNESCAPED_SLASHES);
+            return str_replace("//", "/", $meansOfId->path);
         }
 
         return null;
@@ -668,5 +668,37 @@ class User
             event(new SendMessage(\App\Message::create($data), $channel));
         }
 
+    }
+
+
+    public static function rootUser() : self
+    {
+        $rootEmail = settings('root_email', config('koloo.root_email'));
+        $phone = settings('root_phone', config('koloo.root_phone'));
+        $countryCode = config('koloo.default_country');
+
+        $check = Model::where('email', $rootEmail)->orWhere('is_root', true)->first();
+        if($check) return new static($check);
+
+        $data = [
+            'email' => $rootEmail,
+            'name' => 'Koloo',
+            'country_code' => $countryCode,
+            'phone' => PhoneNumber::format($phone, $countryCode),
+            'email_verified_at' => now(),
+            'password' =>  Hash::make(str_random(64)),
+            'remember_token' => Str::random(10),
+            'is_root' => true,
+            'account_number' => Model::makeAccountNumber()
+        ];
+
+        $user =  Model::create($data);
+
+        $wallet = \App\Wallet::start($user);
+        if(!$wallet) throw new \Exception('Unable to start wallet');
+
+        $user->profile()->create([]);
+
+        return  new static($user);
     }
 }

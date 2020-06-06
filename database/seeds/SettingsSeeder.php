@@ -13,7 +13,7 @@ class SettingsSeeder extends Seeder
     {
         $this->clearSettings();
 
-        settings()->set('max_commission', 250); // Amount is in cent/kobo
+        settings()->set('max_commission', 330); // Amount is in cent/kobo
         settings()->set('min_commission', 100);
         settings()->set('currency_precision', 2);
         settings()->set('otp_length', 4);
@@ -22,7 +22,7 @@ class SettingsSeeder extends Seeder
         settings()->set('document_storage_path', 'docs/');
         settings()->set('document_storage_max_size', 2000); // 2mb
         settings()->set('document_storage_mime_types', 'pdf,doc,docx,jpeg,jpg,png');
-        settings()->set('valid_document_fields', 'passport_photo,agreement_form');
+        settings()->set('valid_document_fields', 'means_of_identification,agreement_form,application_form');
 
 
     }

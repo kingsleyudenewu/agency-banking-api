@@ -22,6 +22,10 @@ class User extends AuthBaseModel
     const GENDER_FEMALE = 'female';
     const GENDER_OTHERS = 'others';
 
+    const STATUS_APPROVED = 'approved';
+    const STATUS_PENDING_APPROVAL = 'pending approval';
+    const STATUS_DRAFT = 'draft';
+
 
 
     /**
@@ -38,7 +42,8 @@ class User extends AuthBaseModel
         'parent_id',
         'account_number',
         'providus_account_number',
-        'providus_account_ref'
+        'providus_account_ref',
+        'is_root'
     ];
 
     /**
@@ -48,7 +53,7 @@ class User extends AuthBaseModel
      */
     protected $hidden = [
         'password', 'remember_token', 'api_token', 'email_verified_at',
-        'phone_verified', 'deleted_at',
+        'phone_verified', 'deleted_at', 'is_root'
     ];
 
     /**

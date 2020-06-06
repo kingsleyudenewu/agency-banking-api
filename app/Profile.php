@@ -11,11 +11,11 @@ class Profile extends BaseModel
     protected $fillable = [
         'user_id',
         'home_address',
-        'passport',
+        'means_of_identification',
         'dob',
         'gender',
         'bank_account_number',
-        'bank_name',
+        'bank_id',
         'secondary_phone',
         'next_of_kin_phone',
         'next_of_kin_name',
@@ -28,14 +28,18 @@ class Profile extends BaseModel
         'bvn',
         'passport_photo',
         'agreement_form',
+        'application_form',
         'emergency_phone',
         'emergency_name',
+        'means_of_identification',
+        'has_bank_account',
         'commission'
     ];
 
     protected $casts = [
-        'passport_photo' => Json::class,
+        'application_form' => Json::class,
         'agreement_form' => Json::class,
+        'means_of_identification' => Json::class,
     ];
 
     protected $hidden  = [];

@@ -11,9 +11,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        \App\Wallet::truncate();
+        \App\Transaction::truncate();
+        \App\Message::truncate();
 
         $this->call(LaravelEntrustSeeder::class);
         $this->call(CountrySeeder::class);
         $this->call(SettingsSeeder::class);
+        $this->call(BankSeeder::class);
+        $this->call(RootUserSeeder::class);
+
     }
 }

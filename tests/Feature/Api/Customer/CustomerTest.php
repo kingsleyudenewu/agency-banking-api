@@ -31,6 +31,8 @@ class CustomerTest extends TestCase
     /** @test */
     public function logged_in_can_create_a_new_customer()
     {
+        $this->withoutExceptionHandling();
+
         $authUser = $this->agentUser;
         $this->signIn($authUser->getModel());
 
@@ -43,8 +45,8 @@ class CustomerTest extends TestCase
         Storage::fake($disk);
 
 
-        $file = UploadedFile::fake()->create('passport.png', $maxSize, 'image/png');
-        $payload['passport_photo'] = $file;
+        $file = UploadedFile::fake()->create('means_of_identification.png', $maxSize, 'image/png');
+        $payload['means_of_identification'] = $file;
 
 
         $res = $this->postJson(route('api.customers.new'), $payload)
@@ -63,7 +65,7 @@ class CustomerTest extends TestCase
 
         $fullPath  = $path  . $file->hashName();
 
-        $this->assertEquals($fullPath, $user->getPassportPath());
+        $this->assertEquals($fullPath, $user->getMeansOfIdentification());
 
         Storage::disk($disk)->assertExists($fullPath);
 

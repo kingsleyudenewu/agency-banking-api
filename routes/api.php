@@ -160,5 +160,16 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
     });
 
 
+    Route::group([
+        'prefix' => 'banks',
+        'namespace' => 'Api\Bank',
+        'as' => 'banks.',
+        'middleware' => []], function () {
+        Route::get('/', 'BanksController@index')->name('list');
+        Route::post('/', 'BanksController@store')
+            ->middleware(['auth:api', 'admin-check'])
+            ->name('store');
+    });
+
 
 });
