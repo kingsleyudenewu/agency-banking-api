@@ -437,6 +437,7 @@ class User
 
     private function canChargeWallet(int $amount)
     {
+        $amount =  ($amount * 100); // The amount is stored in kobo
         $this->checkWalletIsValid();
 
         $wallet = $this->mainWallet();
@@ -477,7 +478,6 @@ class User
 
             $data = $user->validateForTransaction($data);
 
-            $data['amount'] = $data['amount'] / 100;
             $saving = $user->makeNewSaving($data);
 
             $saving->contributions()->create($contribData);
