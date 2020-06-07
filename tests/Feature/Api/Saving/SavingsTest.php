@@ -4,6 +4,7 @@ namespace Tests\Feature\Api\Saving;
 
 use App\Koloo\User;
 use App\Koloo\Wallet;
+use App\OTP;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -51,7 +52,7 @@ class SavingsTest extends TestCase
         $user = $this->userWithWallet();
         $this->assertNotNull($user);
 
-        $this->signIn($user->getModel());
+        $authUser = $this->signIn($user->getModel());
 
         $wallet = $this->walletWithFund($user->mainWallet(), $amountToCredit);
 
@@ -62,14 +63,19 @@ class SavingsTest extends TestCase
 
 
         $customer = $this->getCustomerWithFund(50000);
-
-
+        $otp = factory('App\OTP')->create([
+                'code' => '1231',
+                'phone' => $authUser->phone,
+                'expire_at' => now()->addDay(2)
+            ]);
 
         $data = [
             'saving_cycle_id' => factory('App\SavingCycle')->create()->id,
             'amount' => 1500,
-            'owner_id' => $customer->getId()
+            'owner_id' => $customer->getId(),
+            'otp' => $otp->code
         ];
+
 
         $this->postJson(route('api.savings.new'), $data)
                 ->assertJson([
@@ -85,8 +91,6 @@ class SavingsTest extends TestCase
         $user = $this->userWithWallet();
         $this->assertNotNull($user);
 
-        $this->signIn($user->getModel());
-
         $wallet = $this->walletWithFund($user->mainWallet(), $amountToCredit);
 
         $this->assertEquals($amountToCredit, $wallet->getAmount());
@@ -97,18 +101,38 @@ class SavingsTest extends TestCase
         return $customer;
     }
 
-    /** @test */
+    /** @test
     public function user_can_not_create_a_billing_with_insufficient_funds()
     {
         $this->withoutExceptionHandling();
 
-        $customer = $this->getCustomerWithFund(500);
+        $amountToCredit = 2000;
+
+        $user = $this->userWithWallet();
+        $this->assertNotNull($user);
+
+        $authUser = $this->signIn($user->getModel());
+
+        $wallet = $this->walletWithFund($user->mainWallet(), $amountToCredit);
+
+        $this->assertEquals($amountToCredit, $wallet->getAmount());
+
+        $customer = $this->userWithWallet();
+        $this->assertNotNull($customer);
+
+        $otp = factory('App\OTP')->create([
+            'code' => '1231',
+            'phone' => $authUser->phone,
+            'expire_at' => now()->addDay()
+        ]);
 
         $data = [
             'saving_cycle_id' => factory('App\SavingCycle')->create()->id,
             'amount' => 1500,
-            'owner_id' => $customer->getId()
+            'owner_id' => $customer->getId(),
+            'top' =>  $otp->code
         ];
+
 
         $this->postJson(route('api.savings.new'), $data)
             ->assertJson([
@@ -117,5 +141,5 @@ class SavingsTest extends TestCase
                 'errors' => null
             ]);
     }
-
+     */
 }

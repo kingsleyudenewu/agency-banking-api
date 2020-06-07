@@ -7,8 +7,8 @@ use Faker\Generator as Faker;
 
 $factory->define(OTP::class, function (Faker $faker) {
     return [
-        'phone' => $faker->e164PhoneNumber,
+        'phone' => $faker->phoneNumber,
         'code' => $faker->numberBetween(1000, 99999999),
-        'expire_at' => now()->addMinutes(10)
+        'expire_at' => now()->addMinutes(60)
     ];
 });
