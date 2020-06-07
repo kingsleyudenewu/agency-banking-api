@@ -38,6 +38,7 @@ class CreateProfilesTable extends Migration
             $table->string('emergency_name')->nullable();
             $table->string('emergency_phone')->nullable();
             $table->integer('commission')->default(0);
+            $table->integer('commission_for_agent')->default(0);
             $table->boolean('has_bank_account')->default(false);
             $table->uuid('user_id');
             $table->primary('id');

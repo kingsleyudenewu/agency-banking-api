@@ -10,7 +10,7 @@ class Profile extends BaseModel
 {
     protected $fillable = [
         'user_id',
-        'home_address',
+        'address',
         'means_of_identification',
         'dob',
         'gender',
@@ -25,15 +25,16 @@ class Profile extends BaseModel
         'business_name',
         'business_address',
         'business_phone',
+        'business_type',
         'bvn',
-        'passport_photo',
         'agreement_form',
         'application_form',
         'emergency_phone',
         'emergency_name',
         'means_of_identification',
         'has_bank_account',
-        'commission'
+        'commission',
+        'commission_for_agent'
     ];
 
     protected $casts = [

@@ -71,33 +71,6 @@ class CustomerTest extends TestCase
 
     }
 
-
-
-    /*public function authenticated_user_can_create_a_customer_account_with_the_right_data()
-    {
-
-        $auhUser = $this->signIn($this->agentUser->getModel());
-
-
-        $payload = $this->profile_creation_data();
-
-        $res = $this->postJson(route('api.customers.new'), $payload)
-            ->assertStatus(200)
-            ->assertJson(['status' => 'success']);
-
-        $content = $res->json();
-
-        $user = User::find($content['data']['id']);
-        $this->assertNotNull($user);
-        $this->assertTrue($user->getModel()->hasRole('customer'));
-        $this->assertFalse($user->getModel()->hasRole('admin'));
-        $this->assertFalse($user->getModel()->hasRole('super-agent'));
-        $this->assertFalse($user->getModel()->hasRole('agent'));
-        $this->assertEquals($auhUser->id, $user->getParentID());
-
-    }*/
-
-
     private function profile_creation_data()
     {
         $userData = factory('App\User')->raw(['phone' => '08129531720']);

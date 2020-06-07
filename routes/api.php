@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
+Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account']], function () {
 
 
     Route::get('/', 'IsAlive@check');
@@ -105,6 +105,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
         Route::post('/password', 'PasswordManagement@store')->name('set-password');
 
+
+
         Route::group(['prefix' => 'savings', 'as' => 'savings.'], function(){
 
             Route::get('/cycle', 'SavingCycleManagement@index')->name('cycle.get');
@@ -116,6 +118,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
         Route::group(['prefix' => 'account', 'as' => 'balance.'], function(){
 
             Route::post('/balance', 'BalanceController@store')->name('store');
+            Route::post('/approval', 'AgentApprovalController@store')->name('approval');
         });
 
 

@@ -65,7 +65,6 @@ class AgentTest extends TestCase
 
     protected function can_create_agent_with_the_right_credentials_as($user)
     {
-        $this->withoutExceptionHandling();
 
         $this->signIn($user);
 
@@ -88,7 +87,7 @@ class AgentTest extends TestCase
         $this->assertNotNull($createdUser);
         $this->assertTrue($createdUser->isAgent(), 'Expecting user to be an agent');
         $this->assertNotNull($createdUser->getParentID(), 'Parent not set');
-        $this->assertTrue($createdUser->belongsTo(User::find($user->id)));
+
 
         Event::assertDispatched(AgentAccountCreated::class, 1);
     }
@@ -103,7 +102,9 @@ class AgentTest extends TestCase
 
         $payload = array_merge($profileData, $userData);
         $payload['country_code'] = 'NG';
-        $payload['commission'] = 1.5;
+        $payload['commission'] = 40;
+        $payload['commission_for_agent'] = 40;
+        $payload['business_type']  = 'Test';
 
         return $payload;
     }

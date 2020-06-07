@@ -56,9 +56,7 @@ class CreateAgentRequest extends BaseRequest
             'gender' => [
                 'required',
                 Rule::in(['female', 'male'])
-            ],
-            'bank_account_number' => 'nullable|numeric',
-            'bank_name' => 'nullable',
+            ]
 
         ];
 
@@ -72,28 +70,51 @@ class CreateAgentRequest extends BaseRequest
             $validationRules['passport_photo'] = 'nullable|image|max:10240'; // 10mb largest
             $validationRules['has_bank_account'] = 'boolean';
 
-        }  elseif ($this->path() === 'api/v1/agents' && $this->isMethod("post"))
+        }  elseif ($this->canChangeCommission())
         {
+
+            $maxCommission = intval(settings('max_commission'));
+            $minCommission = intval(settings('min_commission'));
 
             $validationRules['commission'] = [
                 'required',
                 'numeric',
-                'min:'. intval(settings('min_commission')),
-                function($attribute, $value, $fail) {
-
-                    $maxCommission = auth()->user()->hasRole(\App\User::ROLE_ADMIN) ?
-                        settings('max_commission') : intval(auth()->user()->profile->commission);
-
-                    if($value > $maxCommission) {
-                        $fail('You can not set commission greater than ' . $maxCommission / 100);
+                function($attribute, $value, $fail) use($maxCommission, $minCommission) {
+                    if($value < $minCommission )
+                    {
+                        $fail('The commission must be at least ' . $minCommission / 100 . '%');
+                    } else if($value > $maxCommission)
+                    {
+                        $fail('You can not set commission greater than ' . $maxCommission / 100 . '%');
                     }
-
                 }
             ];
+
+
+            $validationRules['commission_for_agent'] = [
+                'required',
+                'numeric',
+                function($attribute, $value, $fail) use ($maxCommission) {
+                    $newMax = $maxCommission - $this->commission;
+                    if($value < $this->commission )
+                    {
+                        $fail('The commission must be at least ' . $this->commission / 100 . '%');
+                    } else if($value > $newMax) {
+                        $fail('You can not set commission for agent greater than ' . $newMax / 100 . '%');
+                    }
+                }
+            ];
+
+            $validationRules['bvn'] = 'required';
+            $validationRules['state_id'] = 'nullable|uuid';
+            $validationRules['business_type'] = 'required';
+            $validationRules['business_name'] = 'nullable|max:255';
+            $validationRules['business_address'] = 'nullable|max:255';
         }
 
 
        $validationRules['password'] = 'required|min:6|strong_password';
+
 
         return $validationRules;
     }
@@ -103,15 +124,6 @@ class CreateAgentRequest extends BaseRequest
     protected function prepareForValidation()
     {
         $data = [ ];
-
-       if($this->country_code && strlen($this->country_code) === 2)
-       {
-           if($this->phone)
-               $data['phone'] = PhoneNumber::format($this->cleanPhone($this->phone), $this->country_code);
-       }
-
-
-
        //$data['password'] = 'S.$a' . str_random(60);
         //TODO: update this password to random string
         $data['password'] = 'S.$a2S1221sm0223';
@@ -121,9 +133,10 @@ class CreateAgentRequest extends BaseRequest
             $data['email'] = str_random(32).$this->phone.'@email-place.koloo.ng';
         }
 
-        if ($this->path() === 'api/v1/agents' && $this->isMethod("post"))
+        if ($this->canChangeCommission())
         {
             $data['commission'] = intval(number_format($this->commission, '2') * 100);
+            $data['commission_for_agent'] =  intval(number_format($this->commission_for_agent, '2') * 100);
         }
 
         if(!request('country_code') && $user = auth()->user())
@@ -132,6 +145,22 @@ class CreateAgentRequest extends BaseRequest
             $data['country_code'] =   $user->country ? $user->country->code : config('koloo.default_country', 'NG'); // Nigeria by default
         }
 
+        if($this->country_code && strlen($this->country_code) === 2)
+        {
+            if($this->phone)
+                $data['phone'] = PhoneNumber::format($this->cleanPhone($this->phone), $this->country_code);
+        }
+
         return $this->merge($data);
     }
+
+    /**
+     * @return bool
+     */
+    private function canChangeCommission(): bool
+    {
+        return $this->path() === 'api/v1/agents' && $this->isMethod("post") && $this->user()->hasRole(\App\User::ROLE_ADMIN);
+    }
+
+
 }

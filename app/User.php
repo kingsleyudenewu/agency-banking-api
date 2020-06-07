@@ -43,7 +43,11 @@ class User extends AuthBaseModel
         'account_number',
         'providus_account_number',
         'providus_account_ref',
-        'is_root'
+        'is_root',
+        'status',
+        'approved_by',
+        'approved_at',
+        'approval_remark'
     ];
 
     /**

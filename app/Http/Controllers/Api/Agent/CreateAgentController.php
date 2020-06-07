@@ -50,7 +50,9 @@ class CreateAgentController extends APIBaseController
         $data = $request->validated();
 
         $authUser = User::find($request->user()->id);
-        $user =  User::createWithProfile($data, $request->user());
+
+        $parent = $authUser->isAdmin() ? User::rootUser()->getModel() : $request->user();
+        $user =  User::createWithProfile($data, $parent);
 
         if(!$user)
         {
@@ -58,11 +60,12 @@ class CreateAgentController extends APIBaseController
         }
 
         $method = ($authUser->isAdmin() && request('type') === 'super') ? 'setAsSuperAgent' : 'setAsAgent';
-
         $user->getModel()->$method();
 
-        event(new AgentAccountCreated($user));
+        if($authUser->isAdmin())
+            $user->approve();
 
+        event(new AgentAccountCreated($user));
 
         $this->logInfo('Done creating account ..');
 

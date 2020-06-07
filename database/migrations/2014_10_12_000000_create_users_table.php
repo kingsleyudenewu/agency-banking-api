@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('phone', 150)->unique();
             $table->string('password');
             $table->uuid('parent_id')->nullable();
-            $table->string('status')->default('approved');
+            $table->string('status')->default(\App\User::STATUS_PENDING_APPROVAL);
             $table->uuid('approved_by')->nullable();
             $table->dateTime('approved_at')->nullable();
             $table->string('approval_remark')->nullable();

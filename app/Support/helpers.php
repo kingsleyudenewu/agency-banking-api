@@ -757,3 +757,12 @@ if (! function_exists('isJson')) {
     }
 }
 
+function error_response($message, $errors=null, $code=400)
+{
+    return response()->json([
+        'status' => 'error',
+        'message' => $message,
+        'errors' => $errors,
+    ], $code);
+}
+

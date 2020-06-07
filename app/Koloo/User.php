@@ -163,6 +163,32 @@ class User
         return $this->model->hasRole(Model::ROLE_SUPER_AGENT);
     }
 
+    public function isApproved()
+    {
+        return $this->model->status === Model::STATUS_APPROVED;
+    }
+
+    public function approve($by=null, $remark='')
+    {
+        return $this->setStatus(Model::STATUS_APPROVED, $by, $remark);
+    }
+
+
+    public function disapprove($by=null, $remark='')
+    {
+        return $this->setStatus(Model::STATUS_DRAFT, $by, $remark);
+    }
+
+    private function setStatus($newStatus, $by=null, $remark='')
+    {
+        $this->model->status = $newStatus;
+        $this->model->approved_by = $by;
+        $this->model->approved_at = now();
+        $this->model->approval_remark = $remark;
+        return $this->model->save();
+    }
+
+
     public function getParent() : ?self
     {
         return $this->model->parent_id ?  new static($this->model->parent) : null;
@@ -246,7 +272,10 @@ class User
            DB::beginTransaction();
 
            if($parent)
+           {
                $data['parent_id'] = $parent->id;
+               $data['commission'] = $parent->profile->commission_for_agent;
+           }
 
            $data['password'] = Hash::make($data['password']);
            $data['account_number'] = Model::makeAccountNumber();
@@ -651,7 +680,7 @@ class User
         if($this->isCustomer())
         {
             $message  = sprintf(config('koloo.customer_welcome_sms'), $this->getAccountNumber());
-        } else if($this->isSuperAgent() || $this->isAgent())
+        } else if(($this->isSuperAgent() || $this->isAgent()) && $this->isApproved())
         {
             $message  = sprintf(config('koloo.agent_welcome_sms'), $this->getModel()->providus_account_number);
         }
@@ -700,5 +729,46 @@ class User
         $user->profile()->create([]);
 
         return  new static($user);
+    }
+
+    private function checkProfile()
+    {
+       if(!$this->model->profile)
+       {
+           Log::error($this->getName() . ' with ID ' . $this->getId() . ' has no profile');
+           throw new \Exception('User profile not found.');
+       }
+
+    }
+    public function getCommission()
+    {
+       $this->checkProfile();
+       return $this->model->profile->commission;
+    }
+
+    public function setCommission($commission)
+    {
+        $this->checkProfile();
+
+        $this->model->profile->commission = $commission;
+        $this->model->profile->save();
+
+        return $this->model->profile->commission;
+    }
+
+    public function getCommissionForAgent()
+    {
+        $this->checkProfile();
+        return $this->model->profile->commission_for_agent;
+    }
+
+    public function setCommissionForAgent($commission)
+    {
+        $this->checkProfile();
+
+        $this->model->profile->commission_for_agent = $commission;
+        $this->model->profile->save();
+
+        return $this->model->profile->commission_for_agent;
     }
 }
