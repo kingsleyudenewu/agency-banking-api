@@ -6,7 +6,7 @@ use App\Transaction;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class HandleWalletBilled
+class HandleFundTransfer
 {
     /**
      * Create the event listener.
@@ -26,6 +26,6 @@ class HandleWalletBilled
      */
     public function handle($event)
     {
-        $event->wallet->getOwner()->writeTransaction($event->amount, Transaction::TRANSACTION_TYPE_DEBIT,  $event->reason, $event->label);
+        $event->customer->writeTransaction($event->amount, Transaction::TRANSACTION_TYPE_CREDIT,  $event->remark, Transaction::LABEL_TRANSFER);
     }
 }

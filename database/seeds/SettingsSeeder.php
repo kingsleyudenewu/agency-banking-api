@@ -14,8 +14,8 @@ class SettingsSeeder extends Seeder
         $this->clearSettings();
 
         settings()->set('max_commission', 8000); // 80%
-        settings()->set('min_commission', 4000);
-        settings()->set('percent_to_charge', 330); // How much to charge per savings
+        settings()->set('min_commission', 2000);
+        settings()->set('percent_to_charge', 330); // How much to charge per savings- This is the system-wide charge
         settings()->set('currency_precision', 2);
         settings()->set('otp_length', 4);
         settings()->set('enable_otp_for_login', false);

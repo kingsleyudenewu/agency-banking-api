@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Events\AgentAccountCreated;
 use App\Events\BalanceUpdated;
+use App\Events\FundTransfer;
 use App\Events\SendMessage;
 use App\Events\SendNewOTP;
 use App\Events\WalletBilled;
 use App\Listeners\HandleAgentAccountCreation;
+use App\Listeners\HandleFundTransfer;
 use App\Listeners\HandleNewOTP;
 use App\Listeners\HandleWalletBilled;
 use App\Listeners\OnSendMessage;
@@ -47,7 +49,11 @@ class EventServiceProvider extends ServiceProvider
 
         BalanceUpdated::class => [
             WriteUpdateUpdatedTransaction::class
-        ]
+        ],
+
+        FundTransfer::class => [
+            HandleFundTransfer::class
+        ],
 
     ];
 

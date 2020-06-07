@@ -9,13 +9,20 @@ class Transaction extends Model
     const TRANSACTION_TYPE_CREDIT = 'credit';
     const TRANSACTION_TYPE_DEBIT = 'debit';
 
+
+    // Some labels
+    const LABEL_NORMAL = 'normal';
+    const LABEL_COMMISSION = 'commission';
+    const LABEL_TRANSFER = 'transfer';
+
     protected $fillable = [
         'type',
         'amount',
         'trans_ref',
         'transactionable_id',
         'transactionable_type',
-        'remark'
+        'remark',
+        'label',
     ];
 
     public function owner()

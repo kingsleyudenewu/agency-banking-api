@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Koloo\Wallet;
+use App\Koloo\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,32 +11,26 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class WalletBilled
+class FundTransfer
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $wallet;
-
-    public $reason;
-
+    public $performedBy;
+    public $customer;
     public $amount;
-
-    public $label;
+    public $remark;
 
     /**
      * Create a new event instance.
      *
-     * @param \App\Koloo\Wallet $wallet
-     * @param int               $amount
-     * @param string            $reason
-     * @param string            $label
+     * @return void
      */
-    public function __construct(Wallet $wallet, int $amount, string $reason, string $label='')
+    public function __construct(User $performedBy, User $customer, int $amount, string $remark = '')
     {
-        $this->wallet = $wallet;
-        $this->reason = $reason;
+        $this->performedBy = $performedBy;
+        $this->customer = $customer;
         $this->amount = $amount;
-        $this->label = $label;
+        $this->remark = $remark;
     }
 
     /**

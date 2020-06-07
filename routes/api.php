@@ -66,6 +66,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
     Route::group(['prefix' => 'accounts', 'namespace' => 'Api\Account', 'as' => 'accounts.', 'middleware' => ['auth:api']], function () {
 
         Route::get('/', 'AccountsController@index')->name('get');
+        Route::post('/fund', 'FundAccountController@fund')
+            ->middleware('otp-required-for-auth-user')
+            ->name('fund');
 
     });
 
@@ -116,10 +119,6 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
 
 
         Route::group(['prefix' => 'account', 'as' => 'balance.'], function(){
-
-            Route::post('/balance', 'BalanceController@store')
-                ->middleware('otp-required-for-auth-user')
-                ->name('store');
             Route::post('/approval', 'AgentApprovalController@store')->name('approval');
         });
 

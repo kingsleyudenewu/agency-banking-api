@@ -29,7 +29,7 @@ class SavingCycleManagement extends APIBaseController
         if(SavingCycle::isFlatCharge($data['charge_type']))
             $data['percentage_to_charge'] = null;
         else
-            $data['percentage_to_charge'] = intval(number_format($data['percentage_to_charge'],2) * 100);
+            $data['percentage_to_charge'] = number_format($data['percentage_to_charge'],2);
 
         $result = SavingCycle::create($data);
 
@@ -42,7 +42,7 @@ class SavingCycleManagement extends APIBaseController
         if(SavingCycle::isFlatCharge($data['charge_type']))
             $data['percentage_to_charge'] = null;
         else
-            $data['percentage_to_charge'] = intval(number_format($data['percentage_to_charge'],2) * 100);
+            $data['percentage_to_charge'] = number_format($data['percentage_to_charge'],2);
 
         $savingCycle = SavingCycle::find($data['id']);
 

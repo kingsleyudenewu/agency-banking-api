@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Koloo\Wallet;
+use App\Contribution;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,32 +11,24 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class WalletBilled
+class CommissionEarned
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $wallet;
-
-    public $reason;
-
     public $amount;
 
-    public $label;
+    public $contribution;
 
     /**
      * Create a new event instance.
      *
-     * @param \App\Koloo\Wallet $wallet
      * @param int               $amount
-     * @param string            $reason
-     * @param string            $label
+     * @param \App\Contribution $contribution
      */
-    public function __construct(Wallet $wallet, int $amount, string $reason, string $label='')
+    public function __construct(int $amount, Contribution $contribution)
     {
-        $this->wallet = $wallet;
-        $this->reason = $reason;
         $this->amount = $amount;
-        $this->label = $label;
+        $this->contribution = $contribution;
     }
 
     /**

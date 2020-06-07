@@ -766,3 +766,7 @@ function error_response($message, $errors=null, $code=400)
     ], $code);
 }
 
+function percentOf($amount, $p)
+{
+    return ($amount / 100) * $p;
+}

@@ -3,7 +3,9 @@
 namespace App\Koloo;
 
 
+use App\Contribution;
 use App\Events\BalanceUpdated;
+use App\Events\CommissionEarned;
 use App\Events\NewContributionCreated;
 use App\Events\NewSavingCreated;
 use App\Events\PreWalletBilled;
@@ -456,6 +458,14 @@ class User
         return new Wallet($wallet);
     }
 
+    public function purse()
+    {
+        $wallet = $this->model->wallets()->where('type', \App\Wallet::WALLET_TYPE_COMMISSION)->first();
+
+        if(!$wallet) return null;
+        return new Wallet($wallet);
+    }
+
 
     public function checkWalletIsValid() : self
     {
@@ -511,7 +521,8 @@ class User
 
             $saving = $user->makeNewSaving($data);
 
-            $saving->contributions()->create($contribData);
+            $contribution = $saving->contributions()->create($contribData);
+            SavingCommission::getInstance($contribution)->computeCommission();
 
             event(new NewSavingCreated($saving));
 
@@ -526,9 +537,8 @@ class User
     }
 
 
-    private function chargeWallet($amount, $reason='Charged')
+    public function chargeWallet($amount, $reason='Charged', $label='')
     {
-
         $this->canChargeWallet($amount);
 
         $wallet = $this->mainWallet();
@@ -537,7 +547,7 @@ class User
 
         $wallet->debit($amount);
 
-        event(new WalletBilled($wallet, $amount, $reason));
+        event(new WalletBilled($wallet, $amount, $reason, $label) );
 
     }
 
@@ -584,14 +594,15 @@ class User
         return $this->model->transactions;
     }
 
-    public function writeTransaction(int $amount, string $type, string $remark = '')
+    public function writeTransaction(int $amount, string $type, string $remark = '', $label='')
     {
         return $this->model->transactions()
                 ->create([
                     'type' => $type,
                     'amount' => $amount,
                     'trans_ref' => $this->makeTransactionRef(),
-                    'remark' => $remark
+                    'remark' => $remark,
+                    'label' => $label
                 ]);
 
     }
@@ -655,6 +666,7 @@ class User
             $contribData = ['amount' => $amount / 100, 'created_by' => $this->getId()];
 
             $contribution = $saving->contributions()->create($contribData);
+            SavingCommission::getInstance($contribution)->computeCommission();
 
             event(new NewContributionCreated($contribution));
 
@@ -728,7 +740,7 @@ class User
         $wallet = \App\Wallet::start($user);
         if(!$wallet) throw new \Exception('Unable to start wallet');
 
-        $user->profile()->create([]);
+        $user->profile()->create(['commission' => settings('min_commission')]);
 
         return  new static($user);
     }
@@ -803,5 +815,23 @@ class User
 
         $otp->invalidateActiveOtp();
 
+    }
+
+    public function earnCommission(int $amount, Contribution $contribution)
+    {
+        $wallet = $this->purse();
+        if(!$wallet) throw new \Exception('Wallet for commission not set for this user.');
+
+        $wallet->credit($amount);
+        $this->model->transactions()
+            ->create([
+                'type' => Transaction::TRANSACTION_TYPE_CREDIT,
+                'amount' => $amount,
+                'label' => Transaction::LABEL_COMMISSION,
+                'trans_ref' => $this->makeTransactionRef(),
+                'remark' => 'Commission earned from savings'
+            ]);
+
+        event(new CommissionEarned($amount, $contribution));
     }
 }

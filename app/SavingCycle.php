@@ -32,4 +32,40 @@ class SavingCycle extends BaseModel
         return $this->min_saving_amount;
     }
 
+    public function getMinSavingAmountAttribute($value)
+    {
+        return $value / 100;
+    }
+
+    public function setMinSavingAmountAttribute($value)
+    {
+        $this->attributes['min_saving_amount'] = $value * 100;
+    }
+
+    public function getPercentageToChargeAttribute($value)
+    {
+        return $value / 100;
+    }
+
+    public function getDurationAttribute($value)
+    {
+        return  intval($value);
+    }
+
+    public function setPercentageToChargeAttribute($value)
+    {
+        $this->attributes['percentage_to_charge'] = $value * 100;
+    }
+
+    public function getMinSavingFrequentAttribute($value)
+    {
+        return $value / 100;
+    }
+
+    public function setMinSavingFrequentAttribute($value)
+    {
+        $this->attributes['min_saving_frequent'] = $value * 100;
+    }
+
+
 }

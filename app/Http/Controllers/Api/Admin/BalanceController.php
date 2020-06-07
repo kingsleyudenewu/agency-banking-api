@@ -18,18 +18,8 @@ class BalanceController extends APIBaseController
 
     public function store(BalanceCreditAndDebitRequest $request)
     {
-      try {
 
-          $customer = User::creditOrDebit($request->validated(), $request->user());
 
-          return $this->successResponse('Successful', ['balance' => $customer->mainWallet()->getAmount()]);
-
-      } catch (\Exception $e)
-      {
-        Log::error('BalanceController :: ' . $e->getMessage());
-
-        return $this->errorResponse($e->getMessage());
-      }
 
     }
 
