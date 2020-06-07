@@ -73,24 +73,39 @@ class SavingCommission
 
         $this->logInfo('Calculating commission. ID: ' . $this->contribution->id . ' creator: ' . $creator->getName());
 
-        $amountToCharge = percentOf($this->contribution->amount, settings('percent_to_charge'));
-        $this->logInfo('Total amount to charge is: ' . number_format($amountToCharge/100,2) );
+        $contributionAmount = $this->contribution->amount;
+        $systemChargesPercent  = doubleval(number_format(settings('percent_to_charge')/100, 2));
 
-        $totalCommission = 100000 - $creator->getCommission();
-        $creatorCommission = percentOf($amountToCharge, $creator->getCommission());
 
-        $creator->earnCommission($creatorCommission, $this->contribution);
+        $totalDeduction = percentOf($contributionAmount,$systemChargesPercent);
+
+
+        $this->logInfo('Total amount to charge is: ' . $totalDeduction );
+
+        $creatorCommission = doubleval(number_format($creator->getCommission()/100, 2));
+
+        $totalCommission = 100 - $creatorCommission;
+
+        $creatorCommissionEarned = percentOf($totalDeduction, $creatorCommission);
+        $creator->earnCommission($creatorCommissionEarned, $this->contribution);
 
         $rootUser = User::rootUser();
         if($creator->getParentID() !== $rootUser->getId() && $creator->getParent())
         {
+
             $parent = $creator->getParent();
-            $totalCommission  -= $parent->getCommission();
-            $parentCommission = percentOf($amountToCharge, $parent->getCommission());
-            $parent->earnCommission($parentCommission, $this->contribution);
+            $parentCommission  = doubleval(number_format($parent->getCommission() / 100,2));
+
+            $totalCommission  -= $parentCommission;
+
+            $parentCommissionEarned = percentOf($totalDeduction, $parentCommission);
+            $parent->earnCommission($parentCommissionEarned, $this->contribution);
         }
 
-        $rootUser->earnCommission(percentOf($amountToCharge, $totalCommission),  $this->contribution);
+
+        $rootUser->earnCommission(percentOf($totalDeduction, $totalCommission),  $this->contribution);
+
+        $this->contribution->updateCommissionComputed();
 
     }
 }
