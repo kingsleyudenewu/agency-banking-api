@@ -7,6 +7,7 @@ use App\Http\Resources\AccountCollection;
 use App\Profile;
 use App\User;
 use \EloquentBuilder;
+use Illuminate\Http\Request;
 
 
 /**
@@ -39,5 +40,22 @@ class AccountsController extends APIBaseController
         }));
 
 
+    }
+
+    public function wallet(Request $request)
+    {
+        $user = new \App\Koloo\User($request->user());
+
+        return $this->successResponse('wallet', [
+            'wallet' => $user->mainWallet()->getModel(),
+            'purse' => $user->purse()->getModel()
+        ]);
+
+    }
+
+
+    public function show(Request $request, $id)
+    {
+        return ;
     }
 }

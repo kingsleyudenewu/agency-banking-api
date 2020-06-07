@@ -63,7 +63,7 @@ class CreateAgentController extends APIBaseController
         $user->getModel()->$method();
 
         if($authUser->isAdmin())
-            $user->approve();
+            $user->approve($authUser->getId(), 'auto approved');
 
         event(new AgentAccountCreated($user));
 

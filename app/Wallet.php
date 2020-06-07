@@ -17,6 +17,8 @@ class Wallet extends Model
 
     protected $fillable = ['user_id', 'currency', 'type'];
 
+    protected $hidden  = ['hash', 'created_at', 'updated_at', 'touched', 'type', 'user_id', 'id'];
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);

@@ -17,13 +17,21 @@ class TransactionController extends APIBaseController
 
     public function index()
     {
-        $query = Transaction::query();
 
-        if(!request()->user()->hasRole(User::ROLE_ADMIN))
-            $query = request()->user()->transactions();
+        $user = request()->user();
+        if(!$user->hasRole(User::ROLE_ADMIN))
+        {
+            $ids = $user->children()->pluck('id')->toArray();
+            $ids[] = $user->id;
+            $query = Transaction::query()
+                ->whereIn('user_id', $ids);
+        }
+        else
+        {
+            $query = Transaction::query();
+        }
 
         $perPage = $this->perginationPerPage();
-
         return $this->successResponse('transactions',
             EloquentBuilder::to($query->with('owner:id,name'), request()->filter)->paginate($perPage)
         );

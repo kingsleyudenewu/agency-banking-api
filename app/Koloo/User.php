@@ -732,6 +732,7 @@ class User
             'password' =>  Hash::make(str_random(64)),
             'remember_token' => Str::random(10),
             'is_root' => true,
+            'status' => \App\User::STATUS_APPROVED,
             'account_number' => Model::makeAccountNumber()
         ];
 

@@ -26,6 +26,8 @@ class User extends AuthBaseModel
     const STATUS_PENDING_APPROVAL = 'pending approval';
     const STATUS_DRAFT = 'draft';
 
+    const SELECT_BASIC_INFO = 'id,name,country_code,phone,email,status,parent_id,created_at,providus_account_number';
+
 
 
     /**
@@ -174,5 +176,11 @@ class User extends AuthBaseModel
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function scopePending($query)
+    {
+        return $query->whereIn('status', [static::STATUS_PENDING_APPROVAL, static::STATUS_DRAFT]);
+    }
+
 
 }
