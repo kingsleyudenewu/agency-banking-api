@@ -117,7 +117,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
 
         Route::group(['prefix' => 'account', 'as' => 'balance.'], function(){
 
-            Route::post('/balance', 'BalanceController@store')->name('store');
+            Route::post('/balance', 'BalanceController@store')
+                ->middleware('otp-required-for-auth-user')
+                ->name('store');
             Route::post('/approval', 'AgentApprovalController@store')->name('approval');
         });
 
@@ -135,8 +137,12 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
 
 
         Route::get('/', 'SavingsController@show')->name('show');
-        Route::post('/', 'SavingsController@store')->name('new');
-        Route::post('/{id}/contribute', 'SavingsController@contribute')->name('contribute');
+        Route::post('/', 'SavingsController@store')
+            ->middleware('otp-required-for-auth-user')
+            ->name('new');
+        Route::post('/{id}/contribute', 'SavingsController@contribute')
+            ->middleware('otp-required-for-auth-user')
+            ->name('contribute');
         Route::get('/{id}/contribute', 'SavingsController@getContributions')->name('get.contributions');
 
 

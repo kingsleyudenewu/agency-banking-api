@@ -4,6 +4,7 @@ namespace App\Http;
 
 
 use App\Http\Middleware\OTPRequired;
+use App\Http\Middleware\OTPRequiredForAuthUser;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -66,5 +67,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin-check' => \App\Http\Middleware\AdminCheck::class,
         'check-account' => \App\Http\Middleware\CheckAccountState::class,
+        'otp-required-for-auth-user' => OTPRequiredForAuthUser::class,
     ];
 }

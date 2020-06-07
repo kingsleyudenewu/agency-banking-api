@@ -10,6 +10,7 @@ use App\Events\PreWalletBilled;
 use App\Events\SendMessage;
 use App\Events\SendNewOTP;
 use App\Events\WalletBilled;
+use App\Exceptions\OTPRequiredException;
 use App\Koloo\Exceptions\BilingException;
 use App\Koloo\Exceptions\UserNotFoundException;
 use App\OTP;
@@ -18,6 +19,7 @@ use App\SavingCycle;
 use App\Traits\LogTrait;
 use App\Transaction;
 use App\User as Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -770,5 +772,36 @@ class User
         $this->model->profile->save();
 
         return $this->model->profile->commission_for_agent;
+    }
+
+
+    /**
+     * This method is used to send OTP to the user before they can continue
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Koloo\User          $user
+     *
+     * @throws \Exception
+     */
+    public static function otpRequiredToContinue(Request $request, self $user)
+    {
+        if(!$user) throw new \Exception('User not found.');
+
+        $otp = new OtpVerification($user);
+        $code = $request->input('otp');
+
+        if(!$code || !$request->has('otp'))
+        {
+            $otp->send();
+            throw new OTPRequiredException('OTP is required to continue.');
+        }
+
+        if(!$otp->isValid($code))
+        {
+            throw new OTPRequiredException('Invalid code entered.');
+        }
+
+        $otp->invalidateActiveOtp();
+
     }
 }

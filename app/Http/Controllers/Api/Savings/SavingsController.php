@@ -34,6 +34,7 @@ class SavingsController extends APIBaseController
             $saving = $customer->newSaving($data,  request()->user());
 
             return $this->successResponse('Success', new Saving($saving));
+
         } catch (\Exception $e)
         {
             return $this->errorResponse($e->getMessage());
