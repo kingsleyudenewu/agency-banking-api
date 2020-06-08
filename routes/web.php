@@ -17,12 +17,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('https://koloo.ng');
 });
-
-
-Route::get('/con', function(){
-    $contrib = \App\Contribution::first();
-
-    \App\Koloo\SavingCommission::getInstance($contrib)->computeCommission();
-
-
-});

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Account;
 
 use App\Http\Controllers\APIBaseController;
 use App\Http\Resources\AccountCollection;
+use App\Http\Resources\AccountView;
 use App\Profile;
 use App\User;
 use \EloquentBuilder;
@@ -56,6 +57,14 @@ class AccountsController extends APIBaseController
 
     public function show(Request $request, $id)
     {
-        return ;
+        $user = User::with('profile')->findOrFail($id);
+        $authUser = new \App\Koloo\User($request->user());
+
+        if(!$authUser->isAdmin() && ($user->parent_id !== $authUser->getId() || $user->id !== $authUser->getId()))
+        {
+            return $this->errorResponse('Not found', null, 404);
+        }
+
+        return $this->successResponse('account', new AccountView($user));
     }
 }

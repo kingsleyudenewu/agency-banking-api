@@ -5,6 +5,7 @@ namespace App;
 
 
 use App\Casts\Json;
+use Illuminate\Support\Facades\Storage;
 
 class Profile extends BaseModel
 {
@@ -43,7 +44,17 @@ class Profile extends BaseModel
         'means_of_identification' => Json::class,
     ];
 
-    protected $hidden  = [];
+    protected $appends = [
+        'agreement_form_url',
+        'means_of_identification_url',
+        'application_form_url'
+    ];
+
+    protected $hidden  = [
+        'agreement_form',
+        'means_of_identification',
+        'application_form'
+    ];
 
     public function user()
     {
@@ -68,5 +79,40 @@ class Profile extends BaseModel
         $this->setup_completed = true;
         $this->save();
 
+    }
+
+    public function getAgreementFormUrlAttribute($value)
+    {
+         $data = json_decode($this->agreement_form);
+
+         return $data ?  $this->getDocUrl($data->disk, $data->path) : null;
+    }
+
+
+    public function getMeansOfIdentificationUrlAttribute($value)
+    {
+        $data = json_decode($this->means_of_identification);
+
+        return $data ?  $this->getDocUrl($data->disk, $data->path) : null;
+    }
+
+    public function getApplicationFormUrlAttribute($value)
+    {
+        $data = json_decode($this->application_form);
+
+        return $data ?  $this->getDocUrl($data->disk, $data->path) : null;
+    }
+
+
+    private function getDocUrl($disk, $path)
+    {
+        $path = str_replace('//', '/', $path);
+        return Storage::disk($disk)->url($path);
+    }
+
+    public function completeSetup()
+    {
+        $this->setup_completed = true;
+        $this->save();
     }
 }
