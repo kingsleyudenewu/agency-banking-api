@@ -147,7 +147,7 @@ class OtpVerification
     private function determineResendDate(): Carbon
     {
         // Switch to email channel
-        if ($this->otpCount > 2) {
+        /*if ($this->otpCount > 2) {
             $this->resendDate = $this->lastOtp->created_at->copy()->addMinute();
         }
         // 24h wait period
@@ -157,7 +157,8 @@ class OtpVerification
         // 1 minute wait period
         else {
             $this->resendDate = $this->lastOtp->created_at->copy()->addMinute();
-        }
+        }*/
+        $this->resendDate = $this->lastOtp->created_at->copy()->addMinute()
 
         return $this->resendDate;
     }
@@ -173,10 +174,11 @@ class OtpVerification
      */
     private function determineChannel(int $count = null): string
     {
-        $count = $count ?: $this->otpCount;
+       // $count = $count ?: $this->otpCount;
 
         //TODO: take '2' out into a config file
-        return $count >= 2 ? 'email' : 'sms';
+       // return $count >= 2 ? 'email' : 'sms';
+        return 'sms';
     }
 
 
