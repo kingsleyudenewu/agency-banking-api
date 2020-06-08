@@ -178,7 +178,7 @@ class User
     {
         $approval = $this->setStatus(Model::STATUS_APPROVED, $by, $remark);
 
-        event(new AccountApproved($this));
+        event(new AccountApproved($this, $remark));
 
         return $approval;
     }
@@ -187,7 +187,7 @@ class User
     public function disapprove($by=null, $remark='')
     {
         $disapproval = $this->setStatus(Model::STATUS_DRAFT, $by, $remark);
-        event(new AccountDisapproved($this));
+        event(new AccountDisapproved($this, $remark));
 
         return $disapproval;
     }

@@ -17,14 +17,18 @@ class AccountApproved
 
     public $user;
 
+    public $remark;
+
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param \App\Koloo\User $user
+     * @param string          $remark
      */
-    public function __construct(User $user)
+    public function __construct(User $user,  string $remark='')
     {
         $this->user = $user;
+        $this->remark = $remark;
     }
 
     /**

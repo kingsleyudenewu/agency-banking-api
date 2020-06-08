@@ -19,7 +19,9 @@ class AgentApprovalController extends APIBaseController
 
     public function store(Request $request)
     {
-        $request->validate(['approval_remark' => 'nullable|max:255']);
+        $request->validate(['remark' => 'nullable|max:255']);
+
+        $remark = $request->input('remark') ?: '';
 
         try {
             $user = User::find(request('id'));
@@ -29,12 +31,11 @@ class AgentApprovalController extends APIBaseController
             {
                 case 'approve':
                     if($user->isApproved()) throw new \Exception('Account is already approved.');
-                    $user->approve($request->user()->id, request('approval_remark'));
-                    event(new AccountApproved($user));
+                    $user->approve($request->user()->id, $remark);
                     break;
                 case 'disapprove':
-                    $user->disapprove($request->user()->id, request('approval_remark'));
-                    event(new AccountDisapproved($user, request('approval_remark')));
+                    if(!$user->isApproved()) throw new \Exception('Account is already disapproved.');
+                    $user->disapprove($request->user()->id, $remark);
                     break;
                 default:
                     throw new \Exception('Invalid action');
