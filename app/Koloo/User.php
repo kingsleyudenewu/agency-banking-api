@@ -4,6 +4,8 @@ namespace App\Koloo;
 
 
 use App\Contribution;
+use App\Events\AccountApproved;
+use App\Events\AccountDisapproved;
 use App\Events\BalanceUpdated;
 use App\Events\CommissionEarned;
 use App\Events\NewContributionCreated;
@@ -174,13 +176,20 @@ class User
 
     public function approve($by=null, $remark='')
     {
-        return $this->setStatus(Model::STATUS_APPROVED, $by, $remark);
+        $approval = $this->setStatus(Model::STATUS_APPROVED, $by, $remark);
+
+        event(new AccountApproved($this));
+
+        return $approval;
     }
 
 
     public function disapprove($by=null, $remark='')
     {
-        return $this->setStatus(Model::STATUS_DRAFT, $by, $remark);
+        $disapproval = $this->setStatus(Model::STATUS_DRAFT, $by, $remark);
+        event(new AccountDisapproved($this));
+
+        return $disapproval;
     }
 
     private function setStatus($newStatus, $by=null, $remark='')

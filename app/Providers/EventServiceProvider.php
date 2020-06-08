@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\AccountApproved;
+use App\Events\AccountDisapproved;
 use App\Events\AgentAccountCreated;
 use App\Events\BalanceUpdated;
 use App\Events\FundTransfer;
@@ -12,6 +14,8 @@ use App\Listeners\HandleAgentAccountCreation;
 use App\Listeners\HandleFundTransfer;
 use App\Listeners\HandleNewOTP;
 use App\Listeners\HandleWalletBilled;
+use App\Listeners\NotifySuperAgentOnAccountApproval;
+use App\Listeners\NotifySuperAgentOnAccountDisapproval;
 use App\Listeners\OnSendMessage;
 use App\Listeners\WriteUpdateUpdatedTransaction;
 use Illuminate\Auth\Events\Registered;
@@ -54,6 +58,14 @@ class EventServiceProvider extends ServiceProvider
         FundTransfer::class => [
             HandleFundTransfer::class
         ],
+
+        AccountApproved::class => [
+            NotifySuperAgentOnAccountApproval::class
+        ],
+
+        AccountDisapproved::class => [
+            NotifySuperAgentOnAccountDisapproval::class
+        ]
 
     ];
 

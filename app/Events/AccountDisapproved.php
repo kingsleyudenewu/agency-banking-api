@@ -17,16 +17,19 @@ class AccountDisapproved
 
     public $user;
 
+    public  $remark;
+
     /**
      * Create a new event instance.
      *
      * @param \App\Koloo\User $user
+     * @param string          $remark
      */
-    public function __construct(User $user)
+    public function __construct(User $user, string $remark)
     {
         $this->user = $user;
+        $this->remark = $remark;
     }
-
 
     /**
      * Get the channels the event should broadcast on.

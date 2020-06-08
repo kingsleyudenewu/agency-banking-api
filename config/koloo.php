@@ -9,9 +9,14 @@ return [
 
     'account_funded_message' => 'Your Koloo account has been credited with: %s',
 
+    'agent_account_approved_message' => 'Application for Agent %s on Koloo has been approved',
+    'agent_account_disapproved_message' => "Application for Agent %s on Koloo was NOT approved. \n%s",
+
 
     'default_country' => 'NG',
     'min_age' => 16,
     'root_email' => 'admin@koloo.ng', // This is the root email address. Can be changed from the gui
     'root_phone' => '08061111841‬' // the phone number should be in the default country set above
+
+
 ];

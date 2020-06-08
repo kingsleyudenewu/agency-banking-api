@@ -34,7 +34,7 @@ class AgentApprovalController extends APIBaseController
                     break;
                 case 'disapprove':
                     $user->disapprove($request->user()->id, request('approval_remark'));
-                    event(new AccountDisapproved($user));
+                    event(new AccountDisapproved($user, request('approval_remark')));
                     break;
                 default:
                     throw new \Exception('Invalid action');
