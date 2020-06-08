@@ -18,7 +18,7 @@ class ShortUrl
 
     private $baseUrl;
 
-    public function __construct(string $baseUrl, string $accessToken)
+    public function __construct($baseUrl, $accessToken)
     {
         $this->accessToken = $accessToken;
         $this->baseUrl = $baseUrl;
