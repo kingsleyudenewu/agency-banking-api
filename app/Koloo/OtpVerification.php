@@ -158,7 +158,7 @@ class OtpVerification
         else {
             $this->resendDate = $this->lastOtp->created_at->copy()->addMinute();
         }*/
-        $this->resendDate = $this->lastOtp->created_at->copy()->addMinute()
+        $this->resendDate = $this->lastOtp->created_at->copy()->addMinute();
 
         return $this->resendDate;
     }
