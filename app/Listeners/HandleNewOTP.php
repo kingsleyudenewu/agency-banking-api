@@ -5,7 +5,10 @@ namespace App\Listeners;
 use App\Events\SendMessage;
 use App\Message;
 
-class HandleNewOTP
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+
+class HandleNewOTP implements ShouldQueue
 {
     /**
      * Create the event listener.

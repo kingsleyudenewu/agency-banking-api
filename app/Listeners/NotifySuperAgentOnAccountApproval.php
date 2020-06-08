@@ -9,7 +9,7 @@ use App\Traits\LogTrait;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class NotifySuperAgentOnAccountApproval
+class NotifySuperAgentOnAccountApproval implements ShouldQueue
 {
     use LogTrait;
 

@@ -18,6 +18,7 @@ use App\Exceptions\OTPRequiredException;
 use App\Koloo\Exceptions\BilingException;
 use App\Koloo\Exceptions\UserNotFoundException;
 use App\OTP;
+use App\PasswordReset;
 use App\Saving;
 use App\SavingCycle;
 use App\Traits\LogTrait;
@@ -843,5 +844,36 @@ class User
             ]);
 
         event(new CommissionEarned($amount, $contribution));
+    }
+
+    public function getNewPasswordReset() : ?PasswordReset
+    {
+        PasswordReset::where('email', $this->getEmail())->delete();
+
+        $days = settings()->get('password_reset_validity_days') ?: 5;
+
+        $plainHash = sprintf('%s%s', sha1(str_random(32)),sha1($this->getId()));
+        $result = PasswordReset::create([
+           'hash' => Hash::make($plainHash),
+           'expires_at' => now()->addDays($days),
+           'email' => $this->getEmail()
+        ]);
+
+        if($result)
+        {
+            $result->plain_hash  = $plainHash;
+            return $result;
+        }
+
+        return null;
+    }
+
+    public function passwordResetValid($code) : bool
+    {
+        $res =  PasswordReset::where('email', $this->getEmail())
+                ->where('expires_at', '>', now())->first();
+        if(!$res) return false;
+
+        return Hash::check($code, $res->hash);
     }
 }

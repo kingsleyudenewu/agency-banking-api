@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (\App\Services\Bitly\ShortUrl $url) {
     return redirect('https://koloo.ng');
 });

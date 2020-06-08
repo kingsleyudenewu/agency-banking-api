@@ -235,7 +235,7 @@ return [
         'SMS' => \App\Components\Sms\Facade\Sms::class,
 
         'EloquentBuilder' => Fouladgar\EloquentBuilder\Facade::class,
-
+        'Bitly' => Shivella\Bitly\Facade\Bitly::class,
     ],
 
 ];

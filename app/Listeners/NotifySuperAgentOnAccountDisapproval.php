@@ -8,7 +8,7 @@ use App\Message;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class NotifySuperAgentOnAccountDisapproval
+class NotifySuperAgentOnAccountDisapproval implements ShouldQueue
 {
     /**
      * Create the event listener.

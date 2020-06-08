@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Services\Bitly\ShortUrl;
 use App\Services\Monnify\Api as MonnifyApi;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
@@ -43,6 +45,13 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(MonnifyApi::class, function () {
             return new MonnifyApi(config('services.monnify'));
+        });
+
+        $this->app->bind(ShortUrl::class, function(){
+            return new ShortUrl(
+                config('services.bitly.base_url'),
+                config('services.bitly.access_token')
+            );
         });
     }
 }

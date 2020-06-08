@@ -17,6 +17,7 @@ use App\Listeners\HandleWalletBilled;
 use App\Listeners\NotifySuperAgentOnAccountApproval;
 use App\Listeners\NotifySuperAgentOnAccountDisapproval;
 use App\Listeners\OnSendMessage;
+use App\Listeners\SendPasswordResetNotification;
 use App\Listeners\WriteUpdateUpdatedTransaction;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -60,7 +61,8 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         AccountApproved::class => [
-            NotifySuperAgentOnAccountApproval::class
+            NotifySuperAgentOnAccountApproval::class,
+            SendPasswordResetNotification::class
         ],
 
         AccountDisapproved::class => [

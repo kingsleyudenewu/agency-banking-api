@@ -42,4 +42,9 @@ return [
         'base_uri' => env('INFOBIP_BASE_URL'),
     ],
 
+    'bitly' => [
+        'access_token' => env('BITLY_ACCESS_TOKEN'),
+        'base_url' => env('BITLY_BASE_URL')
+    ]
+
 ];

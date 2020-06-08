@@ -24,6 +24,8 @@ class SettingsSeeder extends Seeder
         settings()->set('document_storage_max_size', 2000); // 2mb
         settings()->set('document_storage_mime_types', 'pdf,doc,docx,jpeg,jpg,png');
         settings()->set('valid_document_fields', 'means_of_identification,agreement_form,application_form');
+        settings()->set('password_reset_validity_days', 5);
+        settings()->set('frontend_password_reset_base_url', 'http://frontend-v1-3.now.sh/onboarding/get-started');
 
 
     }
