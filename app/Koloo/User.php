@@ -607,14 +607,14 @@ class User
 
     }
 
-    public function writeCreditTransaction(int $amount, string $remark = '')
+    public function writeCreditTransaction(int $amount, string $remark = '', $label='')
     {
-        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_CREDIT, $remark);
+        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_CREDIT, $remark, $label);
     }
 
-    public function writeDebitTransaction(int $amount, string $remark = '')
+    public function writeDebitTransaction(int $amount, string $remark = '', $label='')
     {
-        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_DEBIT, $remark);
+        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_DEBIT, $remark, $label);
     }
 
     private function makeTransactionRef()

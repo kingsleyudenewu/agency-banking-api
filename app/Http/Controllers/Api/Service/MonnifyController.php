@@ -58,7 +58,7 @@ class MonnifyController extends APIBaseController
             $amountToCredit = $payment->payableAmount;
             $user->mainWallet()->credit($amountToCredit);
 
-            $user->writeCreditTransaction($amountToCredit, sprintf('%s%s was deposited into your account via providus bank tranfer', $payment->currencyCode, number_format($payment->payableAmount, 2)));
+            $user->writeCreditTransaction($amountToCredit, sprintf('%s%s was deposited into your account via providus bank tranfer', $payment->currencyCode, number_format($payment->payableAmount, 2)), 'Monnify');
 
             ProvidusTransaction::create(['ref' => $payment->transactionReference, 'payload' => json_encode($payment), 'completed' => now()]);
 
@@ -80,7 +80,7 @@ class MonnifyController extends APIBaseController
         } catch(\Exception $exception) {
 
             $user->mainWallet()->debit($amountToCredit);
-            $user->writeCreditTransaction($amountToCredit, 'Revered due to error: ' . $exception->getMessage());
+            $user->writeDebitTransaction($amountToCredit, 'Revered due to error: ' . $exception->getMessage(), 'Monnify');
 
             $logger->error($exception->getMessage() . ' File ' . $exception->getFile() . ' on line ' . $exception->getLine() . ' Code ' . $exception->getCode());
             $logger->error($request->all());
