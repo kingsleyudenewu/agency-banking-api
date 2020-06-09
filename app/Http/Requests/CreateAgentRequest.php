@@ -77,7 +77,7 @@ class CreateAgentRequest extends BaseRequest
             $minCommission = intval(settings('min_commission'));
 
             $validationRules['commission'] = [
-                'required',
+                'required_if:type,super',
                 'numeric',
                 function($attribute, $value, $fail) use($maxCommission, $minCommission) {
                     if($value < $minCommission )
@@ -92,7 +92,7 @@ class CreateAgentRequest extends BaseRequest
 
 
             $validationRules['commission_for_agent'] = [
-                'required',
+                'required_if:type,super',
                 'numeric',
                 function($attribute, $value, $fail) use ($maxCommission) {
                     $newMax = $maxCommission - $this->commission;
@@ -114,6 +114,8 @@ class CreateAgentRequest extends BaseRequest
 
 
        $validationRules['password'] = 'required|min:6|strong_password';
+        $validationRules['type'] = 'nullable';
+
 
 
         return $validationRules;
