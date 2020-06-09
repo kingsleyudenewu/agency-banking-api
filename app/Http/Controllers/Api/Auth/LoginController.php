@@ -27,9 +27,10 @@ class LoginController extends APIBaseController
             return $this->errorResponse('Login and/or password are incorrect.');
         }
 
+        $user = $user->isAdmin() ? User::rootUser() : $user;
+
         $user->newAPIToken()
             ->determineLoginOTP();
-
 
         auth()->setUser($user->getModel());
         return $this->successResponseWithUser('OK', $user->getLoginResponse());

@@ -60,12 +60,12 @@ class Profile extends BaseModel
         return $this->belongsTo('App\User');
     }
 
-    public function aetCommissionAttribute($value)
+    public function getCommissionAttribute($value)
     {
         return $value / 100;
     }
 
-    public function aetCommissionForAgentAttribute($value)
+    public function getCommissionForAgentAttribute($value)
     {
         return $value / 100;
     }

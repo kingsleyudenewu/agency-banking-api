@@ -287,12 +287,22 @@ class User
 
            if($parent)
            {
-               $data['parent_id'] = $parent->id;
-               $data['commission'] = $parent->profile->commission_for_agent;
+               $parent = new static($parent);
+               static::checkExistence($parent);
+
+               $data['parent_id'] = $parent->getId();
+
+               if(!isset($data['type']) || $data['type'] !== 'super')
+               {
+                   $data['commission'] = $parent->getCommissionForAgent() ;
+               }
            }
 
            $data['password'] = Hash::make($data['password']);
            $data['account_number'] = Model::makeAccountNumber();
+
+
+
            $user =  Model::create($data);
 
            $wallet = \App\Wallet::start($user);
@@ -748,10 +758,12 @@ class User
 
         $user =  Model::create($data);
 
+        $user->setAsAdmin();
+
         $wallet = \App\Wallet::start($user);
         if(!$wallet) throw new \Exception('Unable to start wallet');
 
-        $user->profile()->create(['commission' => settings('min_commission')]);
+        $user->profile()->create(['commission' => settings('min_commission'), 'commission_for_agent' => 60 * 100]);
 
         return  new static($user);
     }
@@ -761,7 +773,7 @@ class User
        if(!$this->model->profile)
        {
            Log::error($this->getName() . ' with ID ' . $this->getId() . ' has no profile');
-           throw new \Exception('User profile not found.');
+           throw new \Exception('User profile not found for ' . $this->getName());
        }
 
     }

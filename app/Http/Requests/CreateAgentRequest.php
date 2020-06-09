@@ -73,50 +73,48 @@ class CreateAgentRequest extends BaseRequest
         }  elseif ($this->canChangeCommission())
         {
 
-            $maxCommission = intval(settings('max_commission'));
-            $minCommission = intval(settings('min_commission'));
+              // TODO: move that super to a constant variable
+            if($this->type  === 'super') {
+                $maxCommission = intval(settings('max_commission'));
+                $minCommission = intval(settings('min_commission'));
 
-            $validationRules['commission'] = [
-                'required_if:type,super',
-                'numeric',
-                function($attribute, $value, $fail) use($maxCommission, $minCommission) {
-                    if($value < $minCommission )
-                    {
-                        $fail('The commission must be at least ' . $minCommission / 100 . '%');
-                    } else if($value > $maxCommission)
-                    {
-                        $fail('You can not set commission greater than ' . $maxCommission / 100 . '%');
+                $validationRules['commission'] = [
+                    'required_if:type,super',
+                    'numeric',
+                    function ($attribute, $value, $fail) use ($maxCommission, $minCommission) {
+                        if ($value < $minCommission) {
+                            $fail('The commission must be at least ' . $minCommission / 100 . '%');
+                        } else if ($value > $maxCommission) {
+                            $fail('You can not set commission greater than ' . $maxCommission / 100 . '%');
+                        }
                     }
-                }
-            ];
+                ];
 
 
-            $validationRules['commission_for_agent'] = [
-                'required_if:type,super',
-                'numeric',
-                function($attribute, $value, $fail) use ($maxCommission) {
-                    $newMax = $maxCommission - $this->commission;
-                    if($value < $this->commission )
-                    {
-                        $fail('The commission must be at least ' . $this->commission / 100 . '%');
-                    } else if($value > $newMax) {
-                        $fail('You can not set commission for agent greater than ' . $newMax / 100 . '%');
+                $validationRules['commission_for_agent'] = [
+                    'required_if:type,super',
+                    'numeric',
+                    function ($attribute, $value, $fail) use ($maxCommission) {
+                        $newMax = $maxCommission - $this->commission;
+                        if ($value < $this->commission) {
+                            $fail('The commission for agent must be at least ' . $this->commission / 100 . '%');
+                        } else if ($value > $newMax) {
+                            $fail('You can not set commission for agent greater than ' . $newMax / 100 . '%');
+                        }
                     }
-                }
-            ];
+                ];
+            }
 
             $validationRules['bvn'] = 'required';
-            $validationRules['state_id'] = 'nullable|uuid';
             $validationRules['business_type'] = 'required';
-            $validationRules['business_name'] = 'nullable|max:255';
-            $validationRules['business_address'] = 'nullable|max:255';
         }
 
 
-       $validationRules['password'] = 'required|min:6|strong_password';
+        $validationRules['state_id'] = 'nullable|uuid';
+        $validationRules['business_name'] = 'nullable|max:255';
+        $validationRules['business_address'] = 'nullable|max:255';
+        $validationRules['password'] = 'required|min:6|strong_password';
         $validationRules['type'] = 'nullable';
-
-
 
         return $validationRules;
     }
@@ -126,9 +124,7 @@ class CreateAgentRequest extends BaseRequest
     protected function prepareForValidation()
     {
         $data = [ ];
-       //$data['password'] = 'S.$a' . str_random(60);
-        //TODO: update this password to random string
-        $data['password'] = 'S.$a2S1221sm0223';
+        $data['password'] = 'S.$a' . str_random(60);
 
         if(!request('email'))
         {

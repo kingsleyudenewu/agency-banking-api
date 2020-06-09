@@ -31,7 +31,7 @@ class CustomerTest extends TestCase
     /** @test */
     public function logged_in_can_create_a_new_customer()
     {
-        $this->withoutExceptionHandling();
+
 
         $authUser = $this->agentUser;
         $this->signIn($authUser->getModel());

@@ -124,6 +124,12 @@ class User extends AuthBaseModel
         $this->attachRole($customer);
     }
 
+    public function setAsAdmin()
+    {
+        $role = Role::where('name', static::ROLE_ADMIN)->first();
+        $this->attachRole($role);
+    }
+
     public function updatePassword(string $password) : bool
     {
         $this->password = Hash::make($password);

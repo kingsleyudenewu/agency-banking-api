@@ -51,8 +51,13 @@ class CreateAgentController extends APIBaseController
 
         $authUser = User::find($request->user()->id);
 
-        $parent = $authUser->isAdmin() ? User::rootUser()->getModel() : $request->user();
-        $user =  User::createWithProfile($data, $parent);
+        if(!$authUser->isAdmin())
+        {
+            unset($data['commission']);
+            unset($data['commission_for_agent']);
+        }
+
+        $user =  User::createWithProfile($data, $authUser->getModel());
 
         if(!$user)
         {
