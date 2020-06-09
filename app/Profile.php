@@ -60,6 +60,17 @@ class Profile extends BaseModel
         return $this->belongsTo('App\User');
     }
 
+    public function aetCommissionAttribute($value)
+    {
+        return $value / 100;
+    }
+
+    public function aetCommissionForAgentAttribute($value)
+    {
+        return $value / 100;
+    }
+
+
     /**
      * By default, a profile status is setting up
      *

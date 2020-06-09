@@ -768,7 +768,7 @@ class User
     public function getCommission()
     {
        $this->checkProfile();
-       return $this->model->profile->commission;
+       return $this->model->profile->commission * 100;
     }
 
     public function setCommission($commission)
@@ -784,7 +784,7 @@ class User
     public function getCommissionForAgent()
     {
         $this->checkProfile();
-        return $this->model->profile->commission_for_agent;
+        return $this->model->profile->commission_for_agent * 100;
     }
 
     public function setCommissionForAgent($commission)
