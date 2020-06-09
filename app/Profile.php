@@ -12,7 +12,6 @@ class Profile extends BaseModel
     protected $fillable = [
         'user_id',
         'address',
-        'means_of_identification',
         'dob',
         'gender',
         'bank_account_number',

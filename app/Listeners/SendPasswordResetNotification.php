@@ -51,7 +51,7 @@ class SendPasswordResetNotification implements ShouldQueue
         }
 
         $url = settings('frontend_password_reset_base_url', env('APP_URL'));
-        $url = sprintf('%s?code=%s', $url, $passwordReset->plain_hash);
+        $url = sprintf('%s?code=%s&email=%s', $url, $passwordReset->plain_hash, $passwordReset->email);
 
         $expiresAt = $passwordReset->expires_at->diffForHumans();
 

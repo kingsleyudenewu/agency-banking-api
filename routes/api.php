@@ -19,6 +19,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
     Route::get('/', 'IsAlive@check');
 
     Route::post('/register', '\App\Http\Controllers\Api\Customer\CustomerController@store')->name('new.customer');
+    Route::post('/auth/new_password', '\App\Http\Controllers\Api\Customer\SetPasswordController@store')->name('new.password');
 
 
 

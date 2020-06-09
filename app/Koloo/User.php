@@ -876,4 +876,9 @@ class User
 
         return Hash::check($code, $res->hash);
     }
+
+    public function clearResetPassword()
+    {
+        PasswordReset::where('email', $this->getEmail())->delete();
+    }
 }
