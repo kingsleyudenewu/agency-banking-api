@@ -17,9 +17,13 @@ class SetPasswordController extends APIBaseController
 
     public function store(Request $request)
     {
+        $request->validate([
+            'password' => 'required|min:5',
+            'code' => 'required',
+            'email' => 'required|email|exists:users,email'
+        ]);
         try {
             $user = User::findByEmail($request->input('email'));
-            User::checkExistence($user);
 
             $check = $user->passwordResetValid($request->input('code'));
             if(!$check) throw new \Exception('Your password reset code is not valid.');
