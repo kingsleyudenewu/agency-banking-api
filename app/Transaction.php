@@ -15,6 +15,8 @@ class Transaction extends Model
     const LABEL_COMMISSION = 'commission';
     const LABEL_TRANSFER = 'transfer';
 
+    protected $appends = ['amount_formatted'];
+
     protected $fillable = [
         'type',
         'amount',
@@ -39,6 +41,12 @@ class Transaction extends Model
     {
         return $value / 100;
     }
+
+    public function getAmountFormattedAttribute($value)
+    {
+        return number_format($this->amount,2);
+    }
+
 
     public function setAmountAttribute($value)
     {
