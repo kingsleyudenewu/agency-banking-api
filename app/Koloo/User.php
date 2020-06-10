@@ -533,7 +533,7 @@ class User
             // If we have the user, try to debit the user
             if($authUser)
             {
-                $authUser->chargeWallet($data['amount'], 'New saving created for ' . e($user->getName()));
+                $authUser->chargeWallet($data['amount'], 'New saving created for ' . e($user->getName()), Transaction::LABEL_CONTRIBUTION);
                 $contribData['created_by'] = $authUser->getId();
             }
 
@@ -681,7 +681,7 @@ class User
              $customer = User::findByInstance($saving->owner);
              User::checkExistence($customer);
 
-            $this->chargeWallet($amount, 'New contribution for ' . e($customer->getName()));
+            $this->chargeWallet($amount, 'New contribution for ' . e($customer->getName()), Transaction::LABEL_CONTRIBUTION);
 
             $contribData = ['amount' => $amount / 100, 'created_by' => $this->getId()];
 
