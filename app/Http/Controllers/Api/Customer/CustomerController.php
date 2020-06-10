@@ -55,7 +55,7 @@ class CustomerController extends APIBaseController
 
         $user->getModel()->setAsCustomer();
 
-        $user->approve($request->user(), 'Auto approved');
+        $user->approve($request->user()->id, 'Auto approved');
 
         event(new AgentAccountCreated($user));
 

@@ -175,7 +175,13 @@ class User
         return $this->model->status === Model::STATUS_APPROVED;
     }
 
-    public function approve($by=null, $remark='')
+    /**
+     * @param string|null $by
+     * @param string      $remark
+     *
+     * @return bool
+     */
+    public function approve(string $by=null, $remark='')
     {
         $approval = $this->setStatus(Model::STATUS_APPROVED, $by, $remark);
 
