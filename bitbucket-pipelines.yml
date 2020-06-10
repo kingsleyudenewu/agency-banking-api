@@ -12,5 +12,9 @@ pipelines:
           caches:
             - composer
           script:
+            - apt-get update && apt-get install -y unzip
+            - apt-get install -y openssh-client
+            - apt-get update
+            - apt-get install -y zlib1g-dev libicu-dev g++ && docker-php-ext-configure intl && docker-php-ext-install intl
             - ssh koloo@134.122.106.209 -o StrictHostKeyChecking=no 'cd /var/www/koloo-v1 &&  git pull && composer install && php artisan migrate'
 
