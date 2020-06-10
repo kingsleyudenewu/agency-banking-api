@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function (\App\Services\Bitly\ShortUrl $url) {
     return redirect('https://koloo.ng');
 });
+
+
+Route::get('/_messages', function (){
+
+    return \App\Message::latest()->get();
+});
