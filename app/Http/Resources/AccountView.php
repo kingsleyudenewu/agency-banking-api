@@ -14,6 +14,7 @@ class AccountView extends JsonResource
      */
     public function toArray($request)
     {
+        $request['wallets'] = Wallet::collection($this->wallets);
         return parent::toArray($request);
     }
 }

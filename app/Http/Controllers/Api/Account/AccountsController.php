@@ -57,7 +57,10 @@ class AccountsController extends APIBaseController
 
     public function show(Request $request, $id)
     {
-        $user = User::with('profile', 'roles:id,name')->findOrFail($id);
+        $user = User::with('profile', 'roles:id,name')->find($id);
+
+        if(!$user) return $this->errorResponse('User not found', null, 404);
+
         $authUser = new \App\Koloo\User($request->user());
 
         if(!$authUser->isAdmin() && ($user->parent_id !== $authUser->getId() || $user->id !== $authUser->getId()))
