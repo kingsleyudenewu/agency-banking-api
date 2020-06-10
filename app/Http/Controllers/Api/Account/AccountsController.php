@@ -30,7 +30,7 @@ class AccountsController extends APIBaseController
             });
         }
 
-        $query->with(['user', 'user.roles:id,name', 'user.country']);
+        $query->with(['user', 'user.roles:id,name', 'user.country', 'user.wallets']);
 
         $perPage = $this->perginationPerPage();
 

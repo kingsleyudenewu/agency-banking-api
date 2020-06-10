@@ -33,7 +33,8 @@ class AccountCollection extends JsonResource
             'providus_account_number' => $this->user->providus_account_number,
             'agreement_form_url' => $this->agreement_form_url,
             'means_of_identification_url' => $this->means_of_identification_url,
-            'application_form_url' => $this->application_form_url
+            'application_form_url' => $this->application_form_url,
+            'wallets' => $this->user->wallets
         ];
     }
 }
