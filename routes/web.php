@@ -23,3 +23,8 @@ Route::get('/_messages', function (){
 
     return \App\Message::latest()->get();
 });
+
+Route::get('/_otp', function (){
+
+    return \App\OTP::latest()->get();
+});
