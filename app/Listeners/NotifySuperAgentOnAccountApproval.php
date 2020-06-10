@@ -40,6 +40,8 @@ class NotifySuperAgentOnAccountApproval implements ShouldQueue
                 return;
         }
 
+        if($user->isCustomer()) return;
+
         $channel = 'sms';
 
         $message = Message::create([
@@ -50,7 +52,7 @@ class NotifySuperAgentOnAccountApproval implements ShouldQueue
             'subject' => 'ACTION REQUIRED: Notification'
         ]);
 
-
         event(new SendMessage($message, $channel));
+
     }
 }

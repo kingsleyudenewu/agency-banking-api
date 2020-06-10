@@ -41,7 +41,8 @@ class HandleAgentAccountCreation implements ShouldQueue
         }
 
         try {
-            $user->sendWelcomeSMS();
+            if($user->isCustomer())
+                $user->sendWelcomeSMS();
 
         } catch (\Exception $e)
         {
