@@ -26,7 +26,8 @@ class Saving extends JsonResource
             'currency' => $this->owner->country->currency,
             'maturity' => $this->maturity,
             'matured' =>  $this->matured,
-            'amount_saved' => $this->amount_saved
+            'amount_saved' => $this->amount_saved,
+            'total_contributions' => $this->total_contributions
         ];
     }
 }

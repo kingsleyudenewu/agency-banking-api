@@ -18,7 +18,7 @@ class Saving extends BaseModel
 
     protected $dates = ['created_at', 'maturity', 'updated_at'];
 
-    protected $appends = ['amount_saved', 'matured'];
+    protected $appends = ['amount_saved', 'matured', 'total_contributions'];
 
     public function cycle()
     {
@@ -58,6 +58,11 @@ class Saving extends BaseModel
     public function getTargetAttribute($value)
     {
         return $value / 100;
+    }
+
+    public function getTotalContributionsAttribute($value)
+    {
+        return $this->contributions()->count();
     }
 
     public function getAmountSavedAttribute($value)
