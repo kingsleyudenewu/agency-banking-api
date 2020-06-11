@@ -11,7 +11,7 @@ return [
 
     'agent_account_approved_message' => 'Application for Agent %s on Koloo has been approved',
     'agent_account_disapproved_message' => "Application for Agent %s on Koloo was NOT approved. \n%s",
-    'password_reset_message' => "Your Koloo account is ready. Link on the link below to set a new password\n%s\nLink expires in %s.",
+    'password_reset_message' => "Your Koloo account is ready. Open on the link below to set a new password\n%s\nLink expires in %s.",
 
 
     'default_country' => 'NG',
