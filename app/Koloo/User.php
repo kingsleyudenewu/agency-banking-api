@@ -835,10 +835,10 @@ class User
         if(!$code || !$request->has('otp'))
         {
             $otp->send();
-            throw new OTPRequiredException('OTP is required to continue.');
+            throw new OTPRequiredException('Enter OTP to continue.');
         }
 
-        if(!$otp->isValid($code))
+        if($request->has('otp') && !$otp->isValid($code))
         {
             throw new OTPRequiredException('Invalid code entered.');
         }
