@@ -605,6 +605,7 @@ class User
             ->savings()
             ->where('owner_id', $this->getId())
             ->where('saving_cycle_id', $data['saving_cycle_id'])
+            ->where('amount', $data['amount'])
             ->whereNull('completed')->first();
 
         if($old) {
