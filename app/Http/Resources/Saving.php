@@ -24,7 +24,9 @@ class Saving extends JsonResource
             'target_formatted' => number_format($this->target, 2),
             'cycle' => $this->cycle,
             'currency' => $this->owner->country->currency,
-            'maturity' => $this->maturity
+            'maturity' => $this->maturity,
+            'matured' =>  $this->matured,
+            'amount_saved' => $this->amount_saved
         ];
     }
 }
