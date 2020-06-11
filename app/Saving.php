@@ -67,7 +67,7 @@ class Saving extends BaseModel
 
     public function getAmountSavedAttribute($value)
     {
-        return $this->contributions()->sum('amount');
+        return $this->contributions()->sum('amount') / 100;
     }
 
     public function getMaturedAttribute($value)

@@ -10,6 +10,7 @@ use App\Http\Resources\Saving;
 use App\Koloo\User;
 use App\Http\Resources\User as UserTransformer;
 use Illuminate\Support\Facades\Log;
+use mysql_xdevapi\Exception;
 
 /**
  * Class SavingsController
@@ -48,6 +49,8 @@ class SavingsController extends APIBaseController
         try {
             $customer = User::search(request('q'), request('country_code'));
             User::checkExistence($customer);
+
+            if(!$customer->isApproved()) throw new \Exception('Account has not been approved.');
 
             $res = [
                 'customer' => new UserTransformer($customer->getModel()),
