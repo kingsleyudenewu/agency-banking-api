@@ -81,7 +81,7 @@ class SavingsController extends APIBaseController
             $authUser = User::findByInstance(auth()->user());
             User::checkExistence($authUser);
 
-            $amount =  request('amount');
+            $amount =  intval() * 100;
 
             $res = $authUser->contributeToSaving($saving, $amount);
 
