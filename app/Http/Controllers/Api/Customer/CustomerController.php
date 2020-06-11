@@ -55,6 +55,8 @@ class CustomerController extends APIBaseController
 
         $user->getModel()->setAsCustomer();
 
+        $user->clearCommission(); // Make sure no commission is set for customers
+
         $user->approve($request->user()->id, 'Auto approved');
 
         event(new AgentAccountCreated($user));

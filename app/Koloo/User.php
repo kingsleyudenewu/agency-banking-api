@@ -899,4 +899,12 @@ class User
     {
         PasswordReset::where('email', $this->getEmail())->delete();
     }
+
+    public function clearCommission()
+    {
+
+        $this->model->profile->commission = 0;
+        $this->model->profile->commission_for_agent = 0;
+        $this->model->profile->save();
+    }
 }
