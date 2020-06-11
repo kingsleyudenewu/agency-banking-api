@@ -16,24 +16,28 @@ class LoginController extends APIBaseController
 {
     public function postLogin(LoginRequest $request)
     {
+        try {
 
-        $phone =  PhoneNumber::format($request->identity, $request->country);
+            $user = User::findByIdentity($request->input('identity'), $request->input('country'));
 
+            if (! $user OR ! Hash::check($request->password, $user->getHashedPassword())) {
+                throw new \Exception('Login and/or password are incorrect.');
+            }
 
-        /** @var User $user */
-        $user = User::findByPhone($phone);
+            if(!$user->isAdmin() && !$user->isApproved()) throw new \Exception('Your account has not been approved');
 
-        if (! $user OR ! Hash::check($request->password, $user->getHashedPassword())) {
-            return $this->errorResponse('Login and/or password are incorrect.');
+            $user = $user->isAdmin() ? User::rootUser() : $user;
+
+            $user->newAPIToken()
+                ->determineLoginOTP();
+
+            auth()->setUser($user->getModel());
+            return $this->successResponseWithUser('OK', $user->getLoginResponse());
+
+        } catch (\Exception $e)
+        {
+            return $this->errorResponse($e->getMessage());
         }
-
-        $user = $user->isAdmin() ? User::rootUser() : $user;
-
-        $user->newAPIToken()
-            ->determineLoginOTP();
-
-        auth()->setUser($user->getModel());
-        return $this->successResponseWithUser('OK', $user->getLoginResponse());
 
     }
 

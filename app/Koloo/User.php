@@ -135,6 +135,14 @@ class User
         return new static($model);
     }
 
+    public static function findByAccountNumber(string $accountNumber = null): ?self
+    {
+        if (! $model = Model::where('account_number', $accountNumber)->first()) {
+            return null;
+        }
+        return new static($model);
+    }
+
     public static function findOneByRole($role): ?self
     {
         if (! $model = Model::withRole($role)->first()) {
@@ -907,5 +915,20 @@ class User
         $this->model->profile->commission = 0;
         $this->model->profile->commission_for_agent = 0;
         $this->model->profile->save();
+    }
+
+    public static function findByIdentity($identity, $country='NG'): ?self
+    {
+        $phone =  PhoneNumber::format($identity,$country);
+        if($phone)
+            $user = static::findByPhone($phone);
+
+        if(!$user)
+            $user = static::findByEmail($identity);
+
+        if(!$user)
+            $user = static::findByAccountNumber($identity);
+
+        return $user;
     }
 }
