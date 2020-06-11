@@ -25,6 +25,14 @@ class DocumentManagement extends APIBaseController
         // We already check for existence via the request middle where
         $agent = User::find(request('id'));
 
+        $profile = $agent->getModel()->profile;
+
+        if(!$profile)
+            return $this->errorResponse('Profile not set for this user.');
+
+        if($profile->set_completed)
+            return  $this->errorResponse('You can not add additional information to this application.');
+
         $storedLocation = $request->file('doc')->store($path, $disk);
 
         $fileData = [

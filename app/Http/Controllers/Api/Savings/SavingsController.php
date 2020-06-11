@@ -51,7 +51,7 @@ class SavingsController extends APIBaseController
 
             $res = [
                 'customer' => new UserTransformer($customer->getModel()),
-                'savings' => Saving::collection($customer->getSavings())
+                'savings' => Saving::collection($customer->getSavings()),
             ];
 
 

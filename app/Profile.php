@@ -46,7 +46,7 @@ class Profile extends BaseModel
     protected $appends = [
         'agreement_form_url',
         'means_of_identification_url',
-        'application_form_url'
+        'application_form_url',
     ];
 
     protected $hidden  = [
@@ -70,6 +70,18 @@ class Profile extends BaseModel
         return $value / 100;
     }
 
+    public function getSetupCompletedAttribute($value)
+    {
+        if($value) return true;
+
+        if(!$this->agreement_form || !$this->means_of_identification || !$this->application_form)
+        {
+            return false;
+        }
+
+        return true;
+
+    }
 
     /**
      * By default, a profile status is setting up
