@@ -3,6 +3,7 @@
 namespace App\Koloo;
 
 
+use App\CommissionPayout;
 use App\Contribution;
 use App\Events\AccountApproved;
 use App\Events\AccountDisapproved;
@@ -501,20 +502,24 @@ class User
     }
 
 
-    public function checkWalletIsValid() : self
+    public function checkWalletIsValid($wallet = null) : self
     {
-        $wallet = $this->mainWallet();
+
+        if(!$wallet)
+            $wallet = $this->mainWallet();
 
         if(!$wallet || !$wallet->isValid()) throw new BilingException('Wallet is not in a valid state');
 
         return $this;
     }
 
-    private function canChargeWallet(int $amount)
-    {
-        $this->checkWalletIsValid();
 
-        $wallet = $this->mainWallet();
+    public function canChargeWallet(int $amount, $wallet=null)
+    {
+        if(!$wallet)
+            $wallet = $this->mainWallet();
+
+        $this->checkWalletIsValid($wallet);
 
         if($wallet->getAmount() < $amount) throw new BilingException('Insufficient funds');
 
@@ -576,6 +581,18 @@ class User
         $this->canChargeWallet($amount);
 
         $wallet = $this->mainWallet();
+
+        event(new PreWalletBilled($wallet));
+
+        $wallet->debit($amount );
+
+        event(new WalletBilled($wallet, $amount, $reason, $label) );
+
+    }
+
+    public function chargeWalletSource($amount, $wallet, $reason='Charged', $label='')
+    {
+        $this->canChargeWallet($amount, $wallet);
 
         event(new PreWalletBilled($wallet));
 
@@ -930,5 +947,16 @@ class User
             $user = static::findByAccountNumber($identity);
 
         return $user;
+    }
+
+
+    public function checkPendingRequest()
+    {
+        $req  = CommissionPayout::whereNull('completed_by')
+                        ->whereNull('paid')->where('user_id', $this->getId())->first();
+
+        if($req) throw new \Exception('You have a pending request.');
+
+        return true;
     }
 }

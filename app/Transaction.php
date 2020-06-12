@@ -15,6 +15,7 @@ class Transaction extends Model
     const LABEL_COMMISSION = 'commission';
     const LABEL_TRANSFER = 'transfer';
     const LABEL_CONTRIBUTION = 'contribution';
+    const LABEL_PAYOUT = 'payout';
 
     protected $appends = ['amount_formatted'];
 
