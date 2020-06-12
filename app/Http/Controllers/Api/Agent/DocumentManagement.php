@@ -6,6 +6,7 @@ use App\Events\AgentDocumentUploaded;
 use App\Http\Controllers\APIBaseController;
 use App\Http\Requests\AgentDocumentUploadRequest;
 use App\Koloo\User;
+use App\Profile;
 
 
 /**
@@ -27,6 +28,8 @@ class DocumentManagement extends APIBaseController
 
         $profile = $agent->getModel()->profile;
 
+
+
         if(!$profile)
             return $this->errorResponse('Profile not set for this user.');
 
@@ -41,6 +44,8 @@ class DocumentManagement extends APIBaseController
         ];
 
         $agent->updateDocument($fileData, $docType);
+
+        $profile = Profile::find($profile->id);
 
         if($profile->hasUploadedAllDocuments())
         {
