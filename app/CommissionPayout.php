@@ -41,4 +41,22 @@ class CommissionPayout extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    /**
+     *
+     * @param string|null $userId the user ID that completed the transaction
+     */
+    public function markAsPaid(string $userId=null)
+    {
+        $this->paid = now();
+        $this->completed_by = $userId;
+        $this->status = static::STATUS_PAID;
+        $this->save();
+    }
+
+    public function updateStatus($newStatus)
+    {
+        $this->status = $newStatus;
+        $this->save();
+    }
 }

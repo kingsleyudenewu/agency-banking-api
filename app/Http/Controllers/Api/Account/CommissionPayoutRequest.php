@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Account;
 
 use App\CommissionPayout;
+use App\Events\CommissionPayoutStatusChanged;
 use App\Events\PayoutRequested;
 use App\Http\Controllers\APIBaseController;
 use App\Koloo\User;
@@ -19,6 +20,13 @@ class CommissionPayoutRequest extends APIBaseController
 {
     use LogTrait;
 
+    const ACTION_APPROVE = 'approve';
+    const ACTION_PAID = 'paid';
+
+    const SEARCH_STATUS_PENDING = 'pending';
+    const SEARCH_STATUS_AWAITING_PAYMENT = 'awaiting';
+    const SEARCH_STATUS_PAID = 'paid';
+
 
     public function index(Request $request)
     {
@@ -28,6 +36,17 @@ class CommissionPayoutRequest extends APIBaseController
 
         if(!$customer->isAdmin())
             $query = $query->where('user_id', $customer->getId());
+
+        if($request->input('q'))
+        {
+            $search = strtolower(trim($request->input('q')));
+            if($search === static::SEARCH_STATUS_AWAITING_PAYMENT)
+                $query->where('status', CommissionPayout::STATUS_WAITING_PAYMENT);
+            else if($search === static::SEARCH_STATUS_PAID)
+                $query->where('status', CommissionPayout::STATUS_PAID);
+            else if($search === static::SEARCH_STATUS_PENDING)
+                $query->where('status', CommissionPayout::STATUS_PENDING);
+        }
 
 
         $res = $query->with(['user:id,name', 'user.wallets'])
@@ -70,6 +89,40 @@ class CommissionPayoutRequest extends APIBaseController
             event(new PayoutRequested($payout));
 
             return $this->successResponse('Payout created', $payout);
+
+        } catch (\Exception $e)
+        {
+            return $this->errorResponse($e->getMessage());
+        }
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $authUser = User::findByInstance($request->user());
+
+        try {
+            if(!$authUser->isAdmin()) throw new \Exception('Access denied');
+
+            $payout = CommissionPayout::find($id);
+            $action = strtolower(trim(request('action')));
+
+            if($payout->paid) throw new \Exception('You can not update a paid request.');
+
+            switch ($action) {
+                case static::ACTION_APPROVE:
+                    $payout->updateStatus(CommissionPayout::STATUS_WAITING_PAYMENT);
+                    break;
+                case static::ACTION_PAID:
+                    $payout->markAsPaid($authUser->getId());
+                    break;
+                default:
+                    throw new \Exception('Invalid action');
+            }
+
+            event(new CommissionPayoutStatusChanged($payout));
+
+            return $this->successResponse('Updated', $payout);
 
         } catch (\Exception $e)
         {

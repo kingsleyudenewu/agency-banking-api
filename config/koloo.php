@@ -12,6 +12,8 @@ return [
     'agent_account_approved_message' => 'Application for Agent %s on Koloo has been approved',
     'agent_account_disapproved_message' => "Application for Agent %s on Koloo was NOT approved. \n%s",
     'password_reset_message' => "Your Koloo account is ready. Open on the link below to set a new password\n%s\nLink expires in %s.",
+    'commission_payout_request_approved_message' => "Dear %s,\nYour commission request has been approved and payment will be made within 24hrs. Amount: %s.",
+    'commission_payout_request_paid_message' => "Dear %s,\nPayment of %s has been transferred to your account and your request has now been closed. Thank you for using Koloo",
 
 
     'default_country' => 'NG',

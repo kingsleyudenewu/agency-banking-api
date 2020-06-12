@@ -6,11 +6,13 @@ use App\Events\AccountApproved;
 use App\Events\AccountDisapproved;
 use App\Events\AgentAccountCreated;
 use App\Events\BalanceUpdated;
+use App\Events\CommissionPayoutStatusChanged;
 use App\Events\FundTransfer;
 use App\Events\SendMessage;
 use App\Events\SendNewOTP;
 use App\Events\WalletBilled;
 use App\Listeners\HandleAgentAccountCreation;
+use App\Listeners\HandleCommissionPayoutStatusChanged;
 use App\Listeners\HandleFundTransfer;
 use App\Listeners\HandleNewOTP;
 use App\Listeners\HandleWalletBilled;
@@ -67,6 +69,10 @@ class EventServiceProvider extends ServiceProvider
 
         AccountDisapproved::class => [
             NotifySuperAgentOnAccountDisapproval::class
+        ],
+
+        CommissionPayoutStatusChanged::class => [
+            HandleCommissionPayoutStatusChanged::class
         ]
 
     ];
