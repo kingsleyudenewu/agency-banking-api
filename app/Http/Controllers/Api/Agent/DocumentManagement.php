@@ -42,6 +42,11 @@ class DocumentManagement extends APIBaseController
 
         $agent->updateDocument($fileData, $docType);
 
+        if($profile->hasUploadedAllDocuments())
+        {
+            $profile->setupCompleted();
+        }
+
         event(new AgentDocumentUploaded($docType));
 
         return $this->successResponse('Uploaded', [

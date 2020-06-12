@@ -70,14 +70,16 @@ class Profile extends BaseModel
         return $value / 100;
     }
 
+    public function hasUploadedAllDocuments()
+    {
+        return $this->agreement_form && $this->means_of_identification && $this->application_form;
+    }
+
     public function getSetupCompletedAttribute($value)
     {
         if($value) return true;
 
-        if(!$this->agreement_form || !$this->means_of_identification || !$this->application_form)
-        {
-            return false;
-        }
+        if(!$this->hasUploadedAllDocuments()) return false;
 
         return true;
 

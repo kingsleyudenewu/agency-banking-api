@@ -20,7 +20,9 @@ class Profile extends JsonResource
             'account_number' => $this->account_number,
             'status' => $this->status,
             'role' => $this->getRoles(),
-            'wallets' => Wallet::collection($this->wallets)
+            'wallets' => Wallet::collection($this->wallets),
+            'commission' => $this->profile->commission,
+            'commission_for_agent' => $this->commission_for_agent,
         ];
     }
 

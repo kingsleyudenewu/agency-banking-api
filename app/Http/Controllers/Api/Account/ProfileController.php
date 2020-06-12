@@ -17,7 +17,7 @@ class ProfileController extends APIBaseController
     {
 
         $user = (request('id') && auth()->user()->hasRole('admin')) ?
-                User::find(request('id')) : auth()->user();
+                User::with('profile')->find(request('id')) : User::with('profile')->find(auth()->user()->id);
 
         if(!$user)
             return $this->errorResponse('User not found', null, 404);
