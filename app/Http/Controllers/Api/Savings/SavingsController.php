@@ -102,7 +102,7 @@ class SavingsController extends APIBaseController
 
             if(!$saving) throw new \Exception('Saving not found');
 
-            return $this->successResponse('contributions', $saving->contributions);
+            return $this->successResponse('contributions', $saving->contributions()->latest()->get());
 
         }catch (\Exception $e)
         {
