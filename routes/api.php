@@ -73,6 +73,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
             ->middleware('otp-required-for-auth-user')
             ->name('fund');
 
+        Route::group(['prefix' => 'commission'], function(){
+            Route::post('/payouts', 'CommissionPayoutRequest@store');
+        });
+
     });
 
 
@@ -148,12 +152,11 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
             ->middleware('otp-required-for-auth-user')
             ->name('new');
         Route::post('/{id}/contribute', 'SavingsController@contribute')
-            ->middleware('otp-required-for-auth-user')
             ->name('contribute');
         Route::get('/{id}/contribute', 'SavingsController@getContributions')->name('get.contributions');
 
 
-
+//  ->middleware('otp-required-for-auth-user')
     });
 
 

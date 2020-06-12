@@ -46,11 +46,12 @@ class SavingsController extends APIBaseController
     public function show()
     {
 
+        $authUser = new User(request()->user());
         try {
             $customer = User::search(request('q'), request('country_code'));
             User::checkExistence($customer);
 
-            if(!$customer->isApproved()) throw new \Exception('Account has not been approved.');
+            if(!$authUser->isAdmin() && !$customer->isApproved()) throw new \Exception('Account has not been approved.');
 
             $res = [
                 'customer' => new UserTransformer($customer->getModel()),
@@ -81,7 +82,7 @@ class SavingsController extends APIBaseController
             $authUser = User::findByInstance(auth()->user());
             User::checkExistence($authUser);
 
-            $amount =  floatval(request('amount')) * 100;
+            $amount =  floatval(request('amount')) ;
 
             $res = $authUser->contributeToSaving($saving, $amount);
 

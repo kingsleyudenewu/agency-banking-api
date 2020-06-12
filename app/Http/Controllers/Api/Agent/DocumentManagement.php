@@ -44,7 +44,10 @@ class DocumentManagement extends APIBaseController
 
         event(new AgentDocumentUploaded($docType));
 
-        return $this->successResponse('Uploaded');
+        return $this->successResponse('Uploaded', [
+            'id' => $profile->user_id,
+            'set_completed' => $profile->set_completed
+        ]);
     }
 
 }

@@ -512,12 +512,11 @@ class User
 
     private function canChargeWallet(int $amount)
     {
-        $amount =  ($amount * 100); // The amount is stored in kobo
         $this->checkWalletIsValid();
 
         $wallet = $this->mainWallet();
 
-        if($wallet->getAmount() * 100 < $amount) throw new BilingException('Insufficient funds');
+        if($wallet->getAmount() < $amount) throw new BilingException('Insufficient funds');
 
         return $this;
     }
@@ -573,13 +572,14 @@ class User
 
     public function chargeWallet($amount, $reason='Charged', $label='')
     {
+
         $this->canChargeWallet($amount);
 
         $wallet = $this->mainWallet();
 
         event(new PreWalletBilled($wallet));
 
-        $wallet->debit($amount);
+        $wallet->debit($amount );
 
         event(new WalletBilled($wallet, $amount, $reason, $label) );
 
@@ -698,7 +698,7 @@ class User
 
             $this->chargeWallet($amount, 'New contribution for ' . e($customer->getName()), Transaction::LABEL_CONTRIBUTION);
 
-            $contribData = ['amount' => $amount / 100, 'created_by' => $this->getId()];
+            $contribData = ['amount' => $amount, 'created_by' => $this->getId()];
 
             $contribution = $saving->contributions()->create($contribData);
             SavingCommission::getInstance($contribution)->computeCommission();

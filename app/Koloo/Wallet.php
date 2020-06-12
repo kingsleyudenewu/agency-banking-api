@@ -96,7 +96,6 @@ class Wallet
 
         try {
             DB::beginTransaction();
-
             $this->model->amount -= $amount;
             $this->model->touched = now();
             $this->model->save();
