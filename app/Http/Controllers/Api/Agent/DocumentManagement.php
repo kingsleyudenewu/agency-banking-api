@@ -46,7 +46,7 @@ class DocumentManagement extends APIBaseController
 
         return $this->successResponse('Uploaded', [
             'id' => $profile->user_id,
-            'set_completed' => $profile->set_completed
+            'setup_completed' => $profile->setup_completed
         ]);
     }
 
