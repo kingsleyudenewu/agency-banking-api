@@ -15,7 +15,7 @@ class CommissionPayout extends Model
     const STATUS_WAITING_PAYMENT = 'Approved awaiting payment';
     const STATUS_PAID = 'commission paid';
 
-    protected $fillable = ['status', 'amount', 'wallet_id', 'user_id'];
+    protected $fillable = ['status', 'amount', 'wallet_id', 'user_id', 'bank_id', 'bank_account_number', 'bank_account_name'];
 
     protected $hidden = ['deleted_at'];
 
@@ -40,6 +40,11 @@ class CommissionPayout extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class, 'bank_id');
     }
 
     /**

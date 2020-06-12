@@ -61,7 +61,13 @@ class CommissionPayoutRequest extends APIBaseController
     {
         $this->logChannel = 'Payout';
 
-        $request->validate(['amount' => 'required']);
+        $request->validate([
+            'amount' => 'required',
+            'bank_id' => 'required|uuid|exists:banks,id',
+            'bank_account_number' => 'required|numeric',
+            'bank_account_name' => 'required'
+            ]);
+
 
         try {
 
@@ -82,6 +88,9 @@ class CommissionPayoutRequest extends APIBaseController
                 'user_id' => $customer->getId(),
                 'wallet_id' => $source->getId(),
                 'amount' => $amount,
+                'bank_id' => $request->input('bank_id'),
+                'bank_account_number' => $request->input('bank_account_number'),
+                'bank_account_name' => $request->input('bank_account_name')
             ]);
 
             $this->log($payout);

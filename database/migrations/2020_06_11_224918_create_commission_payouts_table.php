@@ -20,6 +20,9 @@ class CreateCommissionPayoutsTable extends Migration
             $table->bigInteger('amount');
             $table->dateTime('paid')->nullable();
             $table->uuid('completed_by')->nullable();
+            $table->uuid('bank_id');
+            $table->string('bank_account_number');
+            $table->string('bank_account_name');
             $table->bigInteger('wallet_id');
             $table->timestamps();
             $table->softDeletes();
