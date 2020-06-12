@@ -29,11 +29,10 @@ class DocumentManagement extends APIBaseController
         $profile = $agent->getModel()->profile;
 
 
-
         if(!$profile)
             return $this->errorResponse('Profile not set for this user.');
 
-        if($profile->set_completed)
+        if($profile->setup_completed)
             return  $this->errorResponse('You can not add additional information to this application.');
 
         $storedLocation = $request->file('doc')->store($path, $disk);
