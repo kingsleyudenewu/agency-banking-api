@@ -31,9 +31,10 @@ class TransactionController extends APIBaseController
             $query = Transaction::query();
         }
 
+
         $perPage = $this->perginationPerPage();
         return $this->successResponse('transactions',
-            EloquentBuilder::to($query->with('owner:id,name'), request()->filter)->paginate($perPage)
+            EloquentBuilder::to($query->latest()->with('owner:id,name'), request()->filter)->paginate($perPage)
         );
     }
 }
