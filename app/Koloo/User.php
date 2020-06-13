@@ -885,7 +885,7 @@ class User
                 'amount' => $amount,
                 'label' => Transaction::LABEL_COMMISSION,
                 'trans_ref' => $this->makeTransactionRef(),
-                'remark' => 'Commission earned from savings. NGN' . $amount/100
+                'remark' => 'Commission earned from savings. NGN' . $amount
             ]);
 
         event(new CommissionEarned($amount, $contribution));
