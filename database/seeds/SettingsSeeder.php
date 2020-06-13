@@ -17,7 +17,7 @@ class SettingsSeeder extends Seeder
         settings()->set('min_commission', 2000);
         settings()->set('percent_to_charge', 330); // How much to charge per savings- This is the system-wide charge
         settings()->set('currency_precision', 2);
-        settings()->set('otp_length', 4);
+        settings()->set('otp_length', 8);
         settings()->set('enable_otp_for_login', false);
         settings()->set('document_storage_driver', 'public');
         settings()->set('document_storage_path', 'docs/');

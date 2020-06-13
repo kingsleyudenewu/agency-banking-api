@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
-        'country_code' => factory(\App\Country::class)->create()->code,
+        'country_code' => 'NG',
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'status' => User::STATUS_APPROVED,

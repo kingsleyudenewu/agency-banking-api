@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Koloo\User;
+use App\Wallet;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
 
@@ -25,13 +26,28 @@ abstract class TestCase extends BaseTestCase
         // We need a valid country
         factory('App\Country')->create(['code' => 'NG']);
 
-        $this->adminUser = User::findOneByRole(\App\User::ROLE_ADMIN);
-        $this->superAgentUser = User::findOneByRole(\App\User::ROLE_SUPER_AGENT);
-        $this->agentUser = User::findOneByRole(\App\User::ROLE_AGENT);
+        $this->adminUser = User::rootUser();
 
-        factory('App\Profile')->create(['user_id' => $this->adminUser->getId()]);
-        factory('App\Profile')->create(['user_id' => $this->superAgentUser->getId()]);
-        factory('App\Profile')->create(['user_id' => $this->agentUser->getId()]);
+        $this->superAgentUser = User::findOneByRole(\App\User::ROLE_SUPER_AGENT);
+        $this->superAgentUser->setParent($this->adminUser);
+        Wallet::start($this->superAgentUser->getModel());
+
+        $this->agentUser = User::findOneByRole(\App\User::ROLE_AGENT);
+        $this->agentUser->setParent($this->superAgentUser);
+        Wallet::start($this->agentUser->getModel());
+
+
+        factory('App\Profile')->create([
+            'user_id' => $this->superAgentUser->getId(),
+            'commission' => 20 * 100,
+            'commission_for_agent' => 60 * 100
+        ]);
+        factory('App\Profile')->create([
+             'user_id' => $this->agentUser->getId(),
+                'commission' => 60 * 100,
+                'commission_for_agent' => 0
+        ]);
+
     }
 
 

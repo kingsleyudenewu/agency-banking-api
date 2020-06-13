@@ -51,7 +51,7 @@ class LaravelEntrustSeeder extends Seeder
             // Attach all permissions to the role
             $role->permissions()->sync($permissions);
 
-            $user = factory('App\User')->create();
+            $user = factory('App\User')->create(['country_code' => 'NG']);
             $user->attachRole($role);
         }
 

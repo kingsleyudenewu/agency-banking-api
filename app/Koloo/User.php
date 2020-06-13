@@ -514,7 +514,7 @@ class User
     }
 
 
-    public function canChargeWallet(int $amount, $wallet=null)
+    public function canChargeWallet($amount, $wallet=null)
     {
         if(!$wallet)
             $wallet = $this->mainWallet();
@@ -646,7 +646,7 @@ class User
         return $this->model->transactions;
     }
 
-    public function writeTransaction(int $amount, string $type, string $remark = '', $label='')
+    public function writeTransaction($amount, $type, $remark = '', $label='')
     {
         return $this->model->transactions()
                 ->create([
@@ -659,12 +659,12 @@ class User
 
     }
 
-    public function writeCreditTransaction(int $amount, string $remark = '', $label='')
+    public function writeCreditTransaction($amount, $remark = '', $label='')
     {
         return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_CREDIT, $remark, $label);
     }
 
-    public function writeDebitTransaction(int $amount, string $remark = '', $label='')
+    public function writeDebitTransaction($amount, $remark = '', $label='')
     {
         return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_DEBIT, $remark, $label);
     }
@@ -872,8 +872,9 @@ class User
 
     }
 
-    public function earnCommission(int $amount, Contribution $contribution)
+    public function earnCommission($amount, Contribution $contribution)
     {
+
         $wallet = $this->purse();
         if(!$wallet) throw new \Exception('Wallet for commission not set for this user.');
 
@@ -958,5 +959,11 @@ class User
         if($req) throw new \Exception('You have a pending request.');
 
         return true;
+    }
+
+    public function setParent(self $parent)
+    {
+        $this->model->parent_id = $parent->getId();
+        $this->model->save();
     }
 }

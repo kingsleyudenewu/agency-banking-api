@@ -17,6 +17,8 @@ class SavingCommission
 
     private static $instance = null;
 
+    private $totalSystemDeduction = 0;
+
     use LogTrait;
 
 
@@ -77,16 +79,19 @@ class SavingCommission
         $systemChargesPercent  = doubleval(number_format(settings('percent_to_charge')/100, 2));
 
 
-        $totalDeduction = percentOf($contributionAmount,$systemChargesPercent);
+        $this->totalSystemDeduction = $totalDeduction = percentOf($contributionAmount,$systemChargesPercent);
 
 
         $this->logInfo('Total amount to charge is: ' . $totalDeduction );
 
-        $creatorCommission = doubleval(number_format($creator->getCommission()/100, 2));
+        $creatorCommissionPercent = $creator->isSuperAgent() ? $creator->getCommissionForAgent() : $creator->getCommission();
+
+        $creatorCommission = doubleval(number_format($creatorCommissionPercent/100, 2));
 
         $totalCommission = 100 - $creatorCommission;
 
         $creatorCommissionEarned = percentOf($totalDeduction, $creatorCommission);
+
         $creator->earnCommission($creatorCommissionEarned, $this->contribution);
 
         $rootUser = User::rootUser();
@@ -107,5 +112,12 @@ class SavingCommission
 
         $this->contribution->updateCommissionComputed();
 
+        return true;
+
+    }
+
+    public function getSystemDeductions()
+    {
+        return $this->totalSystemDeduction;
     }
 }

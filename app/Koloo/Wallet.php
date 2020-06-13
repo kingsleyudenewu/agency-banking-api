@@ -44,7 +44,7 @@ class Wallet
         return User::find($this->getModel()->user->id);
     }
 
-    public function getAmount() : int
+    public function getAmount()
     {
         return $this->model->amount;
     }
@@ -56,13 +56,13 @@ class Wallet
      *
      * @return int
      */
-    public function credit(int $amount): int
+    public function credit($amount)
     {
+
         $this->logInfo('Crediting wallet with ' .  $amount);
 
         try {
             DB::beginTransaction();
-
             $this->model->amount += $amount;
             $this->model->touched = now();
             $this->model->save();
@@ -89,7 +89,7 @@ class Wallet
      *
      * @return int
      */
-    public function debit(int $amount): int
+    public function debit($amount)
     {
 
         $this->logInfo('debiting wallet with ' .  $amount);
