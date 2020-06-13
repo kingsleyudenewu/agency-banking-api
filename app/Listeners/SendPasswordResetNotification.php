@@ -35,6 +35,7 @@ class SendPasswordResetNotification implements ShouldQueue
     {
         $this->logChannel = 'SendPasswordResetNotification';
         $user = $event->user;
+        $source = isset($event->source) ? $event->source : null;
 
         if(!$user)
         {
@@ -57,8 +58,17 @@ class SendPasswordResetNotification implements ShouldQueue
 
         $expiresAt = $passwordReset->expires_at->diffForHumans();
 
+        if($source === 'web')
+        {
+            $messageBody =$messageBody = sprintf(config('koloo.password_reset_message'), $this->shortUrl->get($url), $expiresAt);
+
+        }
+        else
+        {
+            $messageBody = sprintf(config('koloo.password_reset_message_new_customer'), $this->shortUrl->get($url), $expiresAt);
+        }
         $message = Message::create([
-            'message' => sprintf(config('koloo.password_reset_message'), $this->shortUrl->get($url), $expiresAt),
+            'message' => $messageBody,
             'message_type' => $channel,
             'user_id' => $user->getId(),
             'sender' => User::rootUser()->getId(),

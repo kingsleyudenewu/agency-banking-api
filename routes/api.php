@@ -30,6 +30,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
 
         Route::post('/login', 'LoginController@postLogin')->name('login.post');
         Route::post('/login/otp', 'LoginOTPController@process')->name('login.post.top');
+        Route::post('/password_request', 'PasswordResetController@store');
 
     });
 

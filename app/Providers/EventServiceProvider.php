@@ -8,6 +8,7 @@ use App\Events\AgentAccountCreated;
 use App\Events\BalanceUpdated;
 use App\Events\CommissionPayoutStatusChanged;
 use App\Events\FundTransfer;
+use App\Events\NewPasswordRequested;
 use App\Events\SendMessage;
 use App\Events\SendNewOTP;
 use App\Events\WalletBilled;
@@ -67,6 +68,9 @@ class EventServiceProvider extends ServiceProvider
             SendPasswordResetNotification::class
         ],
 
+        NewPasswordRequested::class => [
+            SendPasswordResetNotification::class
+        ],
         AccountDisapproved::class => [
             NotifySuperAgentOnAccountDisapproval::class
         ],
