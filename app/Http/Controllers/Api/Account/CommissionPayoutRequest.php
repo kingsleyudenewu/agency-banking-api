@@ -93,7 +93,7 @@ class CommissionPayoutRequest extends APIBaseController
                 'bank_account_name' => $request->input('bank_account_name')
             ]);
 
-            $this->log($payout);
+            $this->logInfo($payout);
 
             event(new PayoutRequested($payout));
 
