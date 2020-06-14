@@ -111,6 +111,7 @@ class WalletTest extends TestCase
     /** @test */
     public function can_start_wallets_for_a_new_user()
     {
+
         $user = factory('App\User')->create();
 
         $this->assertEquals(0, $user->wallets()->count());

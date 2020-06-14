@@ -115,8 +115,7 @@ class Wallet
 
     public function isValid(): bool
     {
-        $money = money($this->model->amount, $this->getCurrency());
-        if(!$this->model->touched && $money->isZero() && !$this->model->hash)
+        if(!$this->model->touched && $this->model->amount == 0  && !$this->model->hash)
         {
             return true;
         }

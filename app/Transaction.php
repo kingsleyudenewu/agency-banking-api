@@ -16,6 +16,7 @@ class Transaction extends Model
     const LABEL_TRANSFER = 'transfer';
     const LABEL_CONTRIBUTION = 'contribution';
     const LABEL_PAYOUT = 'payout';
+    const LABEL_WITHDRAWAL =  'withdrawal';
 
     protected $appends = ['amount_formatted'];
 

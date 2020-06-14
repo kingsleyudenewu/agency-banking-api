@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\Auth;
 
 use App\Koloo\User;
+use App\Profile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -41,13 +42,11 @@ class ProfileTest extends TestCase
         $admin =   $this->adminUser;
         $this->signIn($admin->getModel());
 
-        $profile = factory('App\User')->raw();
-        $user = User::createWithProfile($profile);
+        $profile = factory('App\User')->create();
 
-
-        $this->json('GET', route('api.profile.get') . '?id=' . $user->getId())
+        $this->json('GET', route('api.profile.get') . '?id=' . $profile->user_id)
             ->assertStatus(200)
-            ->assertJson(['status' => 'success', 'data' => ['name' => $user->getName()]]);
+            ->assertJson(['status' => 'success', 'data' => ['name' => 's']]);
     }
 
     /** @test */

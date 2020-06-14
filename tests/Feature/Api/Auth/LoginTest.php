@@ -3,8 +3,10 @@
 namespace Tests\Feature\Api\Auth;
 
 
+
 use App\Koloo\PhoneNumber;
 use App\Koloo\User;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 
@@ -26,8 +28,11 @@ class LoginTest extends TestCase
 
         $this->loadUsersWithPermission();
 
+        $user = factory('App\User')->create(['phone' => '2348061111888', 'password' => Hash::make('password'), 'country_code' => 'NG']);
+
+
         $this->postJson(route('api.auth.login.post'), [
-            'identity' => $this->adminUser->getPhone(),
+            'identity' => '2348061111888',
              'country' => 'NG',
              'password' => 'password'
             ]

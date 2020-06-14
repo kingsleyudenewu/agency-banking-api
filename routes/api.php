@@ -73,6 +73,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         Route::post('/fund', 'FundAccountController@fund')
             ->middleware('otp-required-for-auth-user')
             ->name('fund');
+        Route::post('/withdrawal', 'WithdrawalController@store');
 
         Route::group(['prefix' => 'commission'], function(){
             Route::get('/payouts', 'CommissionPayoutRequest@index');

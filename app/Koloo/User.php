@@ -15,6 +15,7 @@ use App\Events\PreWalletBilled;
 use App\Events\SendMessage;
 use App\Events\SendNewOTP;
 use App\Events\WalletBilled;
+use App\Events\WalletCredited;
 use App\Exceptions\OTPRequiredException;
 use App\Koloo\Exceptions\BilingException;
 use App\Koloo\Exceptions\UserNotFoundException;
@@ -590,6 +591,17 @@ class User
 
     }
 
+
+    public function creditWalletSource($amount, $wallet, $reason='Credit', $label='')
+    {
+        $this->checkWalletIsValid($wallet);
+
+        $wallet->credit($amount );
+
+        event(new WalletBilled($wallet, $amount, $reason, $label) );
+
+    }
+
     public function chargeWalletSource($amount, $wallet, $reason='Charged', $label='')
     {
         $this->canChargeWallet($amount, $wallet);
@@ -598,7 +610,7 @@ class User
 
         $wallet->debit($amount );
 
-        event(new WalletBilled($wallet, $amount, $reason, $label) );
+        event(new WalletCredited($wallet, $amount, $reason, $label) );
 
     }
 

@@ -16,6 +16,9 @@ return [
     'commission_payout_request_approved_message' => "Dear %s,\nYour commission request has been approved and payment will be made within 24hrs. Amount: %s.",
     'commission_payout_request_paid_message' => "Dear %s,\nPayment of %s has been transferred to your account and your request has now been closed. Thank you for using Koloo",
 
+    'fund_withdrawal_notification_message' => "Dear %s,\nYou have withdrew %s via our agent %s. The balance in your account now is %s. Thank you for using Koloo",
+
+
 
     'default_country' => 'NG',
     'min_age' => 16,

@@ -64,7 +64,7 @@ class CommissionPayoutRequest extends APIBaseController
         $request->validate([
             'amount' => 'required',
             'bank_id' => 'required|uuid|exists:banks,id',
-            'bank_account_number' => 'required|numeric',
+            'bank_account_number' => 'required',
             'bank_account_name' => 'required'
             ]);
 
