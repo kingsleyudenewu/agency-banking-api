@@ -49,7 +49,7 @@ class CommissionPayoutRequest extends APIBaseController
         }
 
 
-        $res = $query->with(['user:id,name', 'user.wallets'])
+        $res = $query->with(['user:id,name', 'user.wallets', 'bank:id,name'])
                 ->latest()
                 ->paginate($this->perginationPerPage());
         return $this->successResponse('payouts', $res);

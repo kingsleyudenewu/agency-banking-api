@@ -949,6 +949,8 @@ class User
 
     public static function findByIdentity($identity, $country='NG'): ?self
     {
+        $user = null;
+        
         $phone =  PhoneNumber::format($identity,$country);
         if($phone)
             $user = static::findByPhone($phone);
