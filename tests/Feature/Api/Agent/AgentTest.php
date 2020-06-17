@@ -65,7 +65,6 @@ class AgentTest extends TestCase
 
     protected function can_create_agent_with_the_right_credentials_as($user)
     {
-        $this->withoutExceptionHandling();
 
         $this->signIn($user);
 
@@ -106,6 +105,7 @@ class AgentTest extends TestCase
         $payload['commission'] = 40;
         $payload['commission_for_agent'] = 40;
         $payload['business_type']  = 'Test';
+        $payload['bvn']  = '12345678901';
 
         return $payload;
     }

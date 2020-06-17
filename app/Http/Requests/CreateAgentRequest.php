@@ -72,7 +72,6 @@ class CreateAgentRequest extends BaseRequest
 
         }  elseif ($this->canChangeCommission())
         {
-
               // TODO: move that super to a constant variable
             if($this->type  === 'super') {
                 $maxCommission = intval(settings('max_commission'));
@@ -105,17 +104,21 @@ class CreateAgentRequest extends BaseRequest
                 ];
             }
 
+        }
+
+        if($this->path() === 'api/v1/agents' && $this->isMethod("post"))
+        {
             $validationRules['bvn'] =  [
                 'required',
                 function($attribute, $value, $fail) {
-                   if(strlen($value) !== 11 || !is_numeric($value)) {
-                       $fail('BVN must be only numbers and 11 characters long.');
-                   }
+                    if(strlen($value) !== 11 || !is_numeric($value)) {
+                        $fail('BVN must be only numbers and 11 characters long.');
+                    }
                 }
             ];
+
             $validationRules['business_type'] = 'required';
         }
-
 
         $validationRules['state_id'] = 'nullable|uuid';
         $validationRules['business_name'] = 'nullable|max:255';
