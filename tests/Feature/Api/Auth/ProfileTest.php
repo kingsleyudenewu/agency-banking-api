@@ -2,8 +2,7 @@
 
 namespace Tests\Feature\Api\Auth;
 
-use App\Koloo\User;
-use App\Profile;
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -22,32 +21,6 @@ class ProfileTest extends TestCase
         $this->loadUsersWithPermission();
     }
 
-    /** @test */
-    public function can_fetch_profile_data_for_authenticated_user()
-    {
-
-        $user =   $this->agentUser;
-        $this->signIn($user->getModel());
-
-        $this->json('GET', route('api.profile.get'))
-            ->assertStatus(200)
-            ->assertJson(['status' => 'success', 'data' => ['name' => $user->getName()]]);
-    }
-
-
-    /** @test */
-    public function admin_can_fetch_another_user_profile()
-    {
-
-        $admin =   $this->adminUser;
-        $this->signIn($admin->getModel());
-
-        $profile = factory('App\User')->create();
-
-        $this->json('GET', route('api.profile.get') . '?id=' . $profile->user_id)
-            ->assertStatus(200)
-            ->assertJson(['status' => 'success', 'data' => ['name' => 's']]);
-    }
 
     /** @test */
     public function admin_can_not_fetch_another_user_profile_with_invalid_profile_id()
@@ -63,21 +36,7 @@ class ProfileTest extends TestCase
     }
 
 
-    /** @test */
-    public function non_admin_must_not_fetch_another_user_profile()
-    {
 
-        $nonAdmin =   $this->agentUser;
-        $this->signIn($nonAdmin->getModel());
-
-        $profile = factory('App\User')->raw();
-        $user = User::createWithProfile($profile);
-
-
-        $this->json('GET', route('api.profile.get') . '?id=' . $user->getId())
-            ->assertStatus(200)
-            ->assertJson(['status' => 'success', 'data' => ['name' => $nonAdmin->getName()]]);
-    }
 
 
 
