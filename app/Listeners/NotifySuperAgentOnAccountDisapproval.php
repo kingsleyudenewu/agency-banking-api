@@ -40,7 +40,7 @@ class NotifySuperAgentOnAccountDisapproval implements ShouldQueue
         $channel = 'sms';
 
         $message = Message::create([
-            'message' => sprintf(config('koloo.agent_account_disapproved_message'), $user->getName(), $event->remark),
+            'message' => sprintf(config('koloo.agent_account_disapproved_message'), $event->user->getName(), $event->remark),
             'message_type' => $channel,
             'user_id' => $user->getId(),
             'sender' => User::rootUser()->getId(),
