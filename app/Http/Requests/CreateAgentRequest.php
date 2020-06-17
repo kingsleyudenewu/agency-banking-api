@@ -105,7 +105,14 @@ class CreateAgentRequest extends BaseRequest
                 ];
             }
 
-            $validationRules['bvn'] = 'required';
+            $validationRules['bvn'] =  [
+                'required',
+                function($attribute, $value, $fail) {
+                   if(strlen($value) !== 11 || !is_numeric($value)) {
+                       $fail('BVN must be only numbers and 11 characters long.');
+                   }
+                }
+            ];
             $validationRules['business_type'] = 'required';
         }
 
@@ -143,13 +150,14 @@ class CreateAgentRequest extends BaseRequest
         {
             // Grap the country from the logged in user
             $data['country_code'] =   $user->country ? $user->country->code : config('koloo.default_country', 'NG'); // Nigeria by default
+        } else {
+            $data['country_code'] = request('country_code');
         }
 
-        if($this->country_code && strlen($this->country_code) === 2)
-        {
-            if($this->phone)
-                $data['phone'] = PhoneNumber::format($this->cleanPhone($this->phone), $this->country_code);
-        }
+
+
+        $data['phone'] = PhoneNumber::format($this->cleanPhone($this->phone), $data['country_code']);
+
 
         return $this->merge($data);
     }
