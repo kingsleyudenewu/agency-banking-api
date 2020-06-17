@@ -9,8 +9,8 @@ use App\Http\Requests\CreateSavingsRequest;
 use App\Http\Resources\Saving;
 use App\Koloo\User;
 use App\Http\Resources\User as UserTransformer;
+use App\Transaction;
 use Illuminate\Support\Facades\Log;
-use mysql_xdevapi\Exception;
 
 /**
  * Class SavingsController
@@ -33,6 +33,8 @@ class SavingsController extends APIBaseController
             User::checkExistence($customer);
 
             $saving = $customer->newSaving($data,  request()->user());
+
+            $customer->writeCreditTransaction($saving->amount, 'New contribution', Transaction::LABEL_CONTRIBUTION);
 
             return $this->successResponse('Success', new Saving($saving));
 
@@ -85,6 +87,7 @@ class SavingsController extends APIBaseController
             $amount =  request('amount');
 
             $res = $authUser->contributeToSaving($saving, $amount);
+
 
             return $this->successResponse('Savings', ['contribution' => $res, 'savingStat' => $res->savingPlan->stats()]);
 
