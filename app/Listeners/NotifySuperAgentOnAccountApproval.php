@@ -45,7 +45,7 @@ class NotifySuperAgentOnAccountApproval implements ShouldQueue
         $channel = 'sms';
 
         $message = Message::create([
-            'message' => sprintf(config('koloo.agent_account_approved_message'), $user->getName()),
+            'message' => sprintf(config('koloo.agent_account_approved_message'), $event->user->getName()),
             'message_type' => $channel,
             'user_id' => $user->getId(),
             'sender' => User::rootUser()->getId(),
