@@ -134,9 +134,7 @@ class CreateAgentRequest extends BaseRequest
     protected function prepareForValidation()
     {
         $data = [ ];
-        //$data['password'] = 'S.$a' . str_random(60);
-
-        $data['password'] = 'S.$a12dkF32';
+        $data['password'] = str_random(32) . 'S.32.$a' . str_random(60);
 
         if(!request('email'))
         {

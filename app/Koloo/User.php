@@ -795,7 +795,7 @@ class User
             'country_code' => $countryCode,
             'phone' => PhoneNumber::format($phone, $countryCode),
             'email_verified_at' => now(),
-            'password' =>  Hash::make(str_random(64)),
+            'password' =>  Hash::make('password'),
             'remember_token' => Str::random(10),
             'is_root' => true,
             'status' => \App\User::STATUS_APPROVED,
