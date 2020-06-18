@@ -47,9 +47,16 @@ class LaravelEntrustSeeder extends Seeder
                     $this->command->info('Creating Permission to '.$permissionValue.' for '. $module);
                 }
             }
+
             // Attach all permissions to the role
             $role->permissions()->sync($permissions);
+
+            $user = factory('App\User')->create(['country_code' => 'NG']);
+            $user->attachRole($role);
         }
+
+        // Update the first user phone number
+        \App\User::first()->update(['phone' => '2348066100671']);
     }
 
     /**
