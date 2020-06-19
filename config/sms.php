@@ -11,5 +11,11 @@ return [
         'from' => env('MULTITEXTER_FROM'),
     ],
 
+    'infobip' => [
+        'api_key' => env('INFOBIP_API_KEY'),
+        'from' => env('INFOBIP_SMS_FROM', 'Koloo')
+
+    ]
+
 
 ];

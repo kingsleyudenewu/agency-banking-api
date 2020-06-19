@@ -2,7 +2,9 @@
 
 namespace App\Components\Sms;
 
+use App\Components\Sms\Drivers\InfobipDriver;
 use App\Components\Sms\Drivers\MultitexterDriver;
+use App\Services\Infobip\InfobipSMSApi;
 use App\Services\Multitexter\MultitexterApi;
 use App\Components\Sms\Drivers\NullDriver;
 
@@ -55,6 +57,28 @@ class SmsManager extends Manager
         return new MultitexterApi(config('sms.multitexter'));
     }
 
+
+    /**
+     * Return infobip driver
+     * @return \App\Components\Sms\Drivers\InfobipDriver
+     */
+    public function createInfobipDriver()
+    {
+        return new InfobipDriver(
+            $this->createInfobipClient()
+        );
+    }
+
+
+    /**
+     * Create the InfobipSMSApi client.
+     *
+     * @return InfobipSMSApi
+     */
+    protected function createInfobipClient()
+    {
+        return new InfobipSMSApi(config('sms.infobip'));
+    }
 
     /**
      * Create a Null SMS driver instance.
