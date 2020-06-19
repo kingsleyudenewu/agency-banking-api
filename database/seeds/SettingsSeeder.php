@@ -19,7 +19,7 @@ class SettingsSeeder extends Seeder
         settings()->set('currency_precision', 2);
         settings()->set('otp_length', 8);
         settings()->set('enable_otp_for_login', false);
-        settings()->set('document_storage_driver', 'public');
+        settings()->set('document_storage_driver', 'do_spaces');
         settings()->set('document_storage_path', 'docs/');
         settings()->set('document_storage_max_size', 2000); // 2mb
         settings()->set('document_storage_mime_types', 'pdf,doc,docx,jpeg,jpg,png');
