@@ -21,3 +21,16 @@ pipelines:
             - ./vendor/bin/phpunit
             - ssh koloo@134.122.106.209 -o StrictHostKeyChecking=no 'cd /var/www/koloo-v1 && git pull && composer install && php artisan migrate:refresh && php artisan db:seed'
 
+    live:
+      - step:
+          caches:
+            - composer
+          script:
+            - apt-get update && apt-get install -y unzip
+            - apt-get install -y openssh-client
+            - apt-get update
+            - apt-get install -y zlib1g-dev libicu-dev g++ && docker-php-ext-configure intl && docker-php-ext-install intl
+            - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+            - composer install
+            - ./vendor/bin/phpunit
+            - ssh koloo@161.35.162.8 -o StrictHostKeyChecking=no 'cd /var/www/apps/api-v1 && git pull && composer install'
