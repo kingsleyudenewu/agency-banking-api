@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Services\Monnify\Api;
+use App\Services\Monnify\Api as MonnifyApi;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +16,7 @@ class HandleAgentAccountCreation implements ShouldQueue
      *
      * @param \App\Services\Monnify\Api $monnifyApi
      */
-    public function __construct(Api $monnifyApi)
+    public function __construct(MonnifyApi $monnifyApi)
     {
         $this->monnifyApi = $monnifyApi;
     }

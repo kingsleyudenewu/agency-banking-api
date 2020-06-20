@@ -55,6 +55,12 @@ class OnSendMessage implements ShouldQueue
 
         $this->logInfo("[{$message->id}] Send SMS to {$to}.");
 
+        if(env('APP_ENV') === 'local' || env('APP_ENV') === 'dev')
+        {
+            $this->logInfo('Application running on dev/staging. No sending our sms to external services');
+            return true;
+        }
+
         try {
             Sms::to($to)
                 ->content($text)
