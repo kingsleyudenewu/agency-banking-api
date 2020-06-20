@@ -10,6 +10,7 @@ use App\Koloo\User;
 use App\Traits\LogTrait;
 use App\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class CommissionPayoutRequest
@@ -59,7 +60,7 @@ class CommissionPayoutRequest extends APIBaseController
 
     public function store(Request $request)
     {
-        $this->logChannel = 'Payout';
+
 
         $request->validate([
             'amount' => 'required',
@@ -70,6 +71,11 @@ class CommissionPayoutRequest extends APIBaseController
 
 
         try {
+
+            DB::beginTransaction();
+
+            $customer = User::findByInstance($request->user());
+            User::checkExistence($customer);
 
             $amount = doubleval(str_replace(',', '', trim($request->input('amount'))));
 
@@ -97,10 +103,13 @@ class CommissionPayoutRequest extends APIBaseController
 
             event(new PayoutRequested($payout));
 
+            DB::commit();
+
             return $this->successResponse('Payout created', $payout);
 
         } catch (\Exception $e)
         {
+            DB::rollBack();
             return $this->errorResponse($e->getMessage());
         }
     }

@@ -598,8 +598,7 @@ class User
 
         $wallet->credit($amount );
 
-        event(new WalletBilled($wallet, $amount, $reason, $label) );
-
+        event(new WalletCredited($wallet, $amount, $reason, $label) );
     }
 
     public function chargeWalletSource($amount, $wallet, $reason='Charged', $label='')
@@ -610,7 +609,7 @@ class User
 
         $wallet->debit($amount );
 
-        event(new WalletCredited($wallet, $amount, $reason, $label) );
+        event(new WalletBilled($wallet, $amount, $reason, $label) );
 
     }
 
