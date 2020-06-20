@@ -33,7 +33,8 @@ class SavingCycleTest extends TestCase
             'duration' => 20,
             'min_saving_frequent' => 70,
             'charge_type' => 'flat',
-            'min_saving_amount' => 1500
+            'min_saving_amount' => 1500,
+            'percentage_to_charge' => 50
         ];
 
         $res = $this->postJson(route('api.admin.savings.cycle.create'), $data)

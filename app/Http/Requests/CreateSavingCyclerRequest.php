@@ -31,7 +31,7 @@ class CreateSavingCyclerRequest extends FormRequest
             'duration' => 'required|numeric|min:1',
             'min_saving_frequent' => 'required|min:0|max:100',
             'min_saving_amount' => 'required|numeric|min:0',
-            'percentage_to_charge' => 'required_if:charge_type,percent|min:0|max:100'
+            'percentage_to_charge' => 'required|min:0|max:100'
         ];
     }
 }
