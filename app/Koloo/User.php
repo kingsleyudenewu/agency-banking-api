@@ -982,4 +982,18 @@ class User
         $this->model->parent_id = $parent->getId();
         $this->model->save();
     }
+
+    public function getProvidusAccountNumber(): string
+    {
+        $api = app('App\Services\Monnify\Api');
+        try {
+            $res = $api->reserveAccountNumber($this->getName(), $this->getEmail(), $this->getId());
+            $this->setProvidusBankDetail($res->accountNumber, $res->accountReference);
+            return $res->accountNumber;
+        } catch (\Exception $e) {
+            $this->logInfo('Error getting new account number: ' . $e->getMessage() . ' at ' . $e->getFile() . ' on line ' . $e->getLine());
+        }
+
+        return '';
+    }
 }
