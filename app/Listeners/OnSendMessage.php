@@ -57,7 +57,7 @@ class OnSendMessage implements ShouldQueue
 
         if(env('APP_ENV') === 'local' || env('APP_ENV') === 'dev')
         {
-            $this->logInfo('Application running on dev/staging. No sending our sms to external services')
+            $this->logInfo('Application running on dev/staging. No sending our sms to external services');
             return true;
         }
 
