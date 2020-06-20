@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 
 class SettingsSeeder extends Seeder
 {
+    //9000.0
     /**
      * Run the database seeds.
      *
@@ -13,8 +14,8 @@ class SettingsSeeder extends Seeder
     {
         $this->clearSettings();
 
-        settings()->set('max_commission', 8000); // 80%
-        settings()->set('min_commission', 2000);
+        settings()->set('max_commission', 10000); // 100%
+        settings()->set('min_commission', 2000); // this is reserved for the system
         settings()->set('percent_to_charge', 330); // How much to charge per savings- This is the system-wide charge
         settings()->set('currency_precision', 2);
         settings()->set('otp_length', 8);
