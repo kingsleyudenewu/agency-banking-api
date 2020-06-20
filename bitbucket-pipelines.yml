@@ -28,4 +28,6 @@ pipelines:
           script:
             - apt-get update && apt-get install -y unzip
             - apt-get install -y openssh-client
-            - ssh koloo@161.35.162.8 -o StrictHostKeyChecking=no 'cd /var/www/apps/api-v1 && git pull && composer install'
+            - ssh koloo@161.35.162.8 -o StrictHostKeyChecking=no 'cd /var/www/apps/api-v1 && git pull && composer install && php artisan config:clear'
+            - ssh koloo@161.35.162.8 -o StrictHostKeyChecking=no 'sudo supervisorctl restart laravel-worker:*'
+
