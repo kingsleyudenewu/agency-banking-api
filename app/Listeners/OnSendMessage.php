@@ -22,7 +22,7 @@ class OnSendMessage implements ShouldQueue
      */
     public function __construct()
     {
-        $this->logChannel = 'messages';
+        $this->logChannel = 'koloo';
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Services\Monnify\Api as MonnifyApi;
+use App\Traits\LogTrait;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 class HandleAgentAccountCreation implements ShouldQueue
 {
     protected $monnifyApi;
+    use LogTrait;
 
     /**
      * Create the event listener.
@@ -37,7 +39,7 @@ class HandleAgentAccountCreation implements ShouldQueue
 
         } catch (\Exception $e)
         {
-            Log::error('HandleAgentAccountCreation::monnifyApi ::' . $e->getMessage());
+           $this->logError('HandleAgentAccountCreation::monnifyApi ::' . $e->getMessage());
         }
 
         try {
@@ -46,7 +48,7 @@ class HandleAgentAccountCreation implements ShouldQueue
 
         } catch (\Exception $e)
         {
-            Log::error('HandleAgentAccountCreation::sendWelcomeSMS ::' . $e->getMessage());
+            $this->logError('HandleAgentAccountCreation::sendWelcomeSMS ::' . $e->getMessage());
         }
 
     }

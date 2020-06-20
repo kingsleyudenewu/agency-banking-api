@@ -13,7 +13,7 @@ trait LogTrait
 {
 
 
-    protected $logChannel = 'logs';
+    protected $logChannel = 'koloo';
 
 
     protected function logInfo($message, array $context = []): self
@@ -28,7 +28,7 @@ trait LogTrait
 
     protected function log(string $type, string $message, array $context = []): self
     {
-        Log::channel($this->logChannel)->{$type}($message, $context);
+        Log::channel('koloo')->{$type}($message, $context);
 
         return $this;
     }

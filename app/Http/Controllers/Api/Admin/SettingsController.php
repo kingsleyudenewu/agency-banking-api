@@ -35,7 +35,7 @@ class SettingsController extends APIBaseController
         settings()->set('valid_document_fields', request('valid_document_fields'));
         settings()->set('password_reset_validity_days', request('password_reset_validity_days'));
         settings()->set('frontend_password_reset_base_url', request('frontend_password_reset_base_url'));
-        settings()->set('withdrawal_charge', request('withdrawal_charge'));
+        settings()->set('withdrawal_charge', request('withdrawal_charge') * 100);
 
 
 
@@ -60,7 +60,7 @@ class SettingsController extends APIBaseController
             'valid_document_fields' => settings()->get('valid_document_fields'),
             'password_reset_validity_days' => intval(settings()->get('password_reset_validity_days')),
             'frontend_password_reset_base_url' => settings()->get('frontend_password_reset_base_url'),
-            'withdrawal_charge' => settings()->get('withdrawal_charge'),
+            'withdrawal_charge' => settings()->get('withdrawal_charge') / 100,
         ]);
     }
 
