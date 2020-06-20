@@ -21,7 +21,13 @@ class TransactionController extends APIBaseController
         $user = request()->user();
         if(!$user->hasRole(User::ROLE_ADMIN))
         {
-            $ids = $user->children()->pluck('id')->toArray();
+            $ids = $user->children->map(function($user){
+                if(!$user->hasRole(User::ROLE_CUSTOMER))
+                {
+                    return $user->id;
+                }
+            });
+
             $ids[] = $user->id;
             $query = Transaction::query()
                 ->whereIn('user_id', $ids);

@@ -80,6 +80,11 @@ class SavingsController extends APIBaseController
                 throw new \Exception('Saving closed for new contribution');
             }
 
+            if($saving->hasContributedOn())
+            {
+                throw new \Exception('You recently have contributed to this saving, wait till tomorrow to add more. ');
+            }
+
 
             $authUser = User::findByInstance(auth()->user());
             User::checkExistence($authUser);

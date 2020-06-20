@@ -3,6 +3,8 @@
 namespace App;
 
 
+use Carbon\Carbon;
+
 class Saving extends BaseModel
 {
     protected $fillable = [
@@ -101,4 +103,20 @@ class Saving extends BaseModel
         ];
     }
 
+
+    public function lastContribution()
+    {
+        return $this->contributions()->latest()->first();
+    }
+
+    public function hasContributedOn(Carbon $at=null) : bool
+    {
+
+        if(!$at) $at = Carbon::today();
+
+        return $this->contributions()
+            ->whereDate('created_at', $at->toDateString())
+            ->exists();
+
+    }
 }
