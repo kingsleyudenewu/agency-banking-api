@@ -27,6 +27,8 @@ class SettingsSeeder extends Seeder
         settings()->set('valid_document_fields', 'means_of_identification,agreement_form,application_form');
         settings()->set('password_reset_validity_days', 5);
         settings()->set('frontend_password_reset_base_url', 'http://frontend-v1-3.now.sh/onboarding/get-started');
+        settings()->set('withdrawal_charge', 10000); // 100 Naira
+
 
 
     }
