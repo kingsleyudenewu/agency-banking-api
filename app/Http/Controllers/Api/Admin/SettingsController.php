@@ -36,6 +36,7 @@ class SettingsController extends APIBaseController
         settings()->set('password_reset_validity_days', request('password_reset_validity_days'));
         settings()->set('frontend_password_reset_base_url', request('frontend_password_reset_base_url'));
         settings()->set('withdrawal_charge', request('withdrawal_charge') * 100);
+        settings()->set('withdrawal_charge_for_agent', request('withdrawal_charge_for_agent') * 100);
 
 
 
@@ -61,6 +62,7 @@ class SettingsController extends APIBaseController
             'password_reset_validity_days' => intval(settings()->get('password_reset_validity_days')),
             'frontend_password_reset_base_url' => settings()->get('frontend_password_reset_base_url'),
             'withdrawal_charge' => settings()->get('withdrawal_charge') / 100,
+            'withdrawal_charge_for_agent' => settings()->get('withdrawal_charge_for_agent') / 100
         ]);
     }
 
