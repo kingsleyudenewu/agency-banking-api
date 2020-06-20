@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\APIBaseController;
+use App\Koloo\User;
 use Illuminate\Http\Request;
 
 /**
@@ -16,8 +17,14 @@ class SettingsController extends APIBaseController
     public function store(Request $request)
     {
 
-        settings()->set('max_commission', request('max_commission') * 100);
-        settings()->set('min_commission', request('min_commission') * 100);
+
+        // Update root user commission
+        $rootUser = User::rootUser();
+
+        $rootUser->setCommission(request('min_commission') * 100);
+
+
+        settings()->set('min_commission', request('min_commission') * 100); // This is used for the system
         settings()->set('percent_to_charge', request('percent_to_charge') * 100);
         settings()->set('otp_length', abs(intval(request('otp_length'))) );
         settings()->set('enable_otp_for_login', boolval(request('enable_otp_for_login')));
@@ -39,7 +46,6 @@ class SettingsController extends APIBaseController
     public function index()
     {
         return $this->successResponse('settings', [
-            'max_commission' => settings()->get('max_commission') / 100,
             'min_commission' => settings()->get('min_commission') / 100,
             'percent_to_charge' => settings()->get('percent_to_charge') / 100,
             'otp_length' => intval(settings()->get('otp_length')),
