@@ -197,6 +197,8 @@ class User
 
         event(new AccountApproved($this, $remark));
 
+        $this->getModel()->profile->setupCompleted();
+
         return $approval;
     }
 
@@ -1073,5 +1075,10 @@ class User
             ->where('type', Transaction::TRANSACTION_TYPE_CREDIT)
             ->where('label', Transaction::LABEL_COMMISSION)
             ->sum('amount');
+    }
+
+    public function profileCompleted()
+    {
+
     }
 }

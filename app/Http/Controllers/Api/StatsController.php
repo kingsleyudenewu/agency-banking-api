@@ -36,7 +36,7 @@ class StatsController extends APIBaseController
            return $this->successResponse('stats', $authUser->stats($request));
        } catch (\Exception $e)
        {
-
+            return $this->errorResponse($e->getMessage());
        }
 
     }

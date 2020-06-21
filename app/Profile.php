@@ -92,7 +92,7 @@ class Profile extends BaseModel
      *
      * @return bool
      */
-    public function isSettingUp(): bool
+    public function commission(): bool
     {
         return boolval($this->setup_completed) ? false :  true;
     }
@@ -145,5 +145,10 @@ class Profile extends BaseModel
     public function state()
     {
         return $this->belongsTo(State::class, 'state_id');
+    }
+
+    public function isSettingUp()
+    {
+        return $this->setup_completed ? false : true;
     }
 }
