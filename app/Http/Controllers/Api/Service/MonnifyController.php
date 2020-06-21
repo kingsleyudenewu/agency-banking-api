@@ -8,6 +8,7 @@ use App\Koloo\User;
 use App\Message;
 use App\ProvidusTransaction;
 use App\Services\Monnify\Api;
+use App\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -58,7 +59,7 @@ class MonnifyController extends APIBaseController
             $amountToCredit = $payment->payableAmount;
             $user->mainWallet()->credit($amountToCredit);
 
-            $user->writeCreditTransaction($amountToCredit, sprintf('%s%s was deposited into your account via providus bank tranfer', $payment->currencyCode, number_format($payment->payableAmount, 2)), 'Monnify');
+            $user->writeCreditTransaction($amountToCredit, sprintf('%s%s was deposited into your account via providus bank tranfer', $payment->currencyCode, number_format($payment->payableAmount, 2)), Transaction::LABEL_MONNIFY);
 
             ProvidusTransaction::create(['ref' => $payment->transactionReference, 'payload' => json_encode($payment), 'completed' => now()]);
 

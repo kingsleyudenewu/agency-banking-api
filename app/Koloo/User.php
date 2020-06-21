@@ -1018,4 +1018,60 @@ class User
 
         return '';
     }
+
+    public function stats(Request $request)
+    {
+        $data = [
+            'joined_on' => $this->model->created_at,
+            'wallet_balance' => $this->mainWallet()->getAmount(),
+            'purse_balance' => $this->purse()->getAmount(),
+            'total_inflow_from_providus' => $this->getTotalInflowFromProvidus(),
+            'paid_out' => $this->getTotalPaidOut(),
+            'commission_earned' => $this->getTotalCommissionEarned(),
+        ];
+
+        $countAgents = function($accountType) {
+            return $this->model->children()->whereHas('roles', function($query) use ($accountType){
+                $query->where('name', $accountType);
+            })->count();
+
+        };
+
+        if($this->isSuperAgent() || $this->isAdmin())
+        {
+
+            $data['super_agents_under_you'] = $countAgents(\App\User::ROLE_SUPER_AGENT);
+            $data['agents_under_you'] = $countAgents(\App\User::ROLE_AGENT);
+            $data['customers_under_you'] = $countAgents(\App\User::ROLE_CUSTOMER);
+
+        }
+
+
+        return $data;
+    }
+
+    public function getTotalInflowFromProvidus()
+    {
+        return $this->model->transactions()
+            ->where('type', Transaction::TRANSACTION_TYPE_CREDIT)
+            ->where('label', Transaction::LABEL_MONNIFY)
+            ->sum('amount');
+
+    }
+
+    public function getTotalPaidOut()
+    {
+        return $this->model->transactions()
+            ->where('type', Transaction::TRANSACTION_TYPE_DEBIT)
+            ->where('label', Transaction::LABEL_PAYOUT)
+            ->sum('amount');
+    }
+
+    public function getTotalCommissionEarned()
+    {
+        return $this->model->transactions()
+            ->where('type', Transaction::TRANSACTION_TYPE_CREDIT)
+            ->where('label', Transaction::LABEL_COMMISSION)
+            ->sum('amount');
+    }
 }

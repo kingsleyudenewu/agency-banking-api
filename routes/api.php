@@ -22,6 +22,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
     Route::post('/auth/new_password', '\App\Http\Controllers\Api\Customer\SetPasswordController@store')->name('new.password');
 
 
+    Route::get('/stats', '\App\Http\Controllers\Api\StatsController@index')->middleware(['auth:api']);
+
+
+
 
     /**
      * Auth endpoints
