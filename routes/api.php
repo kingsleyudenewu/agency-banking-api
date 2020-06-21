@@ -108,6 +108,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         'middleware' => ['auth:api']], function () {
 
         Route::post('/', 'CreateAgentController@store')->name('create-new');
+        Route::post('/update', 'UpdateAgentController@store');
         Route::post('/documents', 'DocumentManagement@upload')->name('document.upload');
 
     });

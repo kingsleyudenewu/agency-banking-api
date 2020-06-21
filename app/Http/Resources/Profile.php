@@ -26,6 +26,7 @@ class Profile extends JsonResource
             'next_of_kin_name' => $this->profile->next_of_kin_name,
             'next_of_kin_phone' => $this->profile->next_of_kin_phone,
             'address' => $this->profile->address,
+            'business_address' => $this->profile->business_address,
             'dob' => $this->profile->dob,
             'gender' => $this->profile->gender,
             'commission' => $this->profile->commission,

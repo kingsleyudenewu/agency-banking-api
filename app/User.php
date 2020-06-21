@@ -68,7 +68,7 @@ class User extends AuthBaseModel
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at' => 'dateisSettingUptime',
     ];
 
     public function __construct(array $attributes = [])
