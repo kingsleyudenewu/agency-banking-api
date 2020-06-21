@@ -685,6 +685,29 @@ class User
         return Uuid::generate()->string;
     }
 
+    public function updateLastLogin()
+    {
+        $this->model->last_login = now();
+        $this->model->save();
+    }
+
+    public function suspend()
+    {
+        $this->model->is_suspended = now();
+        $this->model->save();
+    }
+
+    public function unsuspend()
+    {
+        $this->model->is_suspended = null;
+        $this->model->save();
+    }
+
+    public function isSuspended()
+    {
+        return $this->model->is_suspended;
+    }
+
     public static function creditOrDebit($data, $performedBy) : self
     {
         $authUser = static::findByInstance($performedBy);
