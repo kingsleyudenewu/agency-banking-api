@@ -6,7 +6,7 @@ use App\Transaction;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class HandleWalletCredited
+class HandleWalletCredited implements ShouldQueue
 {
     /**
      * Create the event listener.

@@ -161,6 +161,7 @@ class Api
                 'currencyCode' => 'NGN',
                 'contractCode' => $this->contract,
                 'customerEmail' => $customerEmail,
+                'customerName' => $accountName,
             ],
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->getAccessToken()

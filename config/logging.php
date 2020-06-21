@@ -55,16 +55,19 @@ return [
         ],
 
         'koloo' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
+            'driver' => 'slack',
+            'url' => env('LOG_SLACK_WEBHOOK_URL'),
+            'username' => 'Koloo Log',
+            'emoji' => ':boom:',
+            'level' => 'info',
         ],
 
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => 'Laravel Log',
+            'username' => 'Koloo Log',
             'emoji' => ':boom:',
-            'level' => 'critical',
+            'level' => 'info',
         ],
 
         'papertrail' => [
