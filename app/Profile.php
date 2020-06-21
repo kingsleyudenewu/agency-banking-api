@@ -55,6 +55,8 @@ class Profile extends BaseModel
         'application_form'
     ];
 
+    protected $with = ['state'];
+
     public function user()
     {
         return $this->belongsTo('App\User');

@@ -21,16 +21,20 @@ class AccountsController extends APIBaseController
 
     public function index()
     {
-        $query  = Profile::query();
 
-        if(!auth()->user()->hasRole(User::ROLE_ADMIN))
+
+        $authUser = new \App\Koloo\User(auth()->user());
+        $query  = User::query();
+        $query->with(['country'])->whereHas('profile', function ($q){
+            $q->whereNotNull('user_id');
+        });
+
+        if(!$authUser->isAdmin())
         {
-            $query->whereHas('user', function ($query){
-                $query->where('parent_id', auth()->user()->id);
-            });
+            $query = User::query();
+            $query->where('parent_id', $authUser->getId());
         }
 
-        $query->with(['user', 'user.roles:id,name', 'user.country', 'user.wallets']);
 
         $perPage = $this->perginationPerPage();
 
