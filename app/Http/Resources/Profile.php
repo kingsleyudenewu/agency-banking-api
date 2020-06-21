@@ -37,6 +37,7 @@ class Profile extends JsonResource
             'business_phone' => $this->profile->business_phone,
             'business_type' => $this->profile->business_type,
             'state' => $this->profile->state,
+            'is_suspended' => $this->is_suspended,
         ];
     }
 

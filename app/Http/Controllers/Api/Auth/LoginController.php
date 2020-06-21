@@ -26,6 +26,8 @@ class LoginController extends APIBaseController
 
             if(!$user->isAdmin() && !$user->isApproved()) throw new \Exception('Your account has not been approved');
 
+            if(!$user->isAdmin() && $user->isSuspended()) throw new \Exception('Your account has been suspended');
+
             $user = $user->isAdmin() ? User::rootUser() : $user;
 
             $user->updateLastLogin();
