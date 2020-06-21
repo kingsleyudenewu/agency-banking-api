@@ -119,6 +119,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
 
         Route::post('/password', 'PasswordManagement@store')->name('set-password');
 
+        Route::put('/account/{id}/{action}', 'AccountSuspensionController@update');
+
 
          Route::get('/settings', 'SettingsController@index')->name('settings');
          Route::post('/settings', 'SettingsController@store')
