@@ -21,7 +21,9 @@ class ProfileController extends APIBaseController
         {
             $user =  User::with('profile')->find($request->input('id'));
         } else {
-            $user =  User::with('profile')->find(auth()->user()->id);
+            $user =  User::with('profile')
+                ->where('id',auth()->user()->id)
+                ->orWhere('parent_id', auth()->user()->id)->first();
         }
 
 
