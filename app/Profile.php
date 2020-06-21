@@ -139,4 +139,9 @@ class Profile extends BaseModel
         $this->setup_completed = true;
         $this->save();
     }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'state_id');
+    }
 }

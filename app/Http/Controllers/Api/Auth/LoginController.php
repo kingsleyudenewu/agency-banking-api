@@ -28,6 +28,8 @@ class LoginController extends APIBaseController
 
             $user = $user->isAdmin() ? User::rootUser() : $user;
 
+            $user->updateLastLogin();
+
             $user->newAPIToken()
                 ->determineLoginOTP();
 

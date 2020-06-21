@@ -685,6 +685,12 @@ class User
         return Uuid::generate()->string;
     }
 
+    public function updateLastLogin()
+    {
+        $this->model->last_login = now();
+        $this->model->save();
+    }
+
     public static function creditOrDebit($data, $performedBy) : self
     {
         $authUser = static::findByInstance($performedBy);
