@@ -16,18 +16,24 @@ class ProfileController extends APIBaseController
 {
     public function index(Request $request)
     {
+        $user = null;
 
-        if($request->input('id') && auth()->user()->hasRole(User::ROLE_ADMIN))
+        if($request->input('id'))
         {
-            $user =  User::with('profile')->find($request->input('id'));
+            if(auth()->user()->hasRole(User::ROLE_ADMIN))
+            {
+                $user =  User::with('profile')->find($request->input('id'));
+            } else {
+                $user =  User::with('profile')
+                    ->where('parent_id', auth()->user()->id)
+                    ->find( $request->input('id'));
+            }
         }
-        else
-         {
-              if ($request->input('id')){
-                  $user =  User::with('profile')->where('parent_id', $request->input('id'))->first();
-              } else {
-                  $user =  User::with('profile')->find(auth()->user()->id);
-              }
+
+
+        if(!$request->input('id') && !$user)
+        {
+            $user =  User::with('profile')->find(auth()->user()->id);
         }
 
         if(!$user)
