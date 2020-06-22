@@ -37,7 +37,7 @@ class MessageTemplateMail extends Mailable
         return $this
             ->subject($this->messageModel->subject)
             ->view('emails.message-template', [
-                'messageContent' => $content
+                'messageContent' => nl2br($content)
             ]);
     }
 }
