@@ -314,6 +314,7 @@ class User
                {
                    $data['commission'] = $parent->getCommissionForAgent() ;
                }
+
            }
 
            $data['password'] = Hash::make($data['password']);
@@ -866,6 +867,11 @@ class User
     public function getCommissionForAgent()
     {
         $this->checkProfile();
+
+        if($this->isAdmin() && !$this->model->profile->commission_for_agent)
+        {
+            return settings('max_commission') - $this->getCommission();
+        }
         return $this->model->profile->commission_for_agent * 100;
     }
 
