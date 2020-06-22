@@ -57,7 +57,19 @@ class CreateAgentController extends APIBaseController
             unset($data['commission_for_agent']);
         }
 
-        $user =  User::createWithProfile($data, $authUser->getModel());
+        $parent = $authUser->getModel();
+        if($authUser->isAdmin() && $request->input('super_agent_id') && $request->input('type') !== 'super')
+        {
+            $superAgent = User::find($request->input('super_agent_id'));
+            if(!$superAgent || !$superAgent->isSuperAgent())
+            {
+                return $this->errorResponse('Invalid super agent selected');
+            }
+
+            $parent = $superAgent->getModel();
+        }
+
+        $user =  User::createWithProfile($data, $parent);
 
         if(!$user)
         {

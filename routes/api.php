@@ -121,7 +121,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         'as' => 'admin.',
         'middleware' => ['auth:api', 'admin-check']], function () {
 
-
+        Route::get('/super-agents', 'GetSuperAgentsController@index');
         Route::post('/password', 'PasswordManagement@store')->name('set-password');
 
         Route::put('/account/{id}/{action}', 'AccountSuspensionController@update');
