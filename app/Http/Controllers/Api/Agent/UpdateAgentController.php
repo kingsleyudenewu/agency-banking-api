@@ -65,6 +65,16 @@ class UpdateAgentController extends APIBaseController
                 }
             }
 
+            if($authUser->isAdmin() && $request->input('super_agent_id') && $user->isAgent())
+            {
+                $superAgent = User::find($request->input('super_agent_id'));
+                if(!$superAgent || !$superAgent->isSuperAgent())
+                {
+                    throw new \Exception('Invalid super agent selected');
+                }
+
+                $user->setParent($superAgent);
+            }
 
             return $this->successResponse('Successful', new Profile($userModel));
 
@@ -73,8 +83,6 @@ class UpdateAgentController extends APIBaseController
         {
             return $this->errorResponse($e->getMessage());
         }
-
-
 
     }
 
