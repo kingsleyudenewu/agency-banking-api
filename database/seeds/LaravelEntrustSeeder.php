@@ -56,7 +56,7 @@ class LaravelEntrustSeeder extends Seeder
         }
 
         // Update the first user phone number
-        \App\User::first()->update(['phone' => '2348066100671']);
+        \App\User::first()->update(['phone' => '2348066100671', 'email' => 'joefazee@gmail.com']);
     }
 
     /**
