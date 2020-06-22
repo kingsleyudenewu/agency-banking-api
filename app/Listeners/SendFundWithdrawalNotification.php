@@ -32,7 +32,7 @@ class SendFundWithdrawalNotification
         $customer = $event->customer;
         $agent = $event->agent;
         $balance = 'NGN' . number_format($customer->mainWallet()->getAmount(), 2);
-        $channel = 'sms';
+        $channel = 'both';
 
 
         $message = sprintf(config('koloo.fund_withdrawal_notification_message'), $customer->getName(), $amount, $agent->getName(), $balance);
@@ -42,7 +42,7 @@ class SendFundWithdrawalNotification
             'message_type' => $channel,
             'user_id' => $customer->getId(),
             'sender' => User::rootUser()->getId(),
-            'subject' => 'Notification'
+            'subject' => 'Fund withdrawal'
         ]);
 
         event(new SendMessage($message, $channel));

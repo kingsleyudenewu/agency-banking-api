@@ -44,7 +44,7 @@ class NotifySuperAgentOnAccountDisapproval implements ShouldQueue
             'message_type' => $channel,
             'user_id' => $user->getId(),
             'sender' => User::rootUser()->getId(),
-            'subject' => 'ACTION REQUIRED: Notification'
+            'subject' => 'Agent account not approved'
         ]);
 
 

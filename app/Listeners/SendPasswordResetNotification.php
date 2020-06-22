@@ -72,7 +72,7 @@ class SendPasswordResetNotification implements ShouldQueue
             'message_type' => $channel,
             'user_id' => $user->getId(),
             'sender' => User::rootUser()->getId(),
-            'subject' => 'ACTION REQUIRED: Notification'
+            'subject' => 'Password reset'
         ]);
 
         event(new SendMessage($message, $channel));
