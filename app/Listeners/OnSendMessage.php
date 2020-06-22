@@ -3,10 +3,12 @@
 namespace App\Listeners;
 
 use App\Components\Sms\Facade\Sms;
+use App\Mail\MessageTemplateMail;
 use App\Message;
 use App\Traits\LogTrait;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
 class OnSendMessage implements ShouldQueue
 {
@@ -41,10 +43,36 @@ class OnSendMessage implements ShouldQueue
 
         if ($event->message->message_type === 'sms') {
             $this->sendSMSMessage($event->message);
+        } else if ($event->message->message_type === 'email') {
+            $this->sendEmailMessage($event->message);
+        } else if ($event->message->message_type === 'both') {
+            $this->sendEmailMessage($event->message);
+            $this->sendSMSMessage($event->message);
         }
 
         $event->message->status = Message::STATUS_SENT;
         $event->message->save();
+    }
+
+    protected function sendEmailMessage($message)
+    {
+
+        $to = $message->user->email;
+        $mail = new MessageTemplateMail($message);
+
+        $this->logInfo("[{$message->id}] Send email to {$to}.");
+
+        try {
+            Mail::to($to)->send($mail);
+        }
+        catch (\Exception $exception) {
+            $this->logError("[{$message->id}] SEND EMAIL ERROR: {$exception->getMessage()}");
+
+            return false;
+        }
+
+        return true;
+
     }
 
     protected function sendSMSMessage($message)

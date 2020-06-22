@@ -178,7 +178,7 @@ class OtpVerification
 
         //TODO: take '2' out into a config file
        // return $count >= 2 ? 'email' : 'sms';
-        return 'sms';
+        return 'both';
     }
 
 
