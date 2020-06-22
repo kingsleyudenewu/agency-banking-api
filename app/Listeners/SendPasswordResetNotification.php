@@ -46,7 +46,7 @@ class SendPasswordResetNotification implements ShouldQueue
 
         if($user->isCustomer()) return;
 
-        $channel = 'sms';
+        $channel = 'both';
 
         $passwordReset = $user->getNewPasswordReset();
         if(!$passwordReset) {
