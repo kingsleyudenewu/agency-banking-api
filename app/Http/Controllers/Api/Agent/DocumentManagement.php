@@ -32,7 +32,7 @@ class DocumentManagement extends APIBaseController
         if(!$profile)
             return $this->errorResponse('Profile not set for this user.');
 
-        if($profile->setup_completed)
+        if($profile->setup_completed && !$request->user()->hasRole(\App\User::ROLE_ADMIN))
             return  $this->errorResponse('You can not add additional information to this application.');
 
         $storedLocation = $request->file('doc')->store($path, $disk);
