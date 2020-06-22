@@ -38,7 +38,7 @@ class HandleCommissionPayoutStatusChanged implements ShouldQueue
 
         $message = '';
         $amount = 'NGN' . number_format($payout->amount,2);
-        $channel = 'sms';
+        $channel = 'both';
 
         if($payout->status === CommissionPayout::STATUS_PAID)
         {
