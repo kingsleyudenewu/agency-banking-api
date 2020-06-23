@@ -1063,7 +1063,7 @@ class User
         return $this->model->transactions()
             ->where('type', Transaction::TRANSACTION_TYPE_CREDIT)
             ->where('label', Transaction::LABEL_MONNIFY)
-            ->sum('amount');
+            ->sum('amount') / 100;
 
     }
 
@@ -1072,7 +1072,7 @@ class User
         return $this->model->transactions()
             ->where('type', Transaction::TRANSACTION_TYPE_DEBIT)
             ->where('label', Transaction::LABEL_PAYOUT)
-            ->sum('amount');
+            ->sum('amount') / 100;
     }
 
     public function getTotalCommissionEarned()
@@ -1080,7 +1080,7 @@ class User
         return $this->model->transactions()
             ->where('type', Transaction::TRANSACTION_TYPE_CREDIT)
             ->where('label', Transaction::LABEL_COMMISSION)
-            ->sum('amount');
+            ->sum('amount') / 100;
     }
 
     public function profileCompleted()
