@@ -41,6 +41,7 @@ class Profile extends JsonResource
             'business_type' => $this->profile->business_type,
             'state' => $this->profile->state,
             'is_suspended' => $this->is_suspended,
+            'parent' => $this->parent_id ? new SimpleUser($this->parent) : null,
         ];
     }
 
