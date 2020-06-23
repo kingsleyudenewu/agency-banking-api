@@ -22,9 +22,9 @@ class ProfileController extends APIBaseController
         {
             if(auth()->user()->hasRole(User::ROLE_ADMIN))
             {
-                $user =  User::with('profile')->find($request->input('id'));
+                $user =  User::with('profile', 'parent')->find($request->input('id'));
             } else {
-                $user =  User::with('profile')
+                $user =  User::with('profile', 'parent')
                     ->where('parent_id', auth()->user()->id)
                     ->find( $request->input('id'));
             }
