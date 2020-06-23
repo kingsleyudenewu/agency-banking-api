@@ -79,6 +79,7 @@ class User
     {
         if($countryCode)
         {
+            if(!$countryCode) $countryCode = config('koloo.default_country');
             $phone = PhoneNumber::format($query, $countryCode);
             if($phone)
             {
