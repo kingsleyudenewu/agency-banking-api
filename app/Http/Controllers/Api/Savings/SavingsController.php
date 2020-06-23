@@ -50,7 +50,11 @@ class SavingsController extends APIBaseController
 
         $authUser = new User(request()->user());
         try {
-            $customer = User::search(request('q'), request('country_code'));
+            $parentCountry = $authUser->getModel()->country;
+            if($parentCountry) $parentCountry = $parentCountry->code;
+            $countryCode = request('country_code') ?: $parentCountry;
+
+            $customer = User::search(request('q'), $countryCode);
             User::checkExistence($customer);
 
             if(!$authUser->isAdmin() && !$customer->isApproved()) throw new \Exception('Account has not been approved.');
