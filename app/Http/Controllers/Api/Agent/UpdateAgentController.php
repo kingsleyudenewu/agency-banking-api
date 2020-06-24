@@ -74,6 +74,10 @@ class UpdateAgentController extends APIBaseController
                 }
 
                 $user->setParent($superAgent);
+
+                $user->setCommission($superAgent->getCommissionForAgent() );
+                $user->setCommissionForAgent(0);
+
             }
 
             return $this->successResponse('Successful', new Profile($userModel));
