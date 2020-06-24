@@ -75,8 +75,7 @@ class UpdateAgentController extends APIBaseController
 
                 $user->setParent($superAgent);
 
-                $parent = $user->getParent();
-                $user->setCommission($parent->getCommission() );
+                $user->setCommission($superAgent->getCommissionForAgent() );
                 $user->setCommissionForAgent(0);
 
             }
