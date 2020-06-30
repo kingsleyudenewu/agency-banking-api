@@ -33,7 +33,7 @@ class NotifySuperAgentOnAccountApproval implements ShouldQueue
     {
         $user = $event->user->getParent();
 
-        if(!$user)
+        if(!$user || !$user->isAgent())
         {
                 $this->logChannel = 'NotifySuperAgentOnAccountApproval';
                 $this->logInfo($event->user->getName() . ' has no parent');
