@@ -76,7 +76,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         AccountApproved::class => [
-            NotifySuperAgentOnAccountApproval::class,
+           // NotifySuperAgentOnAccountApproval::class,
             SendPasswordResetNotification::class
         ],
 
@@ -84,7 +84,7 @@ class EventServiceProvider extends ServiceProvider
             SendPasswordResetNotification::class
         ],
         AccountDisapproved::class => [
-            NotifySuperAgentOnAccountDisapproval::class
+           // NotifySuperAgentOnAccountDisapproval::class
         ],
 
         CommissionPayoutStatusChanged::class => [
