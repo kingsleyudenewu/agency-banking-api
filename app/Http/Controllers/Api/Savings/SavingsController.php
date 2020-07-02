@@ -96,7 +96,13 @@ class SavingsController extends APIBaseController
 
             $amount =  request('amount');
 
-            User::otpRequiredToContinue($request, new User($request->user()));
+            try {
+                User::otpRequiredToContinue($request, new User($request->user()));
+
+            } catch (\Exception $e)
+            {
+                return response(['message' => $e->getMessage(), 'otp_required' => true], 401);
+            }
 
             $res = $authUser->contributeToSaving($saving, $amount);
 

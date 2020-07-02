@@ -35,7 +35,14 @@ class WithdrawalController extends APIBaseController
             {
                 throw new \Exception('Withdrawal not permitted for this account. If you are an agent/super-agent, please use the payout option.');
             }
-           User::otpRequiredToContinue($request, $customer);
+
+            try {
+                User::otpRequiredToContinue($request, $customer);
+            } catch (\Exception $e)
+            {
+                return response(['message' => $e->getMessage(), 'otp_required' => true], 401);
+            }
+
 
             $authUser = new User($request->user());
             if($authUser->isCustomer()) throw new \Exception('Action not allowed');
