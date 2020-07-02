@@ -84,9 +84,10 @@ class SavingsController extends APIBaseController
                 throw new \Exception('Saving closed for new contribution');
             }
 
-            if($saving->hasContributedOn())
+            $today = now();
+            if($saving->hasContributedOn($today))
             {
-                throw new \Exception('You recently have contributed to this saving, wait till tomorrow to add more. ');
+                return $this->errorResponse('You recently have contributed to this saving, wait till tomorrow to add more. ');
             }
 
 
@@ -94,6 +95,14 @@ class SavingsController extends APIBaseController
             User::checkExistence($authUser);
 
             $amount =  request('amount');
+
+            try {
+                User::otpRequiredToContinue($request, new User($request->user()));
+
+            } catch (\Exception $e)
+            {
+                return response(['message' => $e->getMessage(), 'otp_required' => true], 401);
+            }
 
             $res = $authUser->contributeToSaving($saving, $amount);
 

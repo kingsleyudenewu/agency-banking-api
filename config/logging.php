@@ -55,7 +55,7 @@ return [
         ],
 
         'koloo' => [
-            'driver' => 'slack',
+            'driver' => env('LOG_CHANNEL', 'slack'),
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Koloo Log',
             'emoji' => ':boom:',
