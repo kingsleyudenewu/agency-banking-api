@@ -125,6 +125,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         Route::post('/password', 'PasswordManagement@store')->name('set-password');
 
         Route::put('/account/{id}/{action}', 'AccountSuspensionController@update');
+        Route::get('/savings', 'AdminViewSavingsController@index');
 
 
          Route::get('/settings', 'SettingsController@index')->name('settings');
@@ -163,7 +164,6 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
             ->middleware('otp-required-for-auth-user')
             ->name('new');
         Route::post('/{id}/contribute', 'SavingsController@contribute')
-            ->middleware('otp-required-for-auth-user')
             ->name('contribute');
         Route::get('/{id}/contribute', 'SavingsController@getContributions')->name('get.contributions');
 
