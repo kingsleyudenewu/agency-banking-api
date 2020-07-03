@@ -566,6 +566,8 @@ class User
             $contribution = $saving->contributions()->create($contribData);
             SavingCommission::getInstance($contribution)->computeCommission();
 
+            $contribution->sendContributionMessageToUser($user);
+
             event(new NewSavingCreated($saving));
 
             DB::commit();
