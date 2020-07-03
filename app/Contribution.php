@@ -55,9 +55,10 @@ class Contribution extends BaseModel
         $amount = 'NGN' . number_format($this->amount,2);
         $saving = $this->savingPlan;
         $channel = 'sms';
+        $amountSaved = 'NGN' . number_format($saving->amount_saved,2);
 
 
-        $message = sprintf(config('koloo.contribution_message_to_customer'), $amount, $saving->cycle->title, $saving->amount_saved);
+        $message = sprintf(config('koloo.contribution_message_to_customer'), $amount, $saving->cycle->title, $amountSaved);
 
         $message = Message::create([
             'message' => $message,
