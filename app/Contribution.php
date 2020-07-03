@@ -4,6 +4,9 @@ namespace App;
 
 
 
+use App\Events\SendMessage;
+use App\Koloo\User as KolooUser;
+
 class Contribution extends BaseModel
 {
 
@@ -45,4 +48,26 @@ class Contribution extends BaseModel
         $this->save();
     }
 
+
+    public function sendContributionMessageToUser(KolooUser $user)
+    {
+
+        $amount = 'NGN' . number_format($this->amount,2);
+        $saving = $this->savingPlan;
+        $channel = 'sms';
+        $amountSaved = 'NGN' . number_format($saving->amount_saved,2);
+
+
+        $message = sprintf(config('koloo.contribution_message_to_customer'), $amount, $saving->cycle->title, $amountSaved);
+
+        $message = Message::create([
+            'message' => $message,
+            'message_type' => $channel,
+            'user_id' => $user->getId(),
+            'sender' => KolooUser::rootUser()->getId(),
+            'subject' => 'Contribution Notification'
+        ]);
+
+        event(new SendMessage($message, $channel));
+    }
 }

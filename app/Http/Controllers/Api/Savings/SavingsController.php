@@ -104,10 +104,12 @@ class SavingsController extends APIBaseController
                 return response(['message' => $e->getMessage(), 'otp_required' => true], 401);
             }
 
-            $res = $authUser->contributeToSaving($saving, $amount);
+            $contribution = $authUser->contributeToSaving($saving, $amount);
+
+            $contribution->sendContributionMessageToUser(new User($saving->owner));
 
 
-            return $this->successResponse('Savings', ['contribution' => $res, 'savingStat' => $res->savingPlan->stats()]);
+            return $this->successResponse('Savings', ['contribution' => $contribution, 'savingStat' => $contribution->savingPlan->stats()]);
 
         }catch (\Exception $e)
         {
