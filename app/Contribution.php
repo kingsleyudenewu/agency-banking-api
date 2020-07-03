@@ -63,7 +63,7 @@ class Contribution extends BaseModel
             'message' => $message,
             'message_type' => $channel,
             'user_id' => $user->getId(),
-            'sender' => User::rootUser()->getId(),
+            'sender' => KolooUser::rootUser()->getId(),
             'subject' => 'Contribution Notification'
         ]);
 
