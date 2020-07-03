@@ -5,7 +5,7 @@ namespace App;
 
 
 use App\Events\SendMessage;
-use App\Koloo\User;
+use App\Koloo\User as KolooUser;
 
 class Contribution extends BaseModel
 {
@@ -49,7 +49,7 @@ class Contribution extends BaseModel
     }
 
 
-    public function sendContributionMessageToUser(User $user)
+    public function sendContributionMessageToUser(KolooUser $user)
     {
 
         $amount = 'NGN' . number_format($this->amount,2);
