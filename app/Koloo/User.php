@@ -906,12 +906,12 @@ class User
         if(!$code || !$request->has('otp'))
         {
             $otp->send();
-            throw new OTPRequiredException('Enter OTP to continue.');
+            throw new OTPRequiredException('Enter transaction code to continue.');
         }
 
         if($request->has('otp') && !$otp->isValid($code))
         {
-            throw new OTPRequiredException('Invalid code entered.');
+            throw new OTPRequiredException('Invalid transaction code entered.');
         }
 
         $otp->invalidateActiveOtp();

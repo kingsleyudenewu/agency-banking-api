@@ -41,7 +41,8 @@ class UserTest extends TestCase
     /** @test */
     public function should_have_a_country()
     {
-        $user = factory('App\User')->create();
+        $countryCode = factory('App\Country')->create()->code;
+        $user = factory('App\User')->create(['country_code' => $countryCode]);
 
         $this->assertInstanceOf(Country::class, $user->country);
     }

@@ -111,8 +111,8 @@ class WalletTest extends TestCase
     /** @test */
     public function can_start_wallets_for_a_new_user()
     {
-
-        $user = factory('App\User')->create();
+        $countryCode = factory('App\Country')->create()->code;
+        $user = factory('App\User')->create(['country_code' => $countryCode]);
 
         $this->assertEquals(0, $user->wallets()->count());
 
@@ -127,7 +127,8 @@ class WalletTest extends TestCase
     /** @test */
     public function do_not_start_morethan_two_wallets_for_the_user()
     {
-        $user = factory('App\User')->create();
+        $countryCode = factory('App\Country')->create()->code;
+        $user = factory('App\User')->create(['country_code' => $countryCode]);
 
         $this->assertEquals(0, $user->wallets()->count());
 

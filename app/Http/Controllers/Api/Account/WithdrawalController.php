@@ -28,7 +28,7 @@ class WithdrawalController extends APIBaseController
         ]);
 
         try {
-            DB::beginTransaction();
+
             $customer = User::find($request->input('user_id'));
 
             if(!$customer->isCustomer())
@@ -43,6 +43,8 @@ class WithdrawalController extends APIBaseController
             {
                 return response(['message' => $e->getMessage(), 'otp_required' => true], 401);
             }
+
+            DB::beginTransaction();
 
             $authUser = new User($request->user());
             if($authUser->isCustomer()) throw new \Exception('Action not allowed');
@@ -86,9 +88,9 @@ class WithdrawalController extends APIBaseController
                 $rootUser->creditWalletSource($systemEarning, $rootUser->purse(), 'Withdrawal commission for ' . $customer->getName(), Transaction::LABEL_WITHDRAWAL);
             }
 
-            event(new CustomerFundWithdrawal($amount, $customer, $authUser));
-
             DB::commit();
+
+            event(new CustomerFundWithdrawal($amount, $customer, $authUser));
 
             return $this->successResponse('Transaction successful. You can now pay cash to the customer NGN' . number_format($amount));
 

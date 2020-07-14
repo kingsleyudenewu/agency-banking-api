@@ -59,7 +59,10 @@ class OtpVerification
         if (now()->greaterThanOrEqualTo($this->resendDate)) {
             $this->sendVerificationCode();
             $this->determineResendDate();
+
         }
+
+
 
         return $this;
     }
@@ -158,7 +161,7 @@ class OtpVerification
         else {
             $this->resendDate = $this->lastOtp->created_at->copy()->addMinute();
         }*/
-        $this->resendDate = $this->lastOtp->created_at->copy()->addMinute();
+        $this->resendDate = $this->lastOtp->created_at->copy();
 
         return $this->resendDate;
     }
