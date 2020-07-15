@@ -445,7 +445,6 @@ class User
 
     public function determineLoginOTP()
     {
-        settings()->flushCache();
 
         $otpRequired = boolval(settings('enable_otp_for_login'));
 
