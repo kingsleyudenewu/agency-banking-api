@@ -4,11 +4,13 @@ namespace App\Components\Sms;
 
 use App\Components\Sms\Drivers\InfobipDriver;
 use App\Components\Sms\Drivers\MultitexterDriver;
+use App\Components\Sms\Drivers\TextNgDriver;
 use App\Services\Infobip\InfobipSMSApi;
 use App\Services\Multitexter\MultitexterApi;
 use App\Components\Sms\Drivers\NullDriver;
 
 
+use App\Services\Textng\TextNGSMSApi;
 use Illuminate\Support\Manager;
 
 
@@ -67,6 +69,11 @@ class SmsManager extends Manager
         return new InfobipDriver(
             $this->createInfobipClient()
         );
+    }
+
+    public function createTextngDriver()
+    {
+        return new TextNgDriver(new TextNGSMSApi(config('sms.textng')));
     }
 
 

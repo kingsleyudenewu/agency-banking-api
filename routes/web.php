@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Components\Sms\Facade\Sms;
 use Illuminate\Support\Facades\Route;
 
 /*
