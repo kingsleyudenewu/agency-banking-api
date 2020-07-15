@@ -910,7 +910,7 @@ class User
 
     }
 
-    private static function useOtpForTransaction(Request $request, self $user)
+    public static function useOtpForTransaction(Request $request, self $user)
     {
 
         $otp = new OtpVerification($user);
@@ -930,7 +930,7 @@ class User
         $otp->invalidateActiveOtp();
     }
 
-    private static  function useTransactionPinForTransaction(Request $request, self $user)
+    public static  function useTransactionPinForTransaction(Request $request, self $user)
     {
 
         $code = $request->input('otp');
