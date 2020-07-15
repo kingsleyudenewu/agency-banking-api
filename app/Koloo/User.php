@@ -900,6 +900,19 @@ class User
     {
         if(!$user) throw new \Exception('User not found.');
 
+        if(settings('transaction_auth') === 'pin')
+        {
+            static::useTransactionPinForTransaction($request, $user);
+            return;
+        }
+
+        static::useOtpForTransaction($request, $user);
+
+    }
+
+    private static function useOtpForTransaction(Request $request, self $user)
+    {
+
         $otp = new OtpVerification($user);
         $code = $request->input('otp');
 
@@ -915,8 +928,25 @@ class User
         }
 
         $otp->invalidateActiveOtp();
+    }
+
+    private static  function useTransactionPinForTransaction(Request $request, self $user)
+    {
+
+        $code = $request->input('otp');
+
+        if(!$code || !$request->has('otp'))
+        {
+            throw new OTPRequiredException('Enter transaction code to continue.');
+        }
+
+        if($request->has('otp') && !$user->isValidTransactionPin($code))
+        {
+            throw new OTPRequiredException('Invalid transaction code entered.');
+        }
 
     }
+
 
     public function earnCommission($amount, Contribution $contribution)
     {
@@ -1088,5 +1118,27 @@ class User
     public function profileCompleted()
     {
 
+    }
+
+    public function setTransactionPin($pin)
+    {
+        $pin = Hash::make($pin);
+        $this->model->transaction_pin = $pin;
+        $this->model->save();
+    }
+
+    public function getHashedTransactionPin()
+    {
+        return $this->model->transaction_pin;
+    }
+
+    public function isValidTransactionPin($pin) : bool
+    {
+        return Hash::check($pin, $this->getHashedTransactionPin());
+    }
+
+    public function hasTransactionPin(): bool
+    {
+        return $this->getHashedTransactionPin() ? true : false;
     }
 }

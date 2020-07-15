@@ -5,6 +5,7 @@ namespace Tests\Unit;
 
 
 use App\Country;
+use App\Koloo\User;
 use App\Profile;
 use Illuminate\Database\Eloquent\Collection;
 use Tests\TestCase;
@@ -75,4 +76,44 @@ class UserTest extends TestCase
     }
 
 
+    /** @test */
+    public function can_set_transaction_pin()
+    {
+        $user = factory('App\User')->create();
+        $this->assertNull($user->transaction_pin);
+
+        $user = new User($user);
+        $user->setTransactionPin('2345');
+
+        $this->assertNotNull($user->getHashedTransactionPin());
+        $this->assertNotEquals('2345', $user->getHashedTransactionPin());
+
+    }
+
+
+    /** @test */
+    public function can_check_transaction_pin()
+    {
+        $user = factory('App\User')->create();
+        $this->assertNull($user->transaction_pin);
+        $user = new User($user); // Get a Koloo user
+
+        $user->setTransactionPin('2345');
+        $this->assertTrue($user->isValidTransactionPin('2345'));
+
+    }
+
+
+    /** @test */
+    public function can_check_has_transaction_pin()
+    {
+        $user = factory('App\User')->create();
+        $this->assertNull($user->transaction_pin);
+        $user = new User($user); // Get a Koloo user
+
+
+        $this->assertFalse($user->hasTransactionPin());
+        $user->setTransactionPin('2345');
+        $this->assertTrue($user->hasTransactionPin());
+    }
 }
