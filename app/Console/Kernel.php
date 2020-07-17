@@ -24,8 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('sweeper:sweep')
-                ->everyThreeHours();
+        $schedule->command('sweeper:sweep')->twiceDaily(1, 13);
     }
 
     /**
@@ -38,5 +37,10 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
+    }
+
+    protected function scheduleTimezone()
+    {
+        return 'Africa/Lagos';
     }
 }
