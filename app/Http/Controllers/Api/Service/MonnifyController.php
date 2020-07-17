@@ -56,7 +56,9 @@ class MonnifyController extends APIBaseController
             }
 
 
-            $amountToCredit = $payment->payableAmount;
+            $amountToCredit = $this->applyCharges($payment->payableAmount);
+
+
             $user->mainWallet()->credit($amountToCredit);
 
             $user->writeCreditTransaction($amountToCredit, sprintf('%s%s was deposited into your account via providus bank tranfer', $payment->currencyCode, number_format($payment->payableAmount, 2)), Transaction::LABEL_MONNIFY);
@@ -89,6 +91,34 @@ class MonnifyController extends APIBaseController
         }
 
 
+
+    }
+
+    private function applyCharges($payableAmount)
+    {
+        $charge10kBelow = settings('transfer_charge_10k_below') ? settings('transfer_charge_10k_below') / 100 : 0;
+        $charge10kAbove = settings('transfer_charge_above_10k') ? settings('transfer_charge_above_10k') / 100 : 0;
+
+        $newValue = $payableAmount;
+        $amountCharged = 0;
+        // If the user is paying about 10k
+        if($payableAmount <= 10000)
+        {
+            $amountCharged = $charge10kBelow;
+            $newValue = $newValue - $charge10kBelow;
+        } else {
+            $amountCharged = $charge10kAbove;
+            $newValue = $newValue - $charge10kAbove;
+        }
+
+        if($newValue !== $payableAmount && $charge10kAbove !== 0)
+        {
+            // Some charges has been applied
+            $rootUser = User::rootUser();
+            $rootUser->creditWalletSource($charge10kAbove, $rootUser->purse(), 'Monnify charge', Transaction::LABEL_MONNIFY);
+        }
+
+        return $newValue;
 
     }
 
