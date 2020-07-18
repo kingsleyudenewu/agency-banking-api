@@ -17,7 +17,7 @@ class AdminViewSavingsController extends APIBaseController
     public function index()
     {
         $query = Saving::query();
-        $query->with(['owner:id,name','creator:id,name', 'cycle:id,title']);
+        $query->with(['owner:id,name','creator:id,name', 'cycle:id,title'])->orderBy('maturity', 'desc');
 
 
         $perPage = $this->perginationPerPage();
