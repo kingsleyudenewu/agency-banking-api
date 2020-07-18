@@ -37,7 +37,7 @@ class WithdrawalController extends APIBaseController
             }
 
             try {
-                User::otpRequiredToContinue($request, $customer);
+                User::useOtpForTransaction($request, $customer);
 
             } catch (\Exception $e)
             {

@@ -45,8 +45,10 @@ class SavingsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_with_the_right_access_can_create_savings()
+    public function a_user_with_the_right_access_can_create_savings_otp()
     {
+        settings()->set('transaction_auth', 'otp');
+
         $amountToCredit = 50000;
 
         $user = $this->userWithWallet();
@@ -85,6 +87,44 @@ class SavingsTest extends TestCase
 
     }
 
+    /** @test */
+    public function a_user_with_the_right_access_can_create_savings_pin()
+    {
+        settings()->set('transaction_auth', 'pin');
+
+        $amountToCredit = 50000;
+
+        $user = $this->userWithWallet();
+        $this->assertNotNull($user);
+
+        $user->setTransactionPin('3333');
+        $authUser = $this->signIn($user->getModel());
+
+        $wallet = $this->walletWithFund($user->mainWallet(), $amountToCredit);
+
+        $this->assertEquals($amountToCredit, $wallet->getAmount());
+
+        $customer = $this->userWithWallet();
+        $this->assertNotNull($customer);
+
+
+        $customer = $this->getCustomerWithFund(50000);
+
+        $data = [
+            'saving_cycle_id' => factory('App\SavingCycle')->create()->id,
+            'amount' => 1500,
+            'owner_id' => $customer->getId(),
+            'otp' => '3333'
+        ];
+
+
+        $this->postJson(route('api.savings.new'), $data)
+            ->assertJson([
+                'status' => 'success',
+                'data' => ['amount' => 1500]
+            ]);
+
+    }
 
     private function getCustomerWithFund($amountToCredit) {
 

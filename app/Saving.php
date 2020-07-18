@@ -20,7 +20,7 @@ class Saving extends BaseModel
 
     protected $dates = ['created_at', 'maturity', 'updated_at'];
 
-    protected $appends = ['amount_saved', 'matured', 'total_contributions'];
+    protected $appends = ['amount_saved', 'matured', 'total_contributions', 'saving_frequent_count'];
 
     public function cycle()
     {
@@ -65,6 +65,11 @@ class Saving extends BaseModel
     public function getTotalContributionsAttribute($value)
     {
         return $this->contributions()->count();
+    }
+
+    public function getSavingFrequentCountAttribute($value)
+    {
+        return percentOf($this->cycle->duration, $this->total_contributions);
     }
 
     public function getAmountSavedAttribute($value)
@@ -119,4 +124,22 @@ class Saving extends BaseModel
             ->exists();
 
     }
+
+    public function scopeSweepables($query)
+    {
+        return $query->whereNull('sweep_status')
+                ->whereDate('maturity', '<', now()); //
+    }
+
+    public function swept($comment='')
+    {
+        $this->sweep_status = 'swept';
+        $this->swept_at = now();
+        $this->sweep_comment = $comment;
+        $this->completed = now();
+        $this->save();
+
+    }
+
+
 }

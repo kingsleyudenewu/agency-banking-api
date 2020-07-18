@@ -12,12 +12,14 @@ use App\Events\FundTransfer;
 use App\Events\NewPasswordRequested;
 use App\Events\SendMessage;
 use App\Events\SendNewOTP;
+use App\Events\SweepSaving;
 use App\Events\WalletBilled;
 use App\Events\WalletCredited;
 use App\Listeners\HandleAgentAccountCreation;
 use App\Listeners\HandleCommissionPayoutStatusChanged;
 use App\Listeners\HandleFundTransfer;
 use App\Listeners\HandleNewOTP;
+use App\Listeners\HandleSweepSaving;
 use App\Listeners\HandleWalletBilled;
 use App\Listeners\HandleWalletCredited;
 use App\Listeners\NotifySuperAgentOnAccountApproval;
@@ -89,6 +91,10 @@ class EventServiceProvider extends ServiceProvider
 
         CommissionPayoutStatusChanged::class => [
             HandleCommissionPayoutStatusChanged::class
+        ],
+
+        SweepSaving::class => [
+            HandleSweepSaving::class
         ]
 
     ];

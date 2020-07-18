@@ -29,6 +29,9 @@ class SettingsSeeder extends Seeder
         settings()->set('frontend_password_reset_base_url', 'http://frontend-v1-3.now.sh/onboarding/get-started');
         settings()->set('withdrawal_charge', 10000); // 100 Naira
         settings()->set('withdrawal_charge_for_agent', 5000); // 50%
+        settings()->set('transaction_auth', 'pin'); // pin or otp
+        settings()->set('transfer_charge_10k_below', 100 * 100);
+        settings()->set('transfer_charge_above_10k', 200 * 100);
 
 
 

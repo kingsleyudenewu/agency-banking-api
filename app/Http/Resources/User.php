@@ -22,7 +22,8 @@ class User extends JsonResource
             'providus_account_number' => $this->providus_account_number,
             'roles' => $this->getRoles(),
             'country' => $this->country,
-            'wallets' => $this->wallets
+            'wallets' => $this->wallets,
+            'has_transaction_pin' => $this->transaction_pin ? true : false,
         ];
     }
 }

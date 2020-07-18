@@ -85,6 +85,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
             Route::post('/payouts', 'CommissionPayoutRequest@store')->middleware('otp-required-for-auth-user');
         });
 
+
+        Route::post('/transaction/pin', 'TransactionPinController@store');
     });
 
 
