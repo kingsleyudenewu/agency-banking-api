@@ -55,8 +55,14 @@ class MonnifyController extends APIBaseController
                 return $this->errorResponse('User not found.', null, 400);
             }
 
-
-            $amountToCredit = $this->applyCharges($payment->payableAmount);
+            if($user->isCustomer())
+            {
+                $amountToCredit = $this->applyCharges($payment->payableAmount);
+            }
+            else
+            {
+                $amountToCredit = $payment->payableAmount;
+            }
 
 
             $user->mainWallet()->credit($amountToCredit);
