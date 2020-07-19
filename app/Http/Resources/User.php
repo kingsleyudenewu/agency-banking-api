@@ -24,6 +24,7 @@ class User extends JsonResource
             'country' => $this->country,
             'wallets' => $this->wallets,
             'has_transaction_pin' => $this->transaction_pin ? true : false,
+            'transaction_auth_mode' => settings('transaction_auth') === 'pin' ? 'PIN' : 'SMS/Email OTP',
         ];
     }
 }
