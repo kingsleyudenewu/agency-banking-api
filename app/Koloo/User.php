@@ -918,12 +918,12 @@ class User
         if(!$code || !$request->has('otp'))
         {
             $otp->send();
-            throw new OTPRequiredException('Enter transaction code to continue.');
+            throw new OTPRequiredException('Enter OTP to continue.');
         }
 
         if($request->has('otp') && !$otp->isValid($code))
         {
-            throw new OTPRequiredException('Invalid transaction code entered.');
+            throw new OTPRequiredException('Invalid OTP code entered.');
         }
 
         $otp->invalidateActiveOtp();
@@ -936,12 +936,12 @@ class User
 
         if(!$code || !$request->has('otp'))
         {
-            throw new OTPRequiredException('Enter transaction code to continue.');
+            throw new OTPRequiredException('Enter transaction pin to continue.');
         }
 
         if($request->has('otp') && !$user->isValidTransactionPin($code))
         {
-            throw new OTPRequiredException('Invalid transaction code entered.');
+            throw new OTPRequiredException('Invalid transaction pin entered.');
         }
 
     }
