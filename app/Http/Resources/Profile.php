@@ -42,6 +42,7 @@ class Profile extends JsonResource
             'state' => $this->profile->state,
             'is_suspended' => $this->is_suspended,
             'parent' => $this->parent_id ? new SimpleUser($this->parent) : null,
+            'has_bank_account' => $this->profile->has_bank_account ? 'Yes' : 'No'
         ];
     }
 
