@@ -68,7 +68,7 @@ class CommissionTest extends TestCase
 
 
     /** @test */
-    public function super_agent_should_earn_regular_agent_commission_if_transaction_was_done_by_them_and_the_rest_goes_to_the_root_user()
+    public function super_agent_should_earn_regular_agent_commission__plus_his_own_commission_if_transaction_was_done_by_them_and_the_rest_goes_to_the_root_user()
     {
 
         $customerProfile = factory('App\Profile')->create([
@@ -100,8 +100,8 @@ class CommissionTest extends TestCase
 
 
         $this->assertEquals(99, $savingCommission->getSystemDeductions());
-        $this->assertEquals(59.40, $this->superAgentUser->purse()->getAmount()); // 60% profit
-        $this->assertEquals(39.6, $this->adminUser->purse()->getAmount()); // 40% profit
+        $this->assertEquals(79.2, $this->superAgentUser->purse()->getAmount()); // 60% profit
+        $this->assertEquals(19.8, $this->adminUser->purse()->getAmount()); // 40% profit
         $this->assertEquals(99, $this->superAgentUser->purse()->getAmount() + $this->adminUser->purse()->getAmount());
 
     }
