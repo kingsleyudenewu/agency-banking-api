@@ -61,7 +61,7 @@ class SavingCommission
         if($this->contribution->commissionComputed())
         {
             $this->logInfo('Attempted to re-compute commission: ID: '. $this->contribution->id);
-            return;
+            throw new \Exception('Attempted to re-compute commission');
         }
 
 
@@ -84,7 +84,7 @@ class SavingCommission
 
         $this->logInfo('Total amount to charge is: ' . $totalDeduction );
 
-        $creatorCommissionPercent = $creator->isSuperAgent() ? $creator->getCommissionForAgent() : $creator->getCommission();
+        $creatorCommissionPercent = $creator->isSuperAgent() ? $creator->getCommissionForAgent() +  $creator->getCommission(): $creator->getCommission();
 
         $creatorCommission = doubleval(number_format($creatorCommissionPercent/100, 2));
 
