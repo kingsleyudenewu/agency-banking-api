@@ -85,7 +85,7 @@ class WithdrawalController extends APIBaseController
             if($withdrawalCharge > 0 )
             {
                 $rootUser = User::rootUser();
-                $rootUser->creditWalletSource($systemEarning, $rootUser->purse(), 'Withdrawal commission for ' . $customer->getName(), Transaction::LABEL_WITHDRAWAL);
+                $rootUser->creditWalletSource($systemEarning, $rootUser->mainWallet(), 'Withdrawal commission for ' . $customer->getName(), Transaction::LABEL_WITHDRAWAL);
             }
 
             DB::commit();
