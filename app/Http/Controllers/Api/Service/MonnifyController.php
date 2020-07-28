@@ -121,7 +121,7 @@ class MonnifyController extends APIBaseController
         {
             // Some charges has been applied
             $rootUser = User::rootUser();
-            $rootUser->creditWalletSource($amountCharged, $rootUser->purse(), 'Monnify charge', Transaction::LABEL_MONNIFY);
+            $rootUser->creditWalletSource($amountCharged, $rootUser->mainWallet(), 'Monnify charge', Transaction::LABEL_MONNIFY);
         }
 
         return $newValue;
