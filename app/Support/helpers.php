@@ -768,6 +768,5 @@ function error_response($message, $errors=null, $code=400)
 
 function percentOf($amount, $p)
 {
-    $amount =  ($amount / 100) * $p;
-    return doubleval(number_format($amount,2));
+    return doubleval( ($amount / 100) * $p);
 }
