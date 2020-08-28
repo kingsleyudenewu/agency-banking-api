@@ -661,27 +661,33 @@ class User
         return $this->model->transactions;
     }
 
-    public function writeTransaction($amount, $type, $remark = '', $label='')
+    public function writeTransaction($amount, $type, $remark = '', $label='', $wallet=null)
     {
+        $data = [
+            'type' => $type,
+            'amount' => $amount,
+            'trans_ref' => $this->makeTransactionRef(),
+            'remark' => $remark,
+            'label' => $label
+        ];
+
+        if($wallet)
+        {
+            $data['wallet_id'] = $wallet->getId();
+        }
         return $this->model->transactions()
-                ->create([
-                    'type' => $type,
-                    'amount' => $amount,
-                    'trans_ref' => $this->makeTransactionRef(),
-                    'remark' => $remark,
-                    'label' => $label
-                ]);
+                ->create();
 
     }
 
-    public function writeCreditTransaction($amount, $remark = '', $label='')
+    public function writeCreditTransaction($amount, $remark = '', $label='', $wallet=null)
     {
-        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_CREDIT, $remark, $label);
+        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_CREDIT, $remark, $label, $wallet);
     }
 
-    public function writeDebitTransaction($amount, $remark = '', $label='')
+    public function writeDebitTransaction($amount, $remark = '', $label='', $wallet=null)
     {
-        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_DEBIT, $remark, $label);
+        return $this->writeTransaction($amount, Transaction::TRANSACTION_TYPE_DEBIT, $remark, $label, $wallet);
     }
 
     private function makeTransactionRef()
@@ -960,7 +966,8 @@ class User
                 'amount' => $amount,
                 'label' => Transaction::LABEL_COMMISSION,
                 'trans_ref' => $this->makeTransactionRef(),
-                'remark' => 'Commission earned from savings. NGN' . $amount
+                'remark' => 'Commission earned from savings. NGN' . $amount,
+                'wallet_id' => $wallet->getId(),
             ]);
 
         event(new CommissionEarned($amount, $contribution));

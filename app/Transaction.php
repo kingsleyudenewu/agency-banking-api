@@ -30,6 +30,7 @@ class Transaction extends Model
         'transactionable_type',
         'remark',
         'label',
+        'wallet_id'
     ];
 
     public function owner()
