@@ -203,6 +203,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         Route::post('/', 'BanksController@store')
             ->middleware(['auth:api', 'admin-check'])
             ->name('store');
+        Route::post('/set-status', 'BanksController@enableOrDisable')
+            ->middleware(['auth:api', 'admin-check']);
         Route::put('/{id}', 'BanksController@update')
             ->middleware(['auth:api', 'admin-check']);
     });

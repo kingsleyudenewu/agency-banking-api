@@ -18,7 +18,8 @@ class BanksController extends APIBaseController
 
     public function index()
     {
-        return $this->successResponse('banks', Bank::orderByName()->get());
+        $banks = \request('enabled') ?  Bank::enabled()->orderByName()->get() :  Bank::orderByName()->get();
+        return $this->successResponse('banks', $banks);
     }
 
     public function store(CreateBankRequest $request)
@@ -37,6 +38,25 @@ class BanksController extends APIBaseController
 
         $bank->name = $request->input('name');
         $bank->code = $request->input('code');
+        $bank->save();
+
+        return $this->successResponse('bank', $bank);
+    }
+
+
+    public function enableOrDisable(Request $request)
+    {
+
+        $request->validate([
+            'id' => 'required|uuid|exists:banks,id',
+            'action' => 'required:in:enable,disable'
+        ]);
+
+
+        $bank = Bank::find($request->input('id'));
+
+        $bank->enabled = $request->input('action') === 'enable' ? true :  null;
+
         $bank->save();
 
         return $this->successResponse('bank', $bank);
