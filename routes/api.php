@@ -129,6 +129,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         Route::put('/account/{id}/{action}', 'AccountSuspensionController@update');
         Route::get('/savings', 'AdminViewSavingsController@index');
 
+        Route::post('/fund', 'CreditAndDebitController@store')->middleware('otp-required-for-auth-user');
+
 
          Route::get('/settings', 'SettingsController@index')->name('settings');
          Route::post('/settings', 'SettingsController@store')

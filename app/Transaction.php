@@ -19,6 +19,7 @@ class Transaction extends Model
     const LABEL_WITHDRAWAL =  'withdrawal';
     const LABEL_MONNIFY =  'Monnify';
     const LABEL_SWEEP = 'sweep';
+    const LABEL_MANUAL = 'manual';
 
     protected $appends = ['amount_formatted'];
 

@@ -27,6 +27,7 @@ class BalanceCreditAndDebitRequest extends FormRequest
         return [
             'amount' => 'required|numeric',
             'action' => 'required|in:credit,debit',
+            'source' => 'required|in:wallet,purse',
             'user_id' => 'required|uuid|exists:users,id',
             'remark' => 'required|max:233'
         ];
