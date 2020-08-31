@@ -44,6 +44,7 @@ class CustomerController extends APIBaseController
 
         }
 
+
         $user =  User::createWithProfile($data, $request->user());
 
         if(!$user)

@@ -327,6 +327,11 @@ class User
            $wallet = \App\Wallet::start($user);
            if(!$wallet) throw new \Exception('Unable to start wallet');
 
+           if(!isset($data['state_id']) && $parent && $parent->getModel()->profile->state_id)
+           {
+               $data['state_id'] = $parent->getModel()->profile->state_id;
+           }
+
            $user->profile()->create($data);
 
            DB::commit();
@@ -738,7 +743,7 @@ class User
     {
         $savings = $this->getModel()->savings();
 
-        return $savings ? $savings->with('cycle:id,title,description')->get() : [];
+        return $savings ? $savings->with('cycle:id,title,description')->latest()->orderBy('maturity', 'desc')->get() : [];
     }
 
     public function contributeToSaving(Saving $saving, $amount)
