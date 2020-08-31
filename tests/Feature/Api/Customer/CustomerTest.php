@@ -47,6 +47,7 @@ class CustomerTest extends TestCase
 
         $file = UploadedFile::fake()->create('means_of_identification.png', $maxSize, 'image/png');
         $payload['means_of_identification'] = $file;
+        $payload['occupation'] = 'Test';
 
 
         $res = $this->postJson(route('api.customers.new'), $payload)

@@ -27,8 +27,6 @@ class CustomerController extends APIBaseController
     public function store(CreateAgentRequest $request)
     {
 
-        $this->logInfo('Creating customer account ..');
-
         $path = settings('document_storage_path');
         $disk = settings('document_storage_driver');
 
@@ -60,8 +58,6 @@ class CustomerController extends APIBaseController
         $user->approve($request->user()->id, 'Auto approved');
 
         event(new AgentAccountCreated($user));
-
-        $this->logInfo('Done customer creating account ..');
 
         return $this->successResponse('OK', new UserTransformer($user->getModel()));
     }

@@ -56,7 +56,7 @@ class CreateAgentRequest extends BaseRequest
             'gender' => [
                 'required',
                 Rule::in(['female', 'male'])
-            ]
+            ],
 
         ];
 
@@ -69,6 +69,7 @@ class CreateAgentRequest extends BaseRequest
             $validationRules['next_of_kin_name'] = 'required|max:255';
             $validationRules['passport_photo'] = 'nullable|image|max:10240'; // 10mb largest
             $validationRules['has_bank_account'] = 'boolean';
+            $validationRules['occupation'] = 'required';
 
         }  elseif ($this->canChangeCommission())
         {
