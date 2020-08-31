@@ -52,13 +52,15 @@ class Contribution extends BaseModel
     public function sendContributionMessageToUser(KolooUser $user)
     {
 
-        $amount = 'NGN' . number_format($this->amount,2);
+        $amount = 'N' . number_format($this->amount,2);
         $saving = $this->savingPlan;
         $channel = 'sms';
-        $amountSaved = 'NGN' . number_format($saving->amount_saved,2);
+        $amountSaved = 'N' . number_format($saving->amount_saved,2);
+        $walletBalance = 'N' . number_format($user->mainWallet()->getAmount(),2);
 
 
-        $message = sprintf(config('koloo.contribution_message_to_customer'), $amount, $saving->cycle->title, $amountSaved);
+        //%s credited to your Koloó safe. Safe balance is now %s. You also have %s in you wallet.
+        $message = sprintf(config('koloo.contribution_message_to_customer'), $amount, $amountSaved, $walletBalance);
 
         $message = Message::create([
             'message' => $message,
