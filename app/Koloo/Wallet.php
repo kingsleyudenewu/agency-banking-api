@@ -26,7 +26,7 @@ class Wallet
     public function __construct(Model $model)
     {
         $this->model = $model;
-        $this->logChannel = 'KOLOO_WALLET';
+        $this->logChannel = 'koloo';
     }
 
     public function getModel(): Model
@@ -119,7 +119,6 @@ class Wallet
         {
             return true;
         }
-
         return Hash::check($this->getAmountHashPlain(), $this->model->hash);
 
     }
