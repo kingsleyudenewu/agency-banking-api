@@ -36,7 +36,8 @@ class AccountCollection extends JsonResource
                 'means_of_identification_url' => $this->profile->means_of_identification_url,
                 'application_form_url' => $this->profile->application_form_url,
                 'wallets' => $this->wallets,
-                'state' => $this->profile->state
+                'state' => $this->profile->state,
+                'occupation' => $this->profile->occupation,
             ];
 
 
