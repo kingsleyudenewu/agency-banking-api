@@ -63,13 +63,20 @@ class CommissionPayoutRequest extends APIBaseController
     public function store(Request $request)
     {
 
-
-        $request->validate([
+        $rules = [
             'amount' => 'required',
-            'bank_id' => 'required|uuid|exists:banks,id',
-            'bank_account_number' => 'required',
-            'bank_account_name' => 'required'
-            ]);
+        ];
+
+
+        $creditWallet =  (bool)strtolower($request->input('source') === static::SOURCE_TO_CREDIT);
+
+        if(!$creditWallet) {
+            $rules['bank_id'] = 'required|uuid|exists:banks,id';
+            $rules['bank_account_number'] = 'required';
+            $rules['bank_account_name'] = 'required';
+        }
+
+        $request->validate($rules);
 
 
         try {
@@ -79,7 +86,6 @@ class CommissionPayoutRequest extends APIBaseController
             $customer = User::findByInstance($request->user());
             User::checkExistence($customer);
 
-            $creditWallet =  (bool)strtolower($request->input('source') === static::SOURCE_TO_CREDIT);
 
             $amount = doubleval(str_replace(',', '', trim($request->input('amount'))));
 
