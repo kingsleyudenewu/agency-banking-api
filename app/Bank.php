@@ -18,4 +18,9 @@ class Bank extends BaseModel
     {
         return $query->whereNotNull('enabled');
     }
+
+    public function getEnabledAttribute($value)
+    {
+        return boolval($value);
+    }
 }
