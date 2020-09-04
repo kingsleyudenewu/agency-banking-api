@@ -41,6 +41,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
     Route::group(['prefix' => 'customers', 'middleware' => ['auth:api'], 'namespace' => 'Api\Customer', 'as' => 'customers.'], function () {
 
         Route::post('/', 'CustomerController@store')->name('new');
+        Route::post('/update', 'CustomerController@update')
+            ->middleware('admin-check')
+            ->name('update');
 
     });
 

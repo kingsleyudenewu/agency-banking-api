@@ -1145,4 +1145,14 @@ class User
     {
         return $this->getHashedTransactionPin() ? true : false;
     }
+
+    public function update(array $data)
+    {
+        $this->getModel()->update([
+            'phone' => $data['phone'],
+            'name' => $data['name']
+        ]);
+        unset($data['name'], $data['phone']);
+        return $this->getProfile()->update($data);
+    }
 }
