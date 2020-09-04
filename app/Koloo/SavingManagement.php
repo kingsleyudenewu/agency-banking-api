@@ -38,7 +38,7 @@ class SavingManagement
         $customer = new User($saving->owner);
 
         if($percentToCharge === doubleval(0) &&
-            ($saving->amount_saved < $saving->target || $savingFrequency < $cycle->min_saving_frequent) ) {
+            ( $savingFrequency < $cycle->min_saving_frequent ) ) {
             $percentToCharge = settings('percent_to_charge') / 100;
             self::processCharge($saving, $percentToCharge, $customer);
            return ;//
