@@ -50,12 +50,12 @@ class Transaction extends Model
 
     public function getAmountFormattedAttribute($value)
     {
-        return number_format($this->amount,2);
+        return round($value, 2);
     }
 
 
     public function setAmountAttribute($value)
     {
-        $this->attributes['amount'] = $value * 100;
+        $this->attributes['amount'] = round($value,2) * 100;
     }
 }
