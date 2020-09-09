@@ -83,7 +83,7 @@ class CreateAgentRequest extends BaseRequest
                     'numeric',
                     function ($attribute, $value, $fail) use ($maxCommission) {
                         if ($value < 0) {
-                            $fail('The commission must be a negative value');
+                            $fail('The commission must not be a negative value');
                         } else if ($value > $maxCommission) {
                             $fail('You can not set commission greater than ' . $maxCommission / 100 . '%');
                         }
