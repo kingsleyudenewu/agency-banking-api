@@ -1,6 +1,4 @@
-
 <?php
-
 namespace App\Koloo;
 
 use App\Contribution;
