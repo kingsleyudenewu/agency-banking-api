@@ -31,7 +31,7 @@ class WalletBilled
      * @param string            $reason
      * @param string            $label
      */
-    public function __construct(Wallet $wallet, int $amount, string $reason, string $label='')
+    public function __construct(Wallet $wallet, $amount, string $reason, string $label='')
     {
         $this->wallet = $wallet;
         $this->reason = $reason;

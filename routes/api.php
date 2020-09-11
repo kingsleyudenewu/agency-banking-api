@@ -41,6 +41,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
     Route::group(['prefix' => 'customers', 'middleware' => ['auth:api'], 'namespace' => 'Api\Customer', 'as' => 'customers.'], function () {
 
         Route::post('/', 'CustomerController@store')->name('new');
+        Route::post('/update', 'CustomerController@update')
+            ->middleware('admin-check')
+            ->name('update');
 
     });
 
@@ -129,6 +132,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         Route::put('/account/{id}/{action}', 'AccountSuspensionController@update');
         Route::get('/savings', 'AdminViewSavingsController@index');
 
+        Route::post('/fund', 'CreditAndDebitController@store')->middleware('otp-required-for-auth-user');
+
 
          Route::get('/settings', 'SettingsController@index')->name('settings');
          Route::post('/settings', 'SettingsController@store')
@@ -201,6 +206,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         Route::post('/', 'BanksController@store')
             ->middleware(['auth:api', 'admin-check'])
             ->name('store');
+        Route::post('/set-status', 'BanksController@enableOrDisable')
+            ->middleware(['auth:api', 'admin-check']);
         Route::put('/{id}', 'BanksController@update')
             ->middleware(['auth:api', 'admin-check']);
     });

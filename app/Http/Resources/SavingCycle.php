@@ -24,7 +24,8 @@ class SavingCycle extends JsonResource
             'updated_at' => $this->updated_at,
             'charge_type' => $this->charge_type,
             'min_saving_amount' => $this->min_saving_amount,
-            'percentage_to_charge' => $this->percentage_to_charge
+            'percentage_to_charge' => $this->percentage_to_charge,
+            'min_saving_frequent' => $this->min_saving_frequent,
         ];
     }
 }

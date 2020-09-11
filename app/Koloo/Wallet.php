@@ -26,7 +26,7 @@ class Wallet
     public function __construct(Model $model)
     {
         $this->model = $model;
-        $this->logChannel = 'KOLOO_WALLET';
+        $this->logChannel = 'koloo';
     }
 
     public function getModel(): Model
@@ -58,6 +58,7 @@ class Wallet
      */
     public function credit($amount)
     {
+        $amount  = round($amount, 2);
 
         $this->logInfo('Crediting wallet with ' .  $amount);
 
@@ -91,6 +92,7 @@ class Wallet
      */
     public function debit($amount)
     {
+        $amount = round($amount, 2);
 
         $this->logInfo('debiting wallet with ' .  $amount);
 

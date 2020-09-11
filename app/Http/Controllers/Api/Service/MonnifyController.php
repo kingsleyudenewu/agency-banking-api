@@ -23,10 +23,10 @@ class MonnifyController extends APIBaseController
 
     public function check(Request $request, Api $monnifyApi)
     {
-        $logger = Log::channel('monnify-account-topup');
+        $logger = Log::channel('koloo');
 
 
-        $logger->info('Monnify webhook. Verifying a hash.', $request->all());
+        $logger->info('Monnify webhook. Verifying a hash.');
 
         $check = ProvidusTransaction::where('ref', $request->get('transactionReference'))->first();
         if($check && $check->isCompleted())
@@ -40,7 +40,7 @@ class MonnifyController extends APIBaseController
             $monnifyApi->verifyWebhook($request->all());
         }
         catch(\Exception $exception) {
-            $logger->error('PAYMENT VERIFICATION FAILED.' . $exception->getMessage(), $request->all());
+            $logger->error('PAYMENT VERIFICATION FAILED.' . $exception->getMessage());
             return $this->errorResponse($exception->getMessage());
         }
 
@@ -51,7 +51,7 @@ class MonnifyController extends APIBaseController
             $payment = $monnifyApi->getSuccessfulTransaction($request->get('transactionReference'));
 
             if (! $user = User::findByProvidusReference($request->get('product')['reference'])) {
-                $logger->error('Monnify webhook. User account reference is not found. ', $request->all());
+                $logger->error('Monnify webhook. User account reference is not found. ');
                 return $this->errorResponse('User not found.', null, 400);
             }
 

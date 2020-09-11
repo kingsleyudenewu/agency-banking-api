@@ -9,6 +9,7 @@ use App\Http\Requests\CreateSavingsRequest;
 use App\Http\Resources\Saving;
 use App\Koloo\User;
 use App\Http\Resources\User as UserTransformer;
+use App\SavingCycle;
 use App\Transaction;
 use Illuminate\Support\Facades\Log;
 
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Log;
 class SavingsController extends APIBaseController
 {
 
+
     public function store(CreateSavingsRequest $request)
     {
         $data = $request->validated();
@@ -28,6 +30,8 @@ class SavingsController extends APIBaseController
         event(new PreSavingCreated($data, request()->user()));
 
         try {
+
+            $this->checkSavingCycleRequirement($data['amount'], $data['saving_cycle_id']);
 
             $customer = User::find($data['owner_id']);
             User::checkExistence($customer);
@@ -78,6 +82,8 @@ class SavingsController extends APIBaseController
             $saving = \App\Saving::find($id);
 
             if(!$saving) throw new \Exception('Saving not found');
+
+            $this->checkSavingCycleRequirement(request('amount'), $saving->saving_cycle_id);
 
             if(!$saving->maturity || $saving->maturity->isPast())
             {
@@ -132,5 +138,20 @@ class SavingsController extends APIBaseController
             Log::error('FAILED_REQUEST: '  .  $e->getMessage() . ' File:  ' . $e->getFile()  . ' on line ' . $e->getLine());
             return $this->errorResponse($e->getMessage());
         }
+    }
+
+    /**
+     * @param $amount
+     * @param $id SavingCycle id
+     *
+     * @throws \Exception
+     */
+    private function checkSavingCycleRequirement($amount, $id)
+    {
+        $savingCycle = SavingCycle::find($id);
+        if(!$savingCycle) throw new \Exception('Saving cycle not valid');
+
+        if($amount < $savingCycle->min_saving_amount)
+            throw new \Exception('The minimum amount you can save is N' . number_format($savingCycle->min_saving_amount));
     }
 }

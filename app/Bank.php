@@ -13,4 +13,14 @@ class Bank extends BaseModel
     {
         return $query->orderBy('name');
     }
+
+    public function scopeEnabled($query)
+    {
+        return $query->whereNotNull('enabled');
+    }
+
+    public function getEnabledAttribute($value)
+    {
+        return boolval($value);
+    }
 }

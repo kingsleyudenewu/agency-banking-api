@@ -10,6 +10,7 @@ use App\Events\CommissionPayoutStatusChanged;
 use App\Events\CustomerFundWithdrawal;
 use App\Events\FundTransfer;
 use App\Events\NewPasswordRequested;
+use App\Events\SavingSwept;
 use App\Events\SendMessage;
 use App\Events\SendNewOTP;
 use App\Events\SweepSaving;
@@ -27,6 +28,7 @@ use App\Listeners\NotifySuperAgentOnAccountDisapproval;
 use App\Listeners\OnSendMessage;
 use App\Listeners\SendFundWithdrawalNotification;
 use App\Listeners\SendPasswordResetNotification;
+use App\Listeners\SendSavingSweptNotification;
 use App\Listeners\WriteUpdateUpdatedTransaction;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -95,7 +97,11 @@ class EventServiceProvider extends ServiceProvider
 
         SweepSaving::class => [
             HandleSweepSaving::class
-        ]
+        ],
+
+        SavingSwept::class => [
+          SendSavingSweptNotification::class
+        ],
 
     ];
 

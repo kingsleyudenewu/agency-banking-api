@@ -28,6 +28,8 @@ class CommissionPayoutRequest extends APIBaseController
     const SEARCH_STATUS_AWAITING_PAYMENT = 'awaiting';
     const SEARCH_STATUS_PAID = 'paid';
 
+    const SOURCE_TO_CREDIT = 'wallet';
+
 
     public function index(Request $request)
     {
@@ -61,13 +63,20 @@ class CommissionPayoutRequest extends APIBaseController
     public function store(Request $request)
     {
 
-
-        $request->validate([
+        $rules = [
             'amount' => 'required',
-            'bank_id' => 'required|uuid|exists:banks,id',
-            'bank_account_number' => 'required',
-            'bank_account_name' => 'required'
-            ]);
+        ];
+
+
+        $creditWallet =  (bool)strtolower($request->input('source') === static::SOURCE_TO_CREDIT);
+
+        if(!$creditWallet) {
+            $rules['bank_id'] = 'required|uuid|exists:banks,id';
+            $rules['bank_account_number'] = 'required';
+            $rules['bank_account_name'] = 'required';
+        }
+
+        $request->validate($rules);
 
 
         try {
@@ -76,6 +85,7 @@ class CommissionPayoutRequest extends APIBaseController
 
             $customer = User::findByInstance($request->user());
             User::checkExistence($customer);
+
 
             $amount = doubleval(str_replace(',', '', trim($request->input('amount'))));
 
@@ -86,26 +96,34 @@ class CommissionPayoutRequest extends APIBaseController
 
             $source = $customer->purse();
 
-            $this->logInfo('Charging the user ' . $customer->getId() . ' the amount: ' . $amount);
+            $this->logInfo('Commission Payout Request:  Charging the user ' . $customer->getId() . ' the amount: ' . $amount);
+            $labelInfo = 'Commission payout';
 
-            $customer->chargeWalletSource($amount, $source, 'Commission payout', Transaction::LABEL_PAYOUT);
+            $customer->chargeWalletSource($amount, $source, $labelInfo, Transaction::LABEL_PAYOUT);
 
-            $payout = CommissionPayout::create([
-                'user_id' => $customer->getId(),
-                'wallet_id' => $source->getId(),
-                'amount' => $amount,
-                'bank_id' => $request->input('bank_id'),
-                'bank_account_number' => $request->input('bank_account_number'),
-                'bank_account_name' => $request->input('bank_account_name')
-            ]);
 
-            $this->logInfo($payout);
+            if($creditWallet) {
+                $customer->creditWalletSource($amount, $customer->mainWallet(), $labelInfo, Transaction::LABEL_PAYOUT);
+                $this->logInfo("Commission Payout Request: PAYOUT TO WALLET. AMOUNT: " .  $amount . " USER: " . $customer->getName() . " USER ID: " . $customer->getId() );
 
-            event(new PayoutRequested($payout));
+            } else {
+                $payout = CommissionPayout::create([
+                    'user_id' => $customer->getId(),
+                    'wallet_id' => $source->getId(),
+                    'amount' => $amount,
+                    'bank_id' => $request->input('bank_id'),
+                    'bank_account_number' => $request->input('bank_account_number'),
+                    'bank_account_name' => $request->input('bank_account_name')
+                ]);
+
+                $this->logInfo("Commission Payout Request: PAYOUT VIA BANK. AMOUNT: " .  $amount . " USER: " . $customer->getName() . " USER ID: " . $customer->getId() );
+
+                event(new PayoutRequested($payout));
+            }
 
             DB::commit();
 
-            return $this->successResponse('Payout created', $payout);
+            return $this->successResponse('Payout created', ['status' => 'ok']);
 
         } catch (\Exception $e)
         {

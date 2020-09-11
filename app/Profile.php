@@ -34,7 +34,8 @@ class Profile extends BaseModel
         'means_of_identification',
         'has_bank_account',
         'commission',
-        'commission_for_agent'
+        'commission_for_agent',
+        'occupation',
     ];
 
     protected $casts = [

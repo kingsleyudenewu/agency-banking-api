@@ -3,6 +3,7 @@
 namespace App\Http;
 
 
+use App\Http\Middleware\AmountInputNormalization;
 use App\Http\Middleware\OTPRequired;
 use App\Http\Middleware\OTPRequiredForAuthUser;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -23,6 +24,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        AmountInputNormalization::class,
     ];
 
     /**

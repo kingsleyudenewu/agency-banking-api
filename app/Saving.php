@@ -3,6 +3,7 @@
 namespace App;
 
 
+use App\Events\SavingSwept;
 use Carbon\Carbon;
 
 class Saving extends BaseModel
@@ -138,6 +139,8 @@ class Saving extends BaseModel
         $this->sweep_comment = $comment;
         $this->completed = now();
         $this->save();
+        event(new SavingSwept($this));
+
 
     }
 
