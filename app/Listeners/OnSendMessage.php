@@ -15,8 +15,6 @@ class OnSendMessage implements ShouldQueue
     use LogTrait;
 
 
-
-
     /**
      * Create the event listener.
      *
@@ -99,7 +97,7 @@ class OnSendMessage implements ShouldQueue
         try {
             Sms::to($to)
                 ->content($text)
-                ->send();
+                ->send($message->id);
         }
         catch (\Exception $exception) {
             $this->logError("[{$message->id}] SEND SMS ERROR: {$exception->getMessage()}");
