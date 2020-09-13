@@ -61,9 +61,9 @@ class SMSReportController extends APIBaseController
 
     private function log(string $type, string $message, array $context = []): self
     {
-        $message = $this->debug ? "[DEBUG MODE] " . $message : $message;
+        $message = "[DEBUG MODE] " . $message;
 
-        Log::channel($this->logChannel)->{$type}($message, $context);
+        Log::channel('koloo')->{$type}($message, $context);
 
         return $this;
     }
