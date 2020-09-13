@@ -6,11 +6,11 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Class InfobipSMSApi
+ * Class InfobipIntlSMSApi
  *
  * @package \App\Services\Infobip
  */
-class InfobipSMSApi
+class InfobipIntlSMSApi
 {
     const SEND_SMS_ENDPOINT = 'https://6jj6wr.api.infobip.com/sms/2/text/advanced';
 
@@ -60,9 +60,6 @@ class InfobipSMSApi
                     ],
                     'text' => $message,
                     'flash' => $flash,
-                    'notifyUrl' => route('infobip.webhook'),
-                    'callbackData' => hash('sha512', $this->to . $messageId . env('INFOBIP_INTL_API_KEY')),
-                    "notifyContentType" => "application/json",
                     'validityPeriod' => 720
                 ]
             ]

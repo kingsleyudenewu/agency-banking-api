@@ -3,9 +3,11 @@
 namespace App\Components\Sms;
 
 use App\Components\Sms\Drivers\InfobipDriver;
+use App\Components\Sms\Drivers\InfobipIntlDriver;
 use App\Components\Sms\Drivers\MultitexterDriver;
 use App\Components\Sms\Drivers\TextNgDriver;
 use App\Services\Infobip\InfobipSMSApi;
+use App\Services\Infobip\InfobipIntlSMSApi;
 use App\Services\Multitexter\MultitexterApi;
 use App\Components\Sms\Drivers\NullDriver;
 
@@ -47,8 +49,7 @@ class SmsManager extends Manager
         );
     }
 
-
-
+    
     /**
      * Create the Multitexter client.
      *
@@ -70,6 +71,15 @@ class SmsManager extends Manager
             $this->createInfobipClient()
         );
     }
+    
+    /**
+     * Return infobip international route driver
+     * @return \App\Components\Sms\Drivers\InfobipIntlDriver
+     */
+    public function createInfobipIntlDriver()
+    {
+        return new InfobipIntlDriver(new InfobipIntlSMSApi(config('sms.infobip_intl')));
+    }
 
     public function createTextngDriver()
     {
@@ -86,6 +96,7 @@ class SmsManager extends Manager
     {
         return new InfobipSMSApi(config('sms.infobip'));
     }
+
 
     /**
      * Create a Null SMS driver instance.

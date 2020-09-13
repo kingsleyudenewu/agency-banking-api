@@ -13,7 +13,7 @@ class NullDriver extends Driver
     /**
      * {@inheritdoc}
      */
-    public function send()
+    public function send($messageId)
     {
         return [];
     }

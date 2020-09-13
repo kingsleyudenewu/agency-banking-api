@@ -16,6 +16,7 @@ use App\Events\SendNewOTP;
 use App\Events\SweepSaving;
 use App\Events\WalletBilled;
 use App\Events\WalletCredited;
+use App\Events\FoundDndSubscriberMessage;
 use App\Listeners\HandleAgentAccountCreation;
 use App\Listeners\HandleCommissionPayoutStatusChanged;
 use App\Listeners\HandleFundTransfer;
@@ -30,6 +31,7 @@ use App\Listeners\SendFundWithdrawalNotification;
 use App\Listeners\SendPasswordResetNotification;
 use App\Listeners\SendSavingSweptNotification;
 use App\Listeners\WriteUpdateUpdatedTransaction;
+use App\Listeners\ProcessDndSubscriberMessage;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -101,6 +103,10 @@ class EventServiceProvider extends ServiceProvider
 
         SavingSwept::class => [
           SendSavingSweptNotification::class
+        ],
+
+        FoundDndSubscriberMessage::class => [
+            ProcessDndSubscriberMessage::class
         ],
 
     ];

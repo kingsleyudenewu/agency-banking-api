@@ -2,21 +2,21 @@
 
 namespace App\Components\Sms\Drivers;
 
-use App\Services\Infobip\InfobipSMSApi;
+use App\Services\Infobip\InfobipIntlSMSApi;
 
 /**
  * Class InfobipDriver
  *
  * @package \App\Components\Sms\Drivers
  */
-class InfobipDriver extends Driver
+class InfobipIntlDriver extends Driver
 {
 
-    protected $infobipApi;
+    protected $infobipIntlApi;
 
-    public function __construct(InfobipSMSApi $infobipApi)
+    public function __construct(InfobipIntlSMSApi $infobipIntlApi)
     {
-        $this->infobipApi = $infobipApi;
+        $this->infobipIntlApi = $infobipIntlApi;
     }
 
     /**
@@ -25,7 +25,7 @@ class InfobipDriver extends Driver
     public function send($messageId)
     {
 
-        $this->infobipApi->sendSms(
+        $this->infobipIntlApi->sendSms(
             $this->recipient,
             $this->message,
             $messageId

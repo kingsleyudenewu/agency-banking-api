@@ -17,6 +17,12 @@ return [
 
     ],
 
+    'infobip_intl' => [
+        'api_key' => env('INFOBIP_INTL_API_KEY'),
+        'from' => env('INFOBIP_SMS_FROM', 'Koloo')
+
+    ],
+
     'textng' => [
         'api_key' => env('TEXTNG_API_KEY'),
         'from' => env('TEXTNG_FROM'),

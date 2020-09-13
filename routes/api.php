@@ -193,7 +193,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         'namespace' => 'Api\Service',
         'as' => 'services.',
         'middleware' => []], function () {
+        
         Route::post('/monnify/check', 'MonnifyController@check')->name('monnify.check');
+        Route::post('/infobip/status', 'SMSReportController@processReport')->name('infobip.webhook');
+    
     });
 
 
