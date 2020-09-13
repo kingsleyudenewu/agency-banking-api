@@ -13,27 +13,26 @@ class SMSReportController extends APIBaseController
 
     public function processReport(Request $request) 
     {
-        $result = is_array($request->input('results')) ? $request->input('results')[0] : null;
+        $this->logInfo($request->input('results'));
+        
+        if( ! is_array($request->input('results')) )
+            return;
+
+        $result = $request->input('results')[0];
+        $to = array_get($result, 'to'); 
+        $messageId = array_get($result, 'messageId');
 
         //Verify webhook hash
-        if( !$result || ! $this->verifyHookHash( 
-            array_get($result, 'to'), 
-            array_get($result, 'messageId'), 
-            array_get($result, 'callbackData') )) {
-                
-            return '111';
-        }
+        if(!$result || !$this->verifyHookHash($to, $messageId, array_get($result, 'callbackData')))
+            return;
             
-        //check if status code is DND_RESTRICTION
+        //check if status code is not DND_RESTRICTION
         if( !$result['status'] || 
             $result['status']['groupId'] != static::INFOBIP_DND_ERROR_CODE_GID ||
             $result['status']['id'] != static::INFOBIP_DND_ERROR_CODE_ID ) {
 
-            return '222';
+            return;
         }
-        
-        $to = array_get($result, 'to'); 
-        $messageId = array_get($result, 'messageId');
 
         new event(FoundDndSubscriberMessage($to, $messageId));
 
@@ -45,4 +44,28 @@ class SMSReportController extends APIBaseController
     {
         return $callbackHash == hash('sha512', $to . $messageId . env('INFOBIP_INTL_API_KEY'));
     }
+
+
+
+    private function logInfo($message, array $context = []): self
+    {
+        return $this->log('info', $message, $context);
+    }
+
+    private function logError(string $message = '', array $context = []): self
+    {
+        $message = "Response: {$message}";
+
+        return $this->log('error', $message, $context);
+    }
+
+    private function log(string $type, string $message, array $context = []): self
+    {
+        $message = $this->debug ? "[DEBUG MODE] " . $message : $message;
+
+        Log::channel($this->logChannel)->{$type}($message, $context);
+
+        return $this;
+    }
+
 }
