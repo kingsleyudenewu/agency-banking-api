@@ -13,8 +13,8 @@ class SMSReportController extends APIBaseController
 
     public function processReport(Request $request) 
     {
-        $this->logInfo($request->input('results'));
-        
+        $this->logInfo(json_encode($request->input('results')));
+
         if( ! is_array($request->input('results')) )
             return;
 
