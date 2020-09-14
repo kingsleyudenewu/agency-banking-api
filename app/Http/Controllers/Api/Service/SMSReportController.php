@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Service;
 
 use App\Http\Controllers\APIBaseController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 class SMSReportController extends APIBaseController
