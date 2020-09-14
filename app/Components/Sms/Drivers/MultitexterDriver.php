@@ -40,7 +40,7 @@ class MultitexterDriver extends Driver
     /**
      * {@inheritdoc}
      */
-    public function send()
+    public function send($messageId)
     {
         $this->multitexterApi->sendSms(
             $this->recipient,

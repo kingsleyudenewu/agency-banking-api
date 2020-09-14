@@ -29,7 +29,7 @@ abstract class Driver
     /**
      * {@inheritdoc}
      */
-    abstract public function send();
+    abstract public function send(string $messageId);
 
     /**
      * Set the recipient of the message.

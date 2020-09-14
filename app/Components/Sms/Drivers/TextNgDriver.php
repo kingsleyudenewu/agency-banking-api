@@ -22,7 +22,7 @@ class TextNgDriver extends Driver
     /**
      * {@inheritdoc}
      */
-    public function send()
+    public function send($messageId)
     {
         $this->api->sendSms($this->recipient, $this->message);
     }
