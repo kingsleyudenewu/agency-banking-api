@@ -34,6 +34,7 @@ class ProcessDndSubscriberMessage implements ShouldQueue
      */
     public function handle($event)
     {
+        $this->logInfo('listener now running');
         
         $msg = Message::find($event->messageId);
         

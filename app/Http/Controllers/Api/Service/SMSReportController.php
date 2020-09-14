@@ -14,28 +14,37 @@ class SMSReportController extends APIBaseController
 
     public function processReport(Request $request) 
     {
-        $this->logInfo(json_encode($request->input('results')));
+        // $this->logInfo(json_encode($request->input('results')));
 
-        if( ! is_array($request->input('results')) )
+        if( ! is_array($request->input('results')) ) {
+            $this->logInfo('not an array');
             return;
+        }
 
         $result = $request->input('results')[0];
         $to = array_get($result, 'to'); 
         $messageId = array_get($result, 'messageId');
 
         //Verify webhook hash
-        if(!$result || !$this->verifyHookHash($to, $messageId, array_get($result, 'callbackData')))
+        if(!$result || !$this->verifyHookHash($to, $messageId, array_get($result, 'callbackData'))) {
+
+            $this->logInfo('failed validation');
             return;
+        }
             
         //check if status code is not DND_RESTRICTION
         if( !$result['status'] || 
             $result['status']['groupId'] != static::INFOBIP_DND_ERROR_CODE_GID ||
             $result['status']['id'] != static::INFOBIP_DND_ERROR_CODE_ID ) {
+            
+            $this->logInfo('not DND status');
 
             return;
         }
 
         new event(FoundDndSubscriberMessage($to, $messageId));
+        
+        $this->logInfo('DND event fired');
 
         return 'ok';
     }

@@ -23,7 +23,7 @@ class FoundDndSubscriberMessage
      *
      * @return void
      */
-    public function __construct($to, $messageId)
+    public function __construct(string $to, string $messageId)
     {
         $this->messageId = $messageId;
         $this->to = $to;
