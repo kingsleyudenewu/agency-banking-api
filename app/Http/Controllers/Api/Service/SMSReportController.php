@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Service;
 
 use App\Http\Controllers\APIBaseController;
 use Illuminate\Support\Facades\Log;
+use App\Events\FoundDndSubscriberMessage;
 use Illuminate\Http\Request;
 
 class SMSReportController extends APIBaseController
@@ -42,7 +43,7 @@ class SMSReportController extends APIBaseController
             return;
         }
 
-        new event(FoundDndSubscriberMessage($to, $messageId));
+        event(new FoundDndSubscriberMessage($to, $messageId));
         
         $this->logInfo('DND event fired');
 
