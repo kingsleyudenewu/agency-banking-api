@@ -14,7 +14,6 @@ class ProcessDndSubscriberMessage implements ShouldQueue
     use LogTrait;
 
     const BACKUP_CHANNEL_DRIVER = 'InfobipIntl';
-    private $logChannel = 'infobipintl-requests';
 
     /**
      * Create the event listener.
