@@ -25,12 +25,12 @@ class SMSReportController extends APIBaseController
         $to = array_get($result, 'to'); 
         $messageId = array_get($result, 'messageId');
 
-        //Verify webhook hash
-        if(!$result || !$this->verifyHookHash($to, $messageId, array_get($result, 'callbackData'))) {
+        // //Verify webhook hash
+        // if(!$result || !$this->verifyHookHash($to, $messageId, array_get($result, 'callbackData'))) {
 
-            $this->logInfo('failed validation');
-            return;
-        }
+        //     $this->logInfo('failed validation');
+        //     return;
+        // }
             
         //check if status code is not DND_RESTRICTION
         if( !$result['status'] || 
