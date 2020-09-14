@@ -32,9 +32,7 @@ class ProcessDndSubscriberMessage implements ShouldQueue
      * @return void
      */
     public function handle($event)
-    {
-        $this->logInfo('listener now running');
-        
+    {   
         $msg = Message::find($event->messageId);
         
         if( $msg ) {
@@ -47,7 +45,10 @@ class ProcessDndSubscriberMessage implements ShouldQueue
             }
             catch (\Exception $exception) {
                 $this->logError("[{$msg->id}] SEND SMS ERROR: {$exception->getMessage()}");
+                return false;
             }
         }
+
+        return;
     }
 }
