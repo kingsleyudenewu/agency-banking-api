@@ -61,7 +61,7 @@ class InfobipSMSApi
                     'text' => $message,
                     'flash' => $flash,
                     'notifyUrl' => route('api.services.infobip.webhook'),
-                    'callbackData' => hash('sha512', $this->to . $messageId . env('INFOBIP_INTL_API_KEY')),
+                    'callbackData' => hash('sha512', $this->to . $id . env('INFOBIP_INTL_API_KEY')),
                     "notifyContentType" => "application/json",
                     'validityPeriod' => 720
                 ]
