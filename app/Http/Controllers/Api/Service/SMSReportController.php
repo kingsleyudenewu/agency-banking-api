@@ -15,10 +15,7 @@ class SMSReportController extends APIBaseController
 
     public function processReport(Request $request) 
     {
-        // $this->logInfo(json_encode($request->input('results')));
-
         if( ! is_array($request->input('results')) ) {
-            $this->logInfo('not an array');
             return;
         }
 
@@ -37,15 +34,13 @@ class SMSReportController extends APIBaseController
         if( !$result['status'] || 
             $result['status']['groupId'] != static::INFOBIP_DND_ERROR_CODE_GID ||
             $result['status']['id'] != static::INFOBIP_DND_ERROR_CODE_ID ) {
-            
-            $this->logInfo('not DND status');
 
             return;
         }
 
         event(new FoundDndSubscriberMessage($to, $messageId));
         
-        $this->logInfo('DND event fired');
+        $this->logInfo('DND Subcriber Message Event Fired');
 
         return 'ok';
     }
