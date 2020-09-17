@@ -40,6 +40,7 @@ class SavingCycleManagement extends APIBaseController
     public function update(UpdateSavingCyclerRequest $request)
     {
         $data = $request->validated();
+        $data['charge_type'] = 'percent';
         if(SavingCycle::isFlatCharge($data['charge_type']))
             $data['percentage_to_charge'] = null;
         else
