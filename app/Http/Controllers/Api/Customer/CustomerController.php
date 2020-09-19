@@ -31,6 +31,8 @@ class CustomerController extends APIBaseController
         $path = settings('document_storage_path');
         $disk = settings('document_storage_driver');
 
+        // return $request->all();
+
         $data = $request->validated();
 
         $idKey = 'means_of_identification';

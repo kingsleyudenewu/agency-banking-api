@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 class SMSReportController extends APIBaseController
 {
 
-    const INFOBIP_DND_ERROR_CODE_ID = 10;
-    const INFOBIP_DND_ERROR_CODE_GID = 5;
+    const INFOBIP_DND_ERROR_CODE_ID = 2050;
+    // const INFOBIP_DND_ERROR_CODE_GID = 5;
 
     public function processReport(Request $request) 
     {
@@ -31,9 +31,8 @@ class SMSReportController extends APIBaseController
         // }
             
         //check if status code is not DND_RESTRICTION
-        if( !$result['status'] || 
-            $result['status']['groupId'] != static::INFOBIP_DND_ERROR_CODE_GID ||
-            $result['status']['id'] != static::INFOBIP_DND_ERROR_CODE_ID ) {
+        if( !$result['error'] || 
+            $result['error']['id'] != static::INFOBIP_DND_ERROR_CODE_ID ) {
 
             return;
         }
