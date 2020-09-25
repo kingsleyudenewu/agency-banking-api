@@ -19,7 +19,7 @@ class MultitexterApi
     private $apiKey;
 
     /** @var string */
-    private $logChannel = 'multitexter-requests';
+    private $logChannel = 'koloo';
 
     /**
      * Global to

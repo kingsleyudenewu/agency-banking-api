@@ -18,7 +18,7 @@ class Api
     const ENDPOINT_CHECK_TRANSACTION_STATUS = 'transactions/%s';
 
     /** @var string */
-    private $logChannel = 'monnify-requests';
+    private $logChannel = 'koloo';
 
     /** @var array */
     private $options;

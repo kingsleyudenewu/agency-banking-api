@@ -17,7 +17,7 @@ class TextNGSMSApi
     private $apiKey;
 
     /** @var string */
-    private $logChannel = 'infobip-requests';
+    private $logChannel = 'koloo';
 
 
     /**
