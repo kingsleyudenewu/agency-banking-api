@@ -14,7 +14,7 @@ class APIBaseController extends Controller
      * @param int $code
      * @return \Illuminate\Http\JsonResponse
      */
-    public function successResponse(string $message = 'OK', $data = null, int $code = 200)
+    public function successResponse($message = 'OK', $data = null, $code = 200)
     {
         return response()->json([
             'status' => 'success',
