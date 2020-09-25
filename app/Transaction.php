@@ -58,4 +58,14 @@ class Transaction extends Model
     {
         $this->attributes['amount'] = round($value,2) * 100;
     }
+
+    public function scopeCredit($query)
+    {
+        return $query->where('type', self::TRANSACTION_TYPE_CREDIT);
+    }
+
+    public function scopeDebit($query)
+    {
+        return $query->where('type', self::TRANSACTION_TYPE_DEBIT);
+    }
 }

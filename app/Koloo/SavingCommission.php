@@ -40,7 +40,7 @@ class SavingCommission
             self::$instance = new static();
         }
 
-        self::$instance->logChannel = 'SavingCommission';
+        self::$instance->logChannel = 'koloo';
         self::$instance->setContribution($contribution);
         return self::$instance;
     }

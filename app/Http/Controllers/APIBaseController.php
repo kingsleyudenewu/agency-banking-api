@@ -14,7 +14,7 @@ class APIBaseController extends Controller
      * @param int $code
      * @return \Illuminate\Http\JsonResponse
      */
-    public function successResponse(string $message = 'OK', $data = null, int $code = 200)
+    public function successResponse($message = 'OK', $data = null, $code = 200)
     {
         return response()->json([
             'status' => 'success',
@@ -30,7 +30,7 @@ class APIBaseController extends Controller
      * @param int $code
      * @return \Illuminate\Http\JsonResponse
      */
-    public function errorResponse(string $message = 'Error message', $errors = null, int $code = 400)
+    public function errorResponse($message = 'Error message', $errors = null, $code = 400)
     {
 
         if($errors instanceof MessageBag)
@@ -55,7 +55,7 @@ class APIBaseController extends Controller
      * @param int $code
      * @return \Illuminate\Http\JsonResponse
      */
-    public function successResponseWithUser(string $message = 'OK', $data = null, int $code = 200)
+    public function successResponseWithUser($message = 'OK', $data = null, $code = 200)
     {
         $data['user'] = $this->user()->transform();
 
@@ -81,7 +81,7 @@ class APIBaseController extends Controller
         return implode("\n", $err);
     }
 
-    protected function perginationPerPage(): int
+    protected function perginationPerPage()
     {
         $perPage = request('per_page') ?: 100;
 

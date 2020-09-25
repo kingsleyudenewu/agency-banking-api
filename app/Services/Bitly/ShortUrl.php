@@ -23,7 +23,7 @@ class ShortUrl
         $this->accessToken = $accessToken;
         $this->baseUrl = $baseUrl;
 
-        $this->logChannel = 'Bitly';
+        $this->logChannel = 'koloo';
     }
 
     public function get(string $longUrl): string
