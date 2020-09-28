@@ -54,11 +54,18 @@ class Sweeper extends Command
 
       foreach($savings as $saving)
       {
+            if(is_null($saving->owner)) 
+            {
+                $infoMessage .= "Something is wrong with savings - " . $saving->id . " Could not be swept";
+                $this->info($infoMessage);
+                
+                continue;
+            }
+                
+            $infoMessage .= 'Sweeping saving ' . $saving->id  . ' total saved ' . $saving->amount_saved . ' owner: ' . $saving->owner->name . ' matured on: ' . $saving->maturity . "\n";
+            $this->info($infoMessage);
 
-          $infoMessage .= 'Sweeping saving ' . $saving->id  . ' total saved ' . $saving->amount_saved . ' owner: ' . $saving->owner->name . ' matured on: ' . $saving->maturity . "\n";
-         $this->info($infoMessage);
-
-          event(new SweepSaving($saving));
+            event(new SweepSaving($saving));
       }
 
       if($infoMessage)
