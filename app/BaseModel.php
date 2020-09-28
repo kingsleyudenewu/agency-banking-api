@@ -16,4 +16,6 @@ class BaseModel extends Model
     public $incrementing = false;
 
     protected $dates = ['deleted_at'];
+
+    protected $keyType = 'string';
 }
