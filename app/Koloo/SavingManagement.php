@@ -25,9 +25,8 @@ class SavingManagement
     {
             $query  = Model::query();
 
-            $query->sweepables()->with(['owner', 'cycle', 'contributions']);
+            return $query->sweepables()->get();
 
-            return $query->get();
     }
 
     public static function charge(Model $saving)
