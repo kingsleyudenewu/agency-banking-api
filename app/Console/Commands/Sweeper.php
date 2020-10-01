@@ -56,7 +56,7 @@ class Sweeper extends Command
       {
             if(is_null($saving->owner)) 
             {
-                $infoMessage .= "Something is wrong with savings - " . $saving->id . " Could not be swept";
+                $infoMessage .= "Something is wrong with savings - " . $saving->id . " Could not be swept\n";
                 $this->info($infoMessage);
                 
                 continue;
