@@ -31,9 +31,9 @@ class MonnifyController extends APIBaseController
         $check = ProvidusTransaction::where('ref', $request->get('transactionReference'))->first();
         if($check && $check->isCompleted())
         {
-            $msg = 'ProvidusTransaction not found or already treated.';
+            $msg = 'Providus Transaction not found or already treated.';
             $logger->error($msg .  $check);
-            return $this->errorResponse($msg);
+            return $this->successResponse($msg);
         }
 
         try {
@@ -41,7 +41,7 @@ class MonnifyController extends APIBaseController
         }
         catch(\Exception $exception) {
             $logger->error('PAYMENT VERIFICATION FAILED.' . $exception->getMessage());
-            return $this->errorResponse($exception->getMessage());
+            return $this->successResponse($exception->getMessage());
         }
 
         $amountToCredit = 0;
@@ -52,7 +52,7 @@ class MonnifyController extends APIBaseController
 
             if (! $user = User::findByProvidusReference($request->get('product')['reference'])) {
                 $logger->error('Monnify webhook. User account reference is not found. ');
-                return $this->errorResponse('User not found.', null, 400);
+                return $this->successResponse('User not found.');
             }
 
             if($user->isCustomer())
@@ -87,13 +87,18 @@ class MonnifyController extends APIBaseController
             return $this->successResponse('Funded.');
 
         } catch(\Exception $exception) {
-
+            /*
+                From my understanding, the next couple of lines are like a rollback 
+                if any failure occurs. Should we be sure the transactions were written first?
+                Imagine if the Exception happens before the credit() call in the try block
+                Maybe some sort of flag? If not we might debit again a user with even a failed transactions
+            */
             $user->mainWallet()->debit($amountToCredit);
-            $user->writeDebitTransaction($amountToCredit, 'Revered due to error: ' . $exception->getMessage(), 'Monnify');
+            $user->writeDebitTransaction($amountToCredit, 'Reverted due to error: ' . $exception->getMessage(), 'Monnify');
 
             $logger->error($exception->getMessage() . ' File ' . $exception->getFile() . ' on line ' . $exception->getLine() . ' Code ' . $exception->getCode());
             $logger->error($request->all());
-            return $this->errorResponse($exception->getMessage());
+            return $this->successResponse($exception->getMessage());
         }
 
 
