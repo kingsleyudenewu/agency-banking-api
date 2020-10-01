@@ -17,4 +17,6 @@ class AuthBaseModel extends Authenticatable{
     public $incrementing = false;
 
     protected $dates = ['deleted_at'];
+
+    protected $keyType = 'string';
 }
