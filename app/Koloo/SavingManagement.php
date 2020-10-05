@@ -36,12 +36,18 @@ class SavingManagement
         $savingFrequency = $saving->saving_frequent_count;
         $customer = new User($saving->owner);
 
-        if($percentToCharge === doubleval(0) &&
-            ( $savingFrequency < $cycle->min_saving_frequent ) ) {
-            $percentToCharge = settings('percent_to_charge') / 100;
-            self::processCharge($saving, $percentToCharge, $customer);
-           return ;//
-        }
+        /*
+            We have turned off charges for savings --
+            This is audacious but we will see how it goes.
+            For now we complement for this but increasing the withdrawal charge. 
+        */
+        
+        // if($percentToCharge === doubleval(0) &&
+        //     ( $savingFrequency < $cycle->min_saving_frequent ) ) {
+        //     $percentToCharge = settings('percent_to_charge') / 100;
+        //     self::processCharge($saving, $percentToCharge, $customer);
+        //    return ;//
+        // }
 
         if($percentToCharge > 0)
         {
