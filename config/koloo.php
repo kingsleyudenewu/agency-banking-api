@@ -17,7 +17,7 @@ return [
     'commission_payout_request_paid_message' => "Dear %s,\nPayment of %s has been transferred to your account and your request has now been closed. Thank you for using Koloo",
 
     'fund_withdrawal_notification_message' => "Dear %s,\nYou have withdrew %s via our agent %s. The balance in your account now is %s. Thank you for using Koloo",
-    'contribution_message_to_customer' => "%s credited to your Koloó safe. Safe balance is now %s. You also have %s in you wallet.",
+    'contribution_message_to_customer' => "%s credited to your Koloo safe. Safe balance is now %s. You also have %s in you wallet.",
     'saving_swept_message' => "Your savings is mature and have been credited to your wallet. Balance is %s. You can do even more, continue saving!",
 
 
