@@ -5,7 +5,7 @@ return [
 
     'customer_welcome_sms' => "You are now saving with Koloo\n\n Your Koloo account number is: %s\n\nYour phone number is also a valid means of identification on our platform.",
 
-    "otp_message" => "Your Koloo OTP is: %s\n\nYour OTP is secret and must NOT be shared with anyone you do not trust.",
+    "otp_message" => "%s\n\nPlease, do NOT share this with anyone you do not trust.",
 
     'account_funded_message' => 'Your Koloo account has been credited with: %s',
 
