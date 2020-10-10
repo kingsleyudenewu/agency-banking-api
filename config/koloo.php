@@ -13,10 +13,10 @@ return [
     'agent_account_disapproved_message' => "Application for Agent %s on Koloo was NOT approved. \n%s",
     'password_reset_message_new_customer' => "Your Koloo account is ready. Open the link below to set a new password\n%s\nLink expires in %s.",
     'password_reset_message' => "Open the link below to set a new password for your koloo account.\n%s\nLink expires in %s.",
-    'commission_payout_request_approved_message' => "Dear %s,\nYour commission request has been approved and payment will be made within 24hrs. Amount: %s.",
-    'commission_payout_request_paid_message' => "Dear %s,\nPayment of %s has been transferred to your account and your request has now been closed. Thank you for using Koloo",
+    'commission_payout_request_approved_message' => "Your payout request for %s has been approved and payment will be made within 24hrs.",
+    'commission_payout_request_paid_message' => "Payout of %s has been transferred to your account successfully. Thank you for using Koloo!",
 
-    'fund_withdrawal_notification_message' => "Dear %s,\nYou have withdrew %s via our agent %s. The balance in your account now is %s. Thank you for using Koloo",
+    'fund_withdrawal_notification_message' => "Hello, You successfully withdrew %s. Your balance is now %s. \nKoloo - Your trusted savings partner!",
     'contribution_message_to_customer' => "%s credited to your Koloo safe. Safe balance is now %s. You also have %s in you wallet.",
     'saving_swept_message' => "Your savings is mature and have been credited to your wallet. Balance is %s. You can do even more, continue saving!",
 

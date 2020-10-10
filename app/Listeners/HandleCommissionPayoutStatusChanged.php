@@ -42,10 +42,10 @@ class HandleCommissionPayoutStatusChanged implements ShouldQueue
 
         if($payout->status === CommissionPayout::STATUS_PAID)
         {
-            $message = sprintf(config('koloo.commission_payout_request_paid_message'), $customer->getName(), $amount);
+            $message = sprintf(config('koloo.commission_payout_request_paid_message'), $amount);
         } else if($payout->status === CommissionPayout::STATUS_WAITING_PAYMENT)
         {
-            $message = sprintf(config('koloo.commission_payout_request_approved_message'), $customer->getName(), $amount);
+            $message = sprintf(config('koloo.commission_payout_request_approved_message'), $amount);
         }
 
         if($message)

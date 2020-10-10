@@ -35,7 +35,7 @@ class SendFundWithdrawalNotification
         $channel = 'both';
 
 
-        $message = sprintf(config('koloo.fund_withdrawal_notification_message'), $customer->getName(), $amount, $agent->getName(), $balance);
+        $message = sprintf(config('koloo.fund_withdrawal_notification_message'), $amount, $balance);
 
         $message = Message::create([
             'message' => $message,
