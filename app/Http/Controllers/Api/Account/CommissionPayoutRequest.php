@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\Account;
 
+use App\Message;
 use App\CommissionPayout;
-use App\Events\CommissionPayoutStatusChanged;
+use App\Events\SendMessage;
 use App\Events\PayoutRequested;
 use App\Http\Controllers\APIBaseController;
+use App\Events\CommissionPayoutStatusChanged;
 use App\Koloo\User;
 use App\Traits\LogTrait;
 use App\Transaction;
@@ -115,10 +117,23 @@ class CommissionPayoutRequest extends APIBaseController
                     'bank_account_number' => $request->input('bank_account_number'),
                     'bank_account_name' => $request->input('bank_account_name')
                 ]);
-
-                $this->logInfo("Commission Payout Request: PAYOUT VIA BANK. AMOUNT: " .  $amount . " USER: " . $customer->getName() . " USER ID: " . $customer->getId() );
+                
+                $infoMessage = "Commission Payout Request: PAYOUT VIA BANK. AMOUNT: " .  $amount . " USER: " . $customer->getName() . " USER ID: " . $customer->getId();
+                
+                //Construct admin payout request notification message
+                $rootUser = User::rootUser();
+                $payoutMessage = Message::create([
+                    'message' => $infoMessage,
+                    'message_type' => 'email',
+                    'user_id' => $rootUser->getId(),
+                    'sender' => $rootUser->getId(),
+                    'subject' => 'New Payment Request ' . now()
+                ]);
 
                 event(new PayoutRequested($payout));
+                event(new SendMessage($payoutMessage, 'email'));
+
+                $this->logInfo($infoMessage);
             }
 
             DB::commit();
