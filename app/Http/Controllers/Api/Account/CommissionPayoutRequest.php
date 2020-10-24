@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Account;
 
+use App\Message;
 use App\CommissionPayout;
 use App\Events\SendMessage;
 use App\Events\PayoutRequested;
