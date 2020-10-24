@@ -85,7 +85,7 @@ class APIBaseController extends Controller
     {
         $perPage = request('per_page') ?: 100;
 
-        if($perPage > 100) $perPage = 100;
+        if($perPage > 200) $perPage = 200;
 
         return $perPage;
     }
