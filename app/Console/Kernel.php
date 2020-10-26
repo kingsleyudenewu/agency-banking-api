@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('sweeper:sweep')->twiceDaily(1, 13);
+        $schedule->command('sweeper:sweep')->dailyAt('01:00');
     }
 
     /**
