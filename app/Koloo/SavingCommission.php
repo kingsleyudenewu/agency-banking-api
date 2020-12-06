@@ -75,6 +75,7 @@ class SavingCommission
         $this->logInfo('Calculating commission. ID: ' . $this->contribution->id . ' creator: ' . $creator->getName());
 
         $contributionAmount = $this->contribution->amount;
+
         $systemChargesPercent  = doubleval(number_format(settings('percent_to_charge')/100, 2));
 
 
