@@ -7,7 +7,7 @@ image: php:7.3.7
 
 pipelines:
   branches:
-    fix-001:
+    develop:
       - step:
           caches:
             - composer
