@@ -55,7 +55,7 @@ class SavingManagement
             "aa5e0a60-c58e-11ea-bfd8-690616fa37f7"
         );
 
-        if( $saving->owner && is_int(array_search($savings->owner->id, $flaggedAgents)) ){
+        if( $saving->owner && is_int(array_search($saving->owner->id, $flaggedAgents)) ){
             $percentToCharge = settings('percent_to_charge') / 100;
             self::processCharge($saving, $percentToCharge, $customer);
 
