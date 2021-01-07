@@ -26,8 +26,9 @@ class PhoneNumber
                 case 'NG':
                         if( in_array(substr($phone, 0, 3), $phoneNumberExceptionsNG) ) {
                             $formattedNumber = "234" . substr($phone, 1);
+                        }
                         
-                        break;
+                    break;
             }
 
             return $formattedNumber;
