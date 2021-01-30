@@ -90,6 +90,7 @@ class SavingsTest extends TestCase
     /** @test */
     public function a_user_with_the_right_access_can_create_savings_pin()
     {
+        $this->withoutExceptionHandling();
         settings()->set('transaction_auth', 'pin');
 
         $amountToCredit = 50000;

@@ -681,7 +681,7 @@ class User
             $data['wallet_id'] = $wallet->getId();
         }
         return $this->model->transactions()
-                ->create();
+                ->create($data);
 
     }
 
@@ -1161,5 +1161,13 @@ class User
         ]);
         unset($data['name'], $data['phone']);
         return $this->getProfile()->update($data);
+    }
+
+    public function hasActiveSaving(): bool  {
+
+        return (bool)$this->model->savings()
+                                ->whereDate('maturity', '>', now())
+                                 ->whereNull('completed')
+                                ->count();
     }
 }

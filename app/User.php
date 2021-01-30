@@ -188,5 +188,10 @@ class User extends AuthBaseModel
         return $query->whereIn('status', [static::STATUS_PENDING_APPROVAL, static::STATUS_DRAFT]);
     }
 
+    public function totalCommissionEarned() : float {
+        $total =  $this->transactions()->credit()->where('label', Transaction::LABEL_COMMISSION)->sum('amount');
+        return  $total / 100; // amount is in kobo
+    }
+
 
 }

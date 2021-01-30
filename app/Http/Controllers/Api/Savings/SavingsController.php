@@ -44,6 +44,7 @@ class SavingsController extends APIBaseController
 
         } catch (\Exception $e)
         {
+            throw $e;
             return $this->errorResponse($e->getMessage());
         }
 

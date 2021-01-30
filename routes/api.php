@@ -153,6 +153,11 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
             Route::get('/pending', 'PendingAccountController@index')->name('pending');
         });
 
+        Route::group(['prefix' => 'stats', 'as' => 'stats.'], function(){
+            Route::get('/', 'AdminStatsController@index')->name('index');
+            Route::get('/users', 'AdminStatsController@users')->name('users');
+            Route::get('/savings', 'AdminStatsController@savings')->name('savings');
+        });
 
     });
 
@@ -193,10 +198,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         'namespace' => 'Api\Service',
         'as' => 'services.',
         'middleware' => []], function () {
-        
+
         Route::post('/monnify/check', 'MonnifyController@check')->name('monnify.check');
         Route::post('/infobip/status', 'SMSReportController@processReport')->name('infobip.webhook');
-    
+
     });
 
 

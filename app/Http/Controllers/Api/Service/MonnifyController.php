@@ -88,7 +88,7 @@ class MonnifyController extends APIBaseController
 
         } catch(\Exception $exception) {
             /*
-                From my understanding, the next couple of lines are like a rollback 
+                From my understanding, the next couple of lines are like a rollback
                 if any failure occurs. Should we be sure the transactions were written first?
                 Imagine if the Exception happens before the credit() call in the try block
                 Maybe some sort of flag? If not we might debit again a user with even a failed transactions
@@ -126,7 +126,7 @@ class MonnifyController extends APIBaseController
         {
             // Some charges has been applied
             $rootUser = User::rootUser();
-            $rootUser->creditWalletSource($amountCharged, $rootUser->mainWallet(), 'Monnify charge', Transaction::LABEL_MONNIFY);
+            $rootUser->creditWalletSource($amountCharged, $rootUser->mainWallet(), Transaction::TRANSFER_CHARGE_REASON, Transaction::LABEL_MONNIFY);
         }
 
         return $newValue;

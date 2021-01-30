@@ -104,11 +104,18 @@ class Saving extends BaseModel
     public function stats() : array
     {
         return [
-            'amountSaved' => $this->contributions()->sum('amount') / 100,
-            'totalSavings' => $this->contributions()->count(),
+            'amountSaved' => $this->getAmountSaved(),
+            'totalSavings' => $this->getTotalSavings(),
         ];
     }
 
+    public function getAmountSaved()  : float  {
+        return $this->contributions()->sum('amount') / 100;
+    }
+
+    public function getTotalSavings()  : int  {
+        return $this->contributions()->count();
+    }
 
     public function lastContribution()
     {
@@ -131,6 +138,17 @@ class Saving extends BaseModel
         return $query->whereNull('sweep_status')
                 ->whereDate('maturity', '<', now()); //
     }
+
+    public function scopeActive($query) {
+        return $query->whereDate('maturity', '>', now())
+            ->whereNull('completed');
+    }
+
+    public function scopeCompleted($query) {
+        return $query->whereDate('maturity', '<=', now())
+                     ->whereNotNull('completed');
+    }
+
 
     public function swept($comment='')
     {

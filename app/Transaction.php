@@ -20,6 +20,7 @@ class Transaction extends Model
     const LABEL_MONNIFY =  'Monnify';
     const LABEL_SWEEP = 'sweep';
     const LABEL_MANUAL = 'manual';
+    const TRANSFER_CHARGE_REASON = 'Monnify charge';
 
     protected $appends = ['amount_formatted'];
 
@@ -63,6 +64,11 @@ class Transaction extends Model
     public function scopeCredit($query)
     {
         return $query->where('type', self::TRANSACTION_TYPE_CREDIT);
+    }
+
+    public function scopeMonnify($query)
+    {
+        return $query->where('label', self::LABEL_MONNIFY);
     }
 
     public function scopeDebit($query)
