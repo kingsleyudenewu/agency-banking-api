@@ -39,15 +39,28 @@ class SavingManagement
         /*
             We have turned off charges for savings --
             This is audacious but we will see how it goes.
-            For now we complement for this but increasing the withdrawal charge. 
+            For now we complement for this by increasing the withdrawal charge. 
         */
-        
+
+        //Original logic for charging
         // if($percentToCharge === doubleval(0) &&
         //     ( $savingFrequency < $cycle->min_saving_frequent ) ) {
         //     $percentToCharge = settings('percent_to_charge') / 100;
         //     self::processCharge($saving, $percentToCharge, $customer);
         //    return ;//
         // }
+        
+        //Agent has been flagged for fraud and we have to charge all his savings
+        $flaggedAgents = array(
+            "aa5e0a60-c58e-11ea-bfd8-690616fa37f7"
+        );
+
+        if( $saving->owner && is_int(array_search($saving->owner->id, $flaggedAgents)) ){
+            $percentToCharge = settings('percent_to_charge') / 100;
+            self::processCharge($saving, $percentToCharge, $customer);
+
+            return;
+        }
 
         if($percentToCharge > 0)
         {
