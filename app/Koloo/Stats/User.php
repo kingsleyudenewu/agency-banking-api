@@ -93,7 +93,7 @@ class User  {
             $userObj = new \App\Koloo\User($user);
             $total += $userObj->mainWallet()->getAmount();
         }
-        return  $total;
+        return  round($total / 100, 2);
     }
 
     public static function totalAgentsWalletBalance(): float  {
