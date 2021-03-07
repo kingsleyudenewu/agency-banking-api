@@ -193,5 +193,10 @@ class User extends AuthBaseModel
         return  $total / 100; // amount is in kobo
     }
 
+    public function contributions()
+    {
+        return $this->hasMany(Contribution::class, 'created_by');
+    }
+
 
 }

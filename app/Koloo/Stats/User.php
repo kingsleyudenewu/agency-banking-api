@@ -19,7 +19,7 @@ class User  {
 
 
 
-    protected static function getUsersByRole(string $role): Builder {
+    public static function getUsersByRole(string $role): Builder {
         return UserModel::select('id', 'name', 'parent_id', 'created_at', 'updated_at')->with('roles')
                         ->whereHas('roles', function($query) use ($role){
             $query->where('name', $role);

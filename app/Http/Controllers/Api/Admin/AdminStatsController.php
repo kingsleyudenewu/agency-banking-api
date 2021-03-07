@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\AgentPerformanceStat;
 use App\Http\Controllers\APIBaseController;
 use App\Koloo\Stats\Configurators\DateRange;
 use App\Koloo\Stats\Providus;
 use App\Koloo\Stats\Saving;
 use App\Koloo\Stats\User;
-use App\SavingCycle;
+
 
 /**
  * Class AdminStatsController
@@ -47,7 +48,20 @@ class AdminStatsController extends APIBaseController {
     public function savings() {
         $onlyActive = request('status') !== 'completed' ? true  : false;
         return [
-            'total_immature_savings' => Saving::getTotalSavingsCycleImmatureContribution($onlyActive),
+            'savings' => Saving::getTotalSavingsCycleImmatureContribution($onlyActive),
         ];
+    }
+
+    // GET /admin/stats/users/performance
+    public function performance()
+    {
+
+        $performance = AgentPerformanceStat::with(['user' => function($q){
+            $q->select('id', 'name');
+        }])->orderByDesc('saving_volume')
+            ->orderByDesc('saving_value')
+            ->orderByDesc('customer_acquired');
+
+        return ['data' => $performance->get()];
     }
 }

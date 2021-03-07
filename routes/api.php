@@ -156,6 +156,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'middleware' => ['check-account'
         Route::group(['prefix' => 'stats', 'as' => 'stats.'], function(){
             Route::get('/', 'AdminStatsController@index')->name('index');
             Route::get('/users', 'AdminStatsController@users')->name('users');
+            Route::get('/users/performance', 'AdminStatsController@performance')->name('performance');
             Route::get('/savings', 'AdminStatsController@savings')->name('savings');
         });
 

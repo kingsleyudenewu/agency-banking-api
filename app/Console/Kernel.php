@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Koloo\Stats\AgentPerformance;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,6 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('sweeper:sweep')->dailyAt('01:00');
+
+        $schedule->command('agent:populate-performance')->daily();
     }
 
     /**
