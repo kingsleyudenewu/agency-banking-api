@@ -91,7 +91,10 @@ class User  {
         $users = static::getUsersByRole($role)->get();
         foreach ($users as $user) {
             $userObj = new \App\Koloo\User($user);
-            $total += $userObj->mainWallet()->getAmount();
+            if($user && $userObj) {
+                $total += $userObj->mainWallet()->getAmount();
+            }
+
         }
         return  round($total / 100, 2);
     }
